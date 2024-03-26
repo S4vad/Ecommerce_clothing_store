@@ -2,7 +2,7 @@
 
 import mongoose from "mongoose";
 
-const uri = 'mongodb://localhost:27017/mydatabase';
+const uri = 'mongodb://localhost:27017/newdatabase';
 
 const connectToDatabase = async () => {
   try {
