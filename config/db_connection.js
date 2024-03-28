@@ -2,13 +2,14 @@
 
 import mongoose from "mongoose";
 
-const uri = 'mongodb://localhost:27017/newdatabase';
+const uri = 'mongodb://localhost:27017/';
 
 const connectToDatabase = async () => {
   try {
     await mongoose.connect(uri, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      dbName:'ecommerce',
     });
     console.log('Connected to MongoDB');
   } catch (error) {

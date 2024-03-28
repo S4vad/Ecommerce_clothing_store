@@ -37,10 +37,11 @@
                 <h1 class="mb-0 fs-3">Sign In</h1>
                 <div class="fs-exact-14 text-muted mt-2 pt-1 mb-5 pb-2">Log in to your account to continue.</div>
                 <form id="signinForm" action="signin" method="POST">
-                    <div class="mb-4"><label class="form-label">Email Address</label><input type="email" id="email"
+                    <div class="mb-4"><label class="form-label">Email Address</label><input type="email" name="userName" id="email"
                             class="form-control form-control-lg" /></div>
-                    <div class="mb-4"><label class="form-label">Password</label><input type="password" id="password"
+                    <div class="mb-4"><label class="form-label">Password</label><input type="password" name="password" id="password"
                             class="form-control form-control-lg" /></div>
+                        <%=message%>
                     <div><button type="submit" class="btn btn-primary btn-lg w-100">Sign In</button></div>
                 </form>
             </div>
