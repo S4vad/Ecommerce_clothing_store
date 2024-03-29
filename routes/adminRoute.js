@@ -1,7 +1,8 @@
 import express, { Router } from "express";
 import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,addProduct,productAdd ,product_list} from "../controller/admincontroller.js";
 
-import upload from "../middlewares/arrayUploadMiddlware.js"
+// import upload from "../middlewares/arrayUploadMiddlware.js"
+import { uploadImages,getResult,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
 
 const routes=express.Router();
 
@@ -16,7 +17,7 @@ routes.get('/product_list',product_list)
 
 routes.post('/signin',adminLogin)
 routes.post('/signup',adminSignup)
-routes.post('/addProduct',upload,productAdd)
+routes.post('/addProduct',uploadImages,resizeImages,productAdd)
 
 
 export default routes;

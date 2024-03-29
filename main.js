@@ -28,7 +28,7 @@ const __dirname=path.dirname(fileURLToPath(import.meta.url))
 const publicUserDirectoryPath = path.join(__dirname, "public", "user");
 app.use(express.static(publicUserDirectoryPath));
 
-app.use(multer());
+
 
 
 // view engin setup
@@ -50,7 +50,7 @@ app.listen(port,()=>{
 
 
 
-  // error handler
+  //error handler
   app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
