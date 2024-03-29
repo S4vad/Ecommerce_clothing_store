@@ -17,6 +17,11 @@ const addProductSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    stock:{
+        type:Number,
+        require:true,
+
+    },
     Image: { // Corrected spelling to "Image"
         type: String, // Assuming the image will be stored as a URL or file path
         required: true
