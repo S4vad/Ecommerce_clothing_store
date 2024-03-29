@@ -8,6 +8,7 @@ import adminRoute from "./routes/adminRoute.js"
 import userRoute from "./routes/userRoute.js"
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import fileUpload from "express-fileupload";
 
 
 const app=express();
@@ -26,6 +27,8 @@ const __dirname=path.dirname(fileURLToPath(import.meta.url))
 
 const publicUserDirectoryPath = path.join(__dirname, "public", "user");
 app.use(express.static(publicUserDirectoryPath));
+
+app.use(fileUpload())
 
 
 // view engin setup

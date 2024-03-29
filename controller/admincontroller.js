@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import adminModel from "../models/adminSchema.js"
+import product from "../models/adminAddProductSchema.js"
 import bcrypt from "bcrypt";
 
 export async function adminHome(req,res){
@@ -14,6 +15,14 @@ export function adminLoginPage(req,res){
 
 export function adminSignupPage(req,res){
     res.render('admin/adminRegister')
+}
+
+export function addProduct(req,res){
+    res.render('admin/addProduct')
+}
+
+export function product_list(req,res){
+    res.render('admin/product_list')
 }
 
 
@@ -68,4 +77,23 @@ export async function adminSignup(req,res){
         
     }
     
+}
+
+
+export async function productAdd(req,res){
+
+    try {
+        const {name,category,price,description}=req.body;
+        const image=req.files.image;
+        await product.create({Name:name,Category:category,Price:price,Description:description});
+        res.send("<script>alert('product created successfully')</script>")
+        res.redirect('/')
+    } catch (err) {
+        console.log(err)
+
+        
+    }
+    // console.log(req.body)
+    // console.log(req.files.image)
+
 }

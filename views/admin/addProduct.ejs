@@ -1,0 +1,41 @@
+<style>
+    .form-control{
+        margin-bottom: 30px;
+        font-size: 15px;
+    }
+
+    .label{
+        margin-top: 30px;
+    }
+</style>
+
+<section>
+    <div class="container mt-4" >
+        <div class="row">
+
+            <div class="col-md-6">
+                <h2 class="text-center" style="margin-left: 470px; margin-top: 30px;">Add product</h2>
+                <form action="/admin/addProduct" method="post"  enctype="multipart/form-data"   style="display: flex; flex-direction: column; width: 500px ; margin-left: 300px; ">
+                    <label for="" class="label">Name</label>
+                    <input type="text" name="name" class="form-control">
+
+                    <label for="">Category</label>
+                    <input type="text" name="category" class="form-control">
+
+                    <label for="">Price</label>
+                    <input type="text" name="price" class="form-control">
+
+                    <label for="">Description</label>
+                    <input type="text" name="description" class="form-control">
+
+                    <label for="">Image</label>
+                    <input type="file" name="image" class="form-control">
+
+                    <button type="submit" class="btn btn-success mt-4" style="color: white; background-color: green; padding-top: 10px; padding-bottom: 10px; font-size: 20px;">Add product</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</section>

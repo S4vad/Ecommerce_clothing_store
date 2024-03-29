@@ -1,0 +1,72 @@
+<style>
+  body {
+      margin-top: 60px;
+  }
+
+  .table {
+      margin-bottom: 30px;
+      margin-left: 200px;
+      border-collapse: collapse;
+      width: 600px; /* Added width to ensure the table is visible */
+  }
+
+  .table th,
+  .table td {
+      padding: 10px;
+      border: 1px solid black; /* Add border to each table cell */
+  }
+
+  .button-container {
+      text-align: center;
+      margin-left: 400px;
+      /* margin-top: 30px; */
+      margin-bottom: 20px;
+  }
+
+  .btn {
+      background-color: green;
+      color: white;
+      padding: 10px;
+  }
+</style>
+
+<div class="button-container">
+  <button onclick="window.location.href='/admin/addProduct'" class="btn btn-primary">Add product</button>
+</div>
+
+
+<table class="table">
+  <thead>
+      <tr>
+          <th scope="col">No</th>
+
+          <th scope="col">Name</th>
+          <th scope="col">Category</th>
+          <th scope="col">Price</th>
+          <th scope="col">Description</th>
+          <th scope="col">Image</th>
+
+          
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+      </tr>
+      <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+      </tr>
+      <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+      </tr>
+  </tbody>
+</table>
