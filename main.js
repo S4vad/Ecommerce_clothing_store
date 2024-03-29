@@ -8,7 +8,7 @@ import adminRoute from "./routes/adminRoute.js"
 import userRoute from "./routes/userRoute.js"
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import fileUpload from "express-fileupload";
+import multer from "multer";
 
 
 const app=express();
@@ -28,7 +28,7 @@ const __dirname=path.dirname(fileURLToPath(import.meta.url))
 const publicUserDirectoryPath = path.join(__dirname, "public", "user");
 app.use(express.static(publicUserDirectoryPath));
 
-app.use(fileUpload())
+app.use(multer());
 
 
 // view engin setup
@@ -47,4 +47,17 @@ const port = process.env.PORT || 3000;
 app.listen(port,()=>{
     console.log('server running successfully',port)
 })
+
+
+
+  // error handler
+  app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+  
+    // render the error page
+    res.status(err.status || 500);
+    res.render('errors/404');
+  });
 

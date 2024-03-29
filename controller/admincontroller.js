@@ -1,7 +1,10 @@
 import jwt from "jsonwebtoken";
 import adminModel from "../models/adminSchema.js"
-import product from "../models/adminAddProductSchema.js"
+import productModel from "../models/adminAddProductSchema.js"
 import bcrypt from "bcrypt";
+import path from "path";
+import { fileURLToPath } from "url";
+
 
 export async function adminHome(req,res){
         res.render('admin/index')
@@ -21,9 +24,32 @@ export function addProduct(req,res){
     res.render('admin/addProduct')
 }
 
-export function product_list(req,res){
-    res.render('admin/product_list')
+export async function product_list(req,res){
+    try {
+        const products= await product.find()
+        console.log(products)
+        res.render('admin/product_list',{products})
+        
+    } catch (error) {
+        res.render(error)
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -80,20 +106,81 @@ export async function adminSignup(req,res){
 }
 
 
-export async function productAdd(req,res){
-
+export async function productAdd(req,res,next){
     try {
-        const {name,category,price,description}=req.body;
-        const image=req.files.image;
-        await product.create({Name:name,Category:category,Price:price,Description:description});
-        res.send("<script>alert('product created successfully')</script>")
-        res.redirect('/')
-    } catch (err) {
-        console.log(err)
-
+        const files = req.body.images
+        const file = req.files
+        const { name, description, brand, price, category, colors, stock, discount, tags } = req.body
+        if (!files) {
+            const error = new Error('Please choose files')
+            error.httpStatusCode = 400;
+            return next(error)
+        }
+        console.log(files)
+        return "sav";
+// //sharp image
+//         let imgArray = files.map((file) => {
+//             let img = fs.readFileSync('./public/productuploads/'+file)
+//             return encode_image = img.toString('base64')
+//         })
+//         let result = imgArray.map((src, index) => {
+//             let finalimg = {
+//                 imageName: file[index].originalname,
+//                 contentType: file[index].mimetype,
+//                 imageBase64: src
+//             }
+//             return finalimg;
+//         })
+//        //delete image
+//             files.forEach((el, i) => {
+//             fs.rmSync('./public/productuploads/'+el, {
+               
+//             })
+//         })
+        
+        await productModel.create({ name, description, brand, price, category, colors, stock, discount, tags, product_image: result })
+            // res.send({"success":data})
+            res.redirect('/admin/product_lists')
+      
+    } catch (error) {
+        next(error)
         
     }
-    // console.log(req.body)
-    // console.log(req.files.image)
-
+   
 }
+
+    // try {
+    //     let {name,category,price,description}=req.body;
+    //     console.log(req.body)
+    
+
+    //     let sampleFile = req.files.image;
+    //     const __dirname = path.resolve();
+
+    //     let random_number=Date.now()
+    //     let uploadDirectory = path.join(__dirname, 'public', 'uploads');
+
+    //     let uploadPath = path.join(uploadDirectory, random_number + '.jpg');
+    //     sampleFile.mv(uploadPath, async function(err) {
+    //       if (err) {
+    //         return res.status(500).send(err);
+        
+    //       }
+    //       let uploadPathRelative = path.relative(path.join(__dirname, 'public'), uploadPath);
+    //       console.log(uploadPathRelative)
+
+    //       await product.create({Name: name, Category: category, Price: price, Description: description, Image: uploadPathRelative});
+    //       res.send("<script>alert('product created successfully')</script>")
+    //     //   res.redirect('/')
+    //     });
+      
+
+//     } catch (err) {
+//         console.log(err)
+
+        
+//     }
+//     // console.log(req.body)
+//     // console.log(req.files.image)
+
+// }
