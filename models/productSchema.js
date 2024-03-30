@@ -22,9 +22,11 @@ const addProductSchema = new mongoose.Schema({
     Images: [
 
     ],
-    Categories: {
-        type: String,
-    },
+    Categories:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'Categories',
+        required:true,
+      },
     Brand:{
         type:String,
         require:true

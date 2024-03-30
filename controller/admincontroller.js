@@ -4,6 +4,8 @@ import productModel from "../models/productSchema.js"
 import bcrypt from "bcrypt";
 import path from "path";
 import { fileURLToPath } from "url";
+import exp from "constants";
+import categorymodel from "../models/categorySchema.js";
 
 
 export async function adminHome(req,res){
@@ -170,3 +172,37 @@ export async function productAdd(req,res,next){
 //     // console.log(req.files.image)
 
 // }
+
+
+export async function category_list(req,res){
+    try {
+        const category=categorymodel.find()
+        console.log(category)
+        res.render('admin/category_list',{category})
+        
+    } catch (error) {
+        res.render(error)
+        
+    }
+}
+export const add_category = async (req, res, next) => {
+    try {
+        const { category_name, category_description } = req.body;
+        if (!category_name || !category_description) {
+            const error = new Error('Category name and description are required');
+            error.httpStatusCode = 400;
+            return next(error);
+        }
+
+        // Create category using provided data
+        await categorymodel.create({
+            category_name: category_name,
+            category_description: category_description,
+        });
+
+        // Redirect after successfully adding the category
+        res.redirect('/admin/category_list');
+    } catch (error) {
+        next(error);
+    }
+};

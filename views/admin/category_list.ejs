@@ -1,0 +1,200 @@
+<%- include('./layouts/main'); -%>
+    <%- include('./layouts/header'); -%>
+
+
+
+        <div id="top" class="sa-app__body">
+            <div class="mx-sm-2 px-2 px-sm-3 px-xxl-4 pb-6">
+                <div class="container">
+                    <div class="py-5">
+                        <div class="row g-4 align-items-center">
+                            <div class="col">
+                                <nav class="mb-2" aria-label="breadcrumb">
+                                    <ol class="breadcrumb breadcrumb-sa-simple">
+                                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Categories</li>
+                                    </ol>
+                                </nav>
+                                <h1 class="h3 m-0">Categories</h1>
+                            </div>
+                            <div class="col-auto d-flex"><a href="app-category.html" class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModalCenter"
+                                    class="btn btn-primary">New
+                                    category</a></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="p-4"><input type="text" placeholder="Start typing to search for categories"
+                                class="form-control form-control--search mx-auto" id="table-search" /></div>
+                        <div class="sa-divider"></div>
+                        <table class="sa-datatables-init" data-order="[[ 1, &quot;asc&quot; ]]"
+                        data-sa-search-input="#table-search">
+                        <thead>
+                            <tr>
+                                <th class="w-min" data-orderable="false"><input type="checkbox"
+                                        class="form-check-input m-0 fs-exact-16 d-block" aria-label="..." />
+                                </th>
+                                <th class="min-w-20x">Name</th>
+                             
+                                <th>Products description</th>
+                         
+                                
+                                <th class="w-min" data-orderable="false"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                               <% for( let i = 0; i < category.length; i++ ) { %>
+                               
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input m-0 fs-exact-16 d-block"
+                                            aria-label="..." /></td>
+                                    <td>
+                                        <div class="d-flex align-items-center"><a href="app-customer.html"
+                                                class="me-4">
+                                                <div
+                                                    class="sa-symbol sa-symbol--shape--rounded sa-symbol--size--lg">
+                                                    <img src="data:<%= category[i].contentType %>;base64,<%= category[i].imageBase64 %>  " width="40"
+                                                        height="40" alt="" /></div>
+                                            </a>
+                                            <div><a href="#id-<%= i %>" data-bs-toggle="modal" class="text-reset"><%= category[i].category_name %> </a>
+                                                <div class="text-muted mt-n1"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                  
+                                    <td><%= category[i].category_description %></td>
+                                
+        
+                                 
+                                    <td>
+                                        <div class="dropdown"><button class="btn btn-sa-muted btn-sm" type="button"
+                                                id="customer-context-menu-0" data-bs-toggle="dropdown"
+                                                aria-expanded="false" aria-label="More"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="3" height="13"
+                                                    fill="currentColor">
+                                                    <path
+                                                        d="M1.5,8C0.7,8,0,7.3,0,6.5S0.7,5,1.5,5S3,5.7,3,6.5S2.3,8,1.5,8z M1.5,3C0.7,3,0,2.3,0,1.5S0.7,0,1.5,0 S3,0.7,3,1.5S2.3,3,1.5,3z M1.5,10C2.3,10,3,10.7,3,11.5S2.3,13,1.5,13S0,12.3,0,11.5S0.7,10,1.5,10z">
+                                                    </path>
+                                                </svg></button>
+                                            <ul class="dropdown-menu dropdown-menu-end"
+                                                aria-labelledby="customer-context-menu-0">
+                                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#id-<%= i %>">Edit</button></li>
+                                               
+                                               
+                                                <li>
+                                                    <hr class="dropdown-divider" />
+                                                </li>
+                                                <li><a class="dropdown-item text-danger" href="/admin/delete_category?id=<%= category[i]._id  %> "  >Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                             
+
+
+
+
+
+                                <div class="modal fade" id="id-<%= i %>" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                                            <button type="button" class="sa-close sa-close--modal" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                    
+                    
+                                            <form class="row g-4 needs-validation" action="/admin/edit_category?id=<%= category[i]._id %> " method="post" >
+                    
+                                                <div class="col-12 position-relative">
+                                                    <label for="validationTooltip01" class="form-label">Category name</label><input
+                                                        name="category_name" type="text" value="<%= category[i].category_name %> " class="form-control" id="validationTooltip01"
+                                                        required>
+                                                    <div class="valid-tooltip">Looks good!</div>
+                                                </div>
+                    
+                    
+                                                <div class="col-12 position-relative">
+                                                    <label for="validationTooltip02" class="form-label">Descripton(optional)</label><textarea
+                                                        id="validationTooltip02"   name="category_description"
+                                                        class="form-control" rows="4"><%= category[i].category_description %></textarea>
+                                                </div>
+                    
+                    
+                                                <!-- <div class="col-12 position-relative">
+                                                    <label for="validationTooltipUsername" class="form-label">Thumbnail</label>
+                                                    <div class="input-group has-validation">
+                                                        <span class="input-group-text" id="validationTooltipUsernamePrepend">@</span><input
+                                                            type="file" name="category_thumbnail" hidden class="form-control" id="formFile-1"
+                                                            required>
+                                                        <div class="invalid-tooltip">choose thumbnail image</div>
+                                                    </div>
+                                                </div> -->
+                    
+                    
+                    
+                    
+                    
+                    
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close</button><button type="submit" class="btn btn-primary">Save changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div><!-- sa-app__body / end -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                        <button type="button" class="sa-close sa-close--modal" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-4 needs-validation" action="/admin/add_category" method="post" enctype="multipart/form-data">
+
+                            <div class="col-12 position-relative">
+                                <label for="validationTooltip01" class="form-label">Category name</label><input
+                                    name="category_name" type="text" class="form-control" id="validationTooltip01"
+                                    required>
+                                <div class="valid-tooltip">Looks good!</div>
+                            </div>
+                            <div class="col-12 position-relative">
+                                <label for="validationTooltip02" class="form-label">Descripton(optional)</label><textarea
+                                    id="validationTooltip02" placeholder="type the description about category" name="category_description"
+                                    class="form-control" rows="4"></textarea>
+                            </div>
+                            <div class="col-12 position-relative">
+                                <label for="validationTooltipUsername" class="form-label">Thumbnail</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text" id="validationTooltipUsernamePrepend">@</span><input
+                                        type="file" name="category_thumbnail" class="form-control" id="formFile-1"
+                                        required>
+                                    <div class="invalid-tooltip">choose thumbnail image</div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close</button><button type="submit" class="btn btn-primary">Save changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('./layouts/footer'); -%>
