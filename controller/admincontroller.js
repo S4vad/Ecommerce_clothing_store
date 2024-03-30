@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import adminModel from "../models/adminSchema.js"
-import productModel from "../models/adminAddProductSchema.js"
+import productModel from "../models/productSchema.js"
 import bcrypt from "bcrypt";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -26,8 +26,8 @@ export function addProduct(req,res){
 
 export async function product_list(req,res){
     try {
-        const products= await product.find()
-        console.log(products)
+        const products= await productModel.find()
+        // console.log(products)
         res.render('admin/product_list',{products})
         
     } catch (error) {
@@ -35,20 +35,6 @@ export async function product_list(req,res){
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -109,15 +95,14 @@ export async function adminSignup(req,res){
 export async function productAdd(req,res,next){
     try {
         const files = req.body.images
-        const file = req.files
-        const { name, description, brand, price, category, colors, stock, discount, tags } = req.body
+        // const file = req.files
+        const { name, description, price,stock, categories, brand ,size} = req.body
         if (!files) {
             const error = new Error('Please choose files')
             error.httpStatusCode = 400;
             return next(error)
         }
         console.log(files)
-        return "sav";
 // //sharp image
 //         let imgArray = files.map((file) => {
 //             let img = fs.readFileSync('./public/productuploads/'+file)
@@ -138,11 +123,12 @@ export async function productAdd(req,res,next){
 //             })
 //         })
         
-        await productModel.create({ name, description, brand, price, category, colors, stock, discount, tags, product_image: result })
+        await productModel.create({ Name:name, Description:description, Brand:brand,Price: price,Categories: categories, Stock:stock,Size:size, Images: files })
             // res.send({"success":data})
-            res.redirect('/admin/product_lists')
+            res.redirect('/admin/product_list')
       
     } catch (error) {
+        console.log(error)
         next(error)
         
     }

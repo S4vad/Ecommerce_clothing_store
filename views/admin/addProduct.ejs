@@ -57,10 +57,10 @@
                                             <textarea id="" name="description" class=" form-control" rows="4"
                                                 required></textarea>
                                         </div>
-                                        <div class="mb-4"><label for="form-product/name"
+                                        <!-- <div class="mb-4"><label for="form-product/name"
                                                 class="form-label">Brand</label><input type="text" class="form-control"
                                                 name="brand" id="form-product/name" required></div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="card mt-5">
                                     <div class="card-body p-5">
@@ -89,7 +89,7 @@
 
                                         <div><label for="form-product/quantity" class="form-label">Stock
                                                 quantity</label><input type="number" class="form-control"
-                                                id="form-product/quantity" name="stock" value="18" required></div>
+                                                id="form-product/quantity" name="stock" value="" required></div>
                                     </div>
                                 </div>
                                 <div class="card mt-5">
@@ -130,14 +130,25 @@
                                         </div>
                                         <div class="card-body p-5">
                                             <div class="mb-5">
-                                                <h2 class="mb-0 fs-exact-18">Colors</h2>
-                                            </div><select name="colors" class="sa-select2 form-select" required
-                                                multiple="">
-                                                <option selected="">Black</option>
-                                                <option>red</option>
-                                                <option selected="">White</option>
-                                                <option>Green</option>
-                                                <option>#800020</option>
+                                                <h2 class="mb-0 fs-exact-18">Categories</h2>
+                                            </div><select name="categories" class="sa-select2 form-select">
+                                                <option selected="">Men</option>
+                                                <option>Women</option>
+                                                <option selected="">Bag</option>
+                                                <option>Shoes</option>
+                                                <option>Watches</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="card-body p-5">
+                                            <div class="mb-5">
+                                                <h2 class="mb-0 fs-exact-18">Size</h2>
+                                            </div><select name="size"  class="sa-select2 form-select">
+                                                <option value="s">Size S</option>
+                                                <option value="m" selected="">Size M</option>
+                                                <option value="l">Size L</option>
+                                                <option value="xl">Size XL</option>
+                                                
 
                                             </select>
                                         </div>
@@ -145,13 +156,13 @@
                                     <div class="card w-100 mt-5">
                                         <div class="card-body p-5">
                                             <div class="mb-5">
-                                                <h2 class="mb-0 fs-exact-18">Tags</h2>
-                                            </div><select name="tags" class="sa-select2 form-select" data-tags="true"
+                                                <h2 class="mb-0 fs-exact-18">Brand</h2>
+                                            </div><select name="brand" class="sa-select2 form-select" data-tags="true"
                                                 required multiple="">
-                                                <option>samsung</option>
-                                                <option>tv</option>
-                                                <option>laptop</option>
-                                                <option>ipad</option>
+                                                <option value="Levis">Levis</option>
+                                                <option value="Luis vuitton">Luis vuitton</option>
+                                                <option value="ZARA">ZARA</option>
+                                                <option value="JORDAN">JORDAN</option>
                                             </select>
                                             <div class="mt-4 mb-n2"><a href="/admin/category_list">Add new category</a>
                                             </div>

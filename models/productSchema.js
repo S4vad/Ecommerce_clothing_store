@@ -5,16 +5,13 @@ const addProductSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    Category: {
-        type: String,
-        required: true
-    },
-    Price: {
-        type: Number, // Assuming price should be a number
-        required: true
-    },
     Description: {
         type: String,
+        required: true
+    },
+
+    Price: {
+        type: Number, // Assuming price should be a number
         required: true
     },
     stock:{
@@ -22,11 +19,26 @@ const addProductSchema = new mongoose.Schema({
         require:true,
 
     },
-    Image: { // Corrected spelling to "Image"
-        type: String, // Assuming the image will be stored as a URL or file path
-        required: true
-    }
-});
+    Images: [
+
+    ],
+    Categories: {
+        type: String,
+    },
+    Brand:{
+        type:String,
+        require:true
+    },
+    Size:{
+        type:String,
+        require:true
+    },
+    
+
+
+
+
+},{timestamps:true});//database time show cheyyan
 
 const Product = mongoose.model('Product', addProductSchema);
 
