@@ -61,157 +61,170 @@
                                                 class="form-label">Brand</label><input type="text" class="form-control"
                                                 name="brand" id="form-product/name" required></div>
                                     </div> -->
-                                </div>
-                                <div class="card mt-5">
-                                    <div class="card-body p-5">
-                                        <div class="mb-5">
-                                            <h2 class="mb-0 fs-exact-18">Pricing</h2>
-                                        </div>
-                                        <div class="row g-4">
-                                            <div class="col"><label for="form-product/price"
-                                                    class="form-label">Price</label><input type="number"
-                                                    class="form-control" id="form-product/price" name="price" required>
+                                    </div>
+                                    <div class="card mt-5">
+                                        <div class="card-body p-5">
+                                            <div class="mb-5">
+                                                <h2 class="mb-0 fs-exact-18">Pricing</h2>
                                             </div>
-                                            <!-- <div class="col"><label for="form-product/old-price"
+                                            <div class="row g-4">
+                                                <div class="col"><label for="form-product/price"
+                                                        class="form-label">Price</label><input type="number"
+                                                        class="form-control" id="form-product/price" name="price"
+                                                        required>
+                                                </div>
+                                                <!-- <div class="col"><label for="form-product/old-price"
                                                     class="form-label">Discount</label><input type="number"
                                                     class="form-control" name="discount" id="form-product/old-price"
                                                     required>
                                             </div> -->
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="card mt-5">
-                                    <div class="card-body p-5">
-                                        <div class="mb-5">
-                                            <h2 class="mb-0 fs-exact-18">Inventory</h2>
-                                        </div>
-
-                                        <div><label for="form-product/quantity" class="form-label">Stock
-                                                quantity</label><input type="number" class="form-control"
-                                                id="form-product/quantity" name="stock" value="" required></div>
-                                    </div>
-                                </div>
-                                <div class="card mt-5">
-                                    <div class="card-body p-5">
-                                        <div class="mb-5">
-                                            <h2 class="mb-0 fs-exact-18">Images</h2>
-                                        </div>
-                                    </div>
-                                    <div class="mt-n5">
-                                        <div class="sa-divider"></div>
-                                        <div class="table-responsive">
-                                            <div class="choose-imagefile-wrap">
-
-                                                <input type="file" id="file-input" name='images' required multiple>
-                                                <div id="preview"></div>
-
+                                    <div class="card mt-5">
+                                        <div class="card-body p-5">
+                                            <div class="mb-5">
+                                                <h2 class="mb-0 fs-exact-18">Inventory</h2>
                                             </div>
 
+                                            <div><label for="form-product/quantity" class="form-label">Stock
+                                                    quantity</label><input type="number" class="form-control"
+                                                    id="form-product/quantity" name="stock" value="" required></div>
                                         </div>
-                                        <div class="sa-divider"></div>
-
                                     </div>
+                                    <div class="card mt-5">
+                                        <div class="card-body p-5">
+                                            <div class="mb-5">
+                                                <h2 class="mb-0 fs-exact-18">Images</h2>
+                                            </div>
+                                        </div>
+                                        <div class="mt-n5">
+                                            <div class="sa-divider"></div>
+                                            <div class="table-responsive">
+                                                <div class="choose-imagefile-wrap">
+
+                                                    <input type="file" id="file-input" name='images' required multiple>
+                                                    <div id="preview"></div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="sa-divider"></div>
+
+                                        </div>
+                                    </div>
+
                                 </div>
+                                <div class="sa-entity-layout__sidebar">
 
-                            </div>
-                            <div class="sa-entity-layout__sidebar">
-
-                                <div class="card w-100 mt-5">
-                                    <div class="card-body p-5">
-                                        <div class="mb-5">
-                                            <h2 class="mb-0 fs-exact-18">Categories</h2>
-
-
-
-
-                                            </select>
-
-                                        </div>
-                                        <div class="card-body p-5">
-                                            <div class="mb-5">
-                                                <h2 class="mb-0 fs-exact-18">Categories</h2>
-                                            </div><select name="categories" class="sa-select2 form-select">
-                                                <option selected="">Men</option>
-                                                <option>Women</option>
-                                                <option selected="">Bag</option>
-                                                <option>Shoes</option>
-                                                <option>Watches</option>
-
-                                            </select>
-                                        </div>
-                                        <div class="card-body p-5">
-                                            <div class="mb-5">
-                                                <h2 class="mb-0 fs-exact-18">Size</h2>
-                                            </div><select name="size"  class="sa-select2 form-select">
-                                                <option value="s">Size S</option>
-                                                <option value="m" selected="">Size M</option>
-                                                <option value="l">Size L</option>
-                                                <option value="xl">Size XL</option>
-                                                
-
-                                            </select>
-                                        </div>
-                                    </div>
                                     <div class="card w-100 mt-5">
                                         <div class="card-body p-5">
                                             <div class="mb-5">
-                                                <h2 class="mb-0 fs-exact-18">Brand</h2>
-                                            </div><select name="brand" class="sa-select2 form-select" data-tags="true"
-                                                required multiple="">
-                                                <option value="Levis">Levis</option>
-                                                <option value="Luis vuitton">Luis vuitton</option>
-                                                <option value="ZARA">ZARA</option>
-                                                <option value="JORDAN">JORDAN</option>
-                                            </select>
-                                            <div class="mt-4 mb-n2"><a href="/admin/category_list">Add new category</a>
+                                                <h2 class="mb-0 fs-exact-18">Categories</h2>
+
+
+
+
+                                                </select>
+
                                             </div>
-                                            </form>
+                                            <div class="card-body p-5">
+                                                <div class="mb-5">
+                                                    <h2 class="mb-0 fs-exact-18">Categories</h2>
+                                                </div>
+                                            
+                                                <select name="category" class="sa-select2 form-select" required>
+                                                    <% for( let i=0; i < category.length; i++ ) { %>
+                                                        <option value="<%= category[i]._id %>">
+                                                            <%= category[i].category_name %>
+                                                        </option>
+                                                        <% } %>
+
+
+
+                                                </select>
+
+                                            </div>
+                                            <div class="card-body p-5">
+                                                <div class="mb-5">
+                                                    <h2 class="mb-0 fs-exact-18">Size</h2>
+                                                </div><select name="size" class="sa-select2 form-select">
+                                                    <option value="s">Size S</option>
+                                                    <option value="m" selected="">Size M</option>
+                                                    <option value="l">Size L</option>
+                                                    <option value="xl">Size XL</option>
+                                                    
+
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="card w-100 mt-5">
+                                            <div class="card-body p-5">
+                                                <div class="mb-5">
+                                                    <h2 class="mb-0 fs-exact-18">Brand</h2>
+                                                </div><select name="brand" class="sa-select2 form-select"
+                                                    data-tags="true" required multiple="">
+                                                    <option value="levis">Levis</option>
+                                                    <option value="luis vuitton">Luis vuitton</option>
+                                                    <option value="zara">ZARA</option>
+                                                    <option value="jordan">JORDAN</option>
+                                                    <option value="nike">Nike</option>
+                                                    <option value="adidas">Adidas</option>
+                                                    <option value="rolex">Rolex</option>
+
+
+                                                </select>
+                                                <div class="mt-4 mb-n2"><a href="/admin/category_list">Add new
+                                                        category</a>
+                                                </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div><!-- sa-app__body / end -->
-            <script>
+                </div><!-- sa-app__body / end -->
+                <script>
 
 
-                function previewImages() {
+                    function previewImages() {
 
-                    var preview = document.querySelector('#preview');
+                        var preview = document.querySelector('#preview');
 
-                    if (this.files) {
-                        [].forEach.call(this.files, readAndPreview);
+                        if (this.files) {
+                            [].forEach.call(this.files, readAndPreview);
+                        }
+
+                        function readAndPreview(file) {
+
+                            // Make sure `file.name` matches our extensions criteria
+                            if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                                return alert(file.name + " is not an image");
+                            } // else...
+
+                            var reader = new FileReader();
+
+                            reader.addEventListener("load", function () {
+                                var image = new Image();
+                                image.height = 100;
+                                image.title = file.name;
+                                image.src = this.result;
+                                preview.appendChild(image);
+                            });
+
+                            reader.readAsDataURL(file);
+
+                        }
+
                     }
 
-                    function readAndPreview(file) {
+                    document.querySelector('#file-input').addEventListener("change", previewImages);
 
-                        // Make sure `file.name` matches our extensions criteria
-                        if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
-                            return alert(file.name + " is not an image");
-                        } // else...
-
-                        var reader = new FileReader();
-
-                        reader.addEventListener("load", function () {
-                            var image = new Image();
-                            image.height = 100;
-                            image.title = file.name;
-                            image.src = this.result;
-                            preview.appendChild(image);
-                        });
-
-                        reader.readAsDataURL(file);
-
-                    }
-
-                }
-
-                document.querySelector('#file-input').addEventListener("change", previewImages);
-
-            </script>
+                </script>
 
 
-            <%- include('./layouts/footer'); -%>
+                <%- include('./layouts/footer'); -%>

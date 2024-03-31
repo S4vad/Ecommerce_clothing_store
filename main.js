@@ -1,6 +1,6 @@
 import path from "path";
-import express from "express"
-import mongoose from "mongoose"
+import express from "express";
+import mongoose from "mongoose";
 
 import connectToDatabase from "./config/db_connection.js";
 import { fileURLToPath } from "url";
@@ -8,7 +8,7 @@ import adminRoute from "./routes/adminRoute.js"
 import userRoute from "./routes/userRoute.js"
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import multer from "multer";
+// import multer from "multer";
 
 
 const app=express();
@@ -31,6 +31,7 @@ app.use(express.static(publicUserDirectoryPath));
 
 
 
+
 // view engin setup
 app.set("views",path.join(__dirname,"views"))
 app.set('view engine','ejs')
@@ -38,12 +39,12 @@ app.set('view engine','ejs')
 // app.engine('hbs',hbs(extname)
 
 app.use("/admin",adminRoute);
-app.use('/',userRoute);
+app.use('/user',userRoute);
 
 app.use(cookieParser());
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3005;
 app.listen(port,()=>{
     console.log('server running successfully',port)
 })

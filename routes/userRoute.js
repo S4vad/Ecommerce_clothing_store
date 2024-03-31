@@ -1,5 +1,5 @@
-import express, { Router } from "express";
-import {userHome} from "../controller/usercontroller.js";
+import express from "express";
+import {userHome,user_registration} from "../controller/usercontroller.js";
 
 
 
@@ -9,6 +9,7 @@ routes.use(express.static("public"))
 
 
 routes.get('/',userHome)
+routes.get('/user_registration',user_registration)
 // routes.get('/login',adminLoginPage)
 // routes.get('/signup',adminSignupPage)
 

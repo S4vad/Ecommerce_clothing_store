@@ -177,16 +177,15 @@
                                             </td>
                                             <td><a href="#" class="text-reset"><%= products[i].Brand %> </a></td>
 
-                                            <td>Categories edit</td>
+                                            <td><%= products[i].Categories.category_name %></td>
                                             <td>
-                                                <% if (products[i].Stock <=10) { %>
-                                                    <div class="badge badge-sa-danger"><%= products[i].Stock %>  In Stock</div>
-
-                                                <% } else{ %> 
-                                                 
-                                                <div class="badge badge-sa-success"><%= products[i].Stock %>  In Stock</div>
+                                                <% if (products[i].Stock <= 10) { %>
+                                                  <div class="badge badge-sa-danger"><%= products[i].Stock %> In Stock</div>
+                                                <% } else { %>
+                                                  <div class="badge badge-sa-success"><%= products[i].Stock %> In Stock</div>
                                                 <% } %>
-                                            </td>
+                                              </td>
+                                              
                                             <td>
                                                 <div class="sa-price"><span class="sa-price__symbol">&#x20B9; </span><span
                                                         class="sa-price__integer"><%= products[i].Price %> </span><span
