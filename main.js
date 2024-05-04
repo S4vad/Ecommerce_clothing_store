@@ -25,8 +25,9 @@ app.use(morgan("dev"))
 
 const __dirname=path.dirname(fileURLToPath(import.meta.url))
 
-const publicUserDirectoryPath = path.join(__dirname, "public", "user");
+const publicUserDirectoryPath = path.join(__dirname, "public");
 app.use(express.static(publicUserDirectoryPath));
+
 
 
 
@@ -39,7 +40,7 @@ app.set('view engine','ejs')
 // app.engine('hbs',hbs(extname)
 
 app.use("/admin",adminRoute);
-app.use('/user',userRoute);
+app.use('/',userRoute);
 
 app.use(cookieParser());
 

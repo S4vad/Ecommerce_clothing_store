@@ -11,9 +11,9 @@ export async function userHome(req,res){
 }
 
 
-export async function user_registration(req,res){
+export async function user_login(req,res){
     try {
-    res.render('user/user_registration')
+    res.render('user/user_login')
         
     } catch (error) {
         

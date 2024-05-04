@@ -1,16 +1,20 @@
 import express from "express";
-import {userHome,user_registration} from "../controller/usercontroller.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import {userHome,user_login} from "../controller/usercontroller.js";
 
 
 
 const routes=express.Router();
 
-routes.use(express.static("public"))
+const __dirname=path.dirname(fileURLToPath(import.meta.url))
+const publicUserDirectoryPath = path.join(__dirname, "public");
+routes.use(express.static(publicUserDirectoryPath));
+
 
 
 routes.get('/',userHome)
-routes.get('/user_registration',user_registration)
-// routes.get('/login',adminLoginPage)
+routes.get('/login',user_login)
 // routes.get('/signup',adminSignupPage)
 
 // routes.post('/signin',adminLogin)
