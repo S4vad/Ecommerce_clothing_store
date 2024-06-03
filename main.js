@@ -1,6 +1,7 @@
 import path from "path";
 import express from "express";
 import mongoose from "mongoose";
+// import bodyParser from "body-parser";
 
 import connectToDatabase from "./config/db_connection.js";
 import { fileURLToPath } from "url";
@@ -12,6 +13,7 @@ import cookieParser from "cookie-parser";
 
 
 const app=express();
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 
 

@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import {userHome,user_login} from "../controller/usercontroller.js";
+import {userHome,signup,userSignup,login,userLogin} from "../controller/usercontroller.js";
 
 
 
@@ -14,11 +14,13 @@ routes.use(express.static(publicUserDirectoryPath));
 
 
 routes.get('/',userHome)
-routes.get('/login',user_login)
+routes.get('/signup',signup)
+routes.get('/login',login)
 // routes.get('/signup',adminSignupPage)
 
-// routes.post('/signin',adminLogin)
-// routes.post('/signup',adminSignup)
+routes.post('/signin',userSignup)
+routes.post('/userlog',userLogin)
+
 
 
 export default routes;

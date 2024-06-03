@@ -4,30 +4,18 @@ import mongoose from "mongoose"
 // const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-    firstname:{type: String, required: true, trim:true},
-    lastname:{type: String,required: true, trim:true},
-    email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim:true,
-  },
-  phone:{
-    type: String,
-  },
-  password: {
-    type: String,
-    trim:true,
-    required: true,
-    minlength: [6],
-  },
-  isBanned:{type:Boolean, default:false},
-  
- 
+  email:{
+    type:String,
+    require:true,
+
+
 },
-{
-  timestamps:true,
+password:{
+    type:String,
+    require:true,
+//for removing white space
+
+}
 }
 );
 
