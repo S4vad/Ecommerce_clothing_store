@@ -31,6 +31,7 @@ const publicUserDirectoryPath = path.join(__dirname, "public");
 app.use(express.static(publicUserDirectoryPath));
 
 
+app.use(cookieParser());//routente top l vilikkanam
 
 
 
@@ -44,7 +45,6 @@ app.set('view engine','ejs')
 app.use("/admin",adminRoute);
 app.use('/',userRoute);
 
-app.use(cookieParser());
 
 
 const port = process.env.PORT || 3000;

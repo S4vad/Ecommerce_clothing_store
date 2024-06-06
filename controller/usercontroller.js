@@ -2,7 +2,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import usermodel from "../models/userSchema.js";
+import Product from "../models/productSchema.js";
 import { name } from "ejs";
+
+
 
 export async function userHome(req,res){
     try {
@@ -46,6 +49,9 @@ export async function login(req,res){
 
 export async function userLogin(req,res){
     const {email,password}=req.body;
+    
+
+    
     try {
         const user = await usermodel.findOne({email});
         
@@ -58,13 +64,28 @@ export async function userLogin(req,res){
             return res.render('user/userLogin',{message:"Incorrect password"});
         }
 
-        const token = jwt.sign({userId: user._id},"jwtid",{expiresIn:"5d"});
-        res.cookie("jwt", token, { httpOnly: true });
+        const token = jwt.sign({userId: user._id},"jwtid",{expiresIn:"5d"});  //jwt id its a secret id , amd we can use any name instead of jwtid
+        res.cookie("userjwt", token, { httpOnly: true });  //for storing cokkies
        
         return res.redirect('/');
     } catch (error) {
         console.log(error.message);
         return res.status(500).send("Internal Server Error");
+    }
+}
+
+
+export async function shop(req,res){
+    try {
+        const product=await Product.find()
+        // console.log(product)
+        res.render('user/shop',{product:product})
+
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
     }
 }
 
