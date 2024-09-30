@@ -37,19 +37,7 @@ export async function addProduct(req,res){
 
 }
 
-export async function product_list(req,res){
-    try {
-        const products= await productModel.find()
-        const Category = await productModel.find().populate('Categories');
-        // const products = await productmodel.find().populate('category') 
-        // console.log(category)
-        res.render('admin/product_list',{products,Category})
-        
-    } catch (error) {
-        res.render(error)
-    }
-    
-}
+
 
 
 
@@ -66,7 +54,7 @@ export async function adminSignup(req,res){
         
     } catch (error) {
         console.log(error.message)
-        res.send("<script>alert('product not created successully');</script>")
+        res.send("<script>alert('sign in not successed');</script>")
 
     }
     
@@ -118,7 +106,7 @@ export async function productAdd(req,res,next){
             error.httpStatusCode = 400;
             return next(error)
         }
-        console.log(files)
+        // console.log(files)
 // //sharp image
 
         
@@ -134,18 +122,57 @@ export async function productAdd(req,res,next){
    
 }
 
+export async function product_list(req,res){
+    try {
+        const products= await productModel.find()
+        const Category = await productModel.find().populate('Categories');
+        // const products = await productmodel.find().populate('category') 
+        // console.log(category)
+        res.render('admin/product_list',{products,Category})
+        
+    } catch (error) {
+        res.render(error)
+    }
+    
+}
+
 export async function edit_product(req,res){
     try {
         const {id}=req.query;
         // console.log(req.query)
-        const Categories=await categorymodel.find()
-        const Category= await productModel.findById(id).populate(Categories);
-        const product=await productModel.findById(id)
-        res.render('admin/edit_product',{Category,product})
+        const Category=await categorymodel.find();
+        const product= await productModel.findById(id).populate("Categories");
+        product.Images=product.Images || []     // product.product_image=product.product_image || []
+    
+        res.render('admin/edit_product',{product,Category})//   C capital aan
         
     } catch (error) {
-        res.render(error)
+        // res.render(error)
+        console.log(error)
         
+    }
+}
+
+
+export async function edit_single_product(req, res) {
+    try {
+        const { id } = req.body;
+        const updatedProductData = {
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            stock: req.body.stock,
+            category: req.body.category,
+            // Handle images separately if needed
+        };
+
+        // Handle images upload logic here if needed
+
+        await productModel.findByIdAndUpdate(id, updatedProductData);
+        res.redirect('/admin/product_list'); // Redirect to product list or desired page
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server error');
     }
 }
 

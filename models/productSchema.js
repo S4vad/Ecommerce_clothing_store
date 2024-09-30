@@ -14,7 +14,7 @@ const addProductSchema = new mongoose.Schema({
         type: Number, // Assuming price should be a number
         required: true
     },
-    stock:{
+    Stock:{
         type:Number,
         require:true,
 

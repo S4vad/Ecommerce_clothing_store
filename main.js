@@ -1,7 +1,7 @@
 import path from "path";
 import express from "express";
 import mongoose from "mongoose";
-// import bodyParser from "body-parser";
+import bodyParser from "body-parser";
 
 import connectToDatabase from "./config/db_connection.js";
 import { fileURLToPath } from "url";
@@ -13,7 +13,7 @@ import cookieParser from "cookie-parser";
 
 
 const app=express();
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
@@ -27,8 +27,8 @@ app.use(morgan("dev"))
 
 const __dirname=path.dirname(fileURLToPath(import.meta.url))
 
-const publicUserDirectoryPath = path.join(__dirname, "public");
-app.use(express.static(publicUserDirectoryPath));
+// const publicUserDirectoryPath = path.join(__dirname, "public");
+app.use(express.static("public"));
 
 
 app.use(cookieParser());//routente top l vilikkanam

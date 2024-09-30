@@ -4,18 +4,27 @@ import jwt from "jsonwebtoken";
 import usermodel from "../models/userSchema.js";
 import Product from "../models/productSchema.js";
 import { name } from "ejs";
+import { getUser } from "../helpers/mainhelper.js";
+
 
 
 
 export async function userHome(req,res){
     try {
-    res.render('user/index')
+        const userId=req.user;
+        const user=await getUser(userId);
+        const product=await Product.find()
+    
+        res.render('user/index',{user:user,product:product})
+        //res.local.user=user; its another method to send something to ejs file like above solution
         
     } catch (error) {
         res.render(error)
         
     }
 }
+
+
 
 
 export async function signup(req,res){
@@ -28,7 +37,7 @@ export async function signup(req,res){
 }
 
 export async function userSignup(req,res){
-    // console.log(req.body)
+    
     const {email,password}=req.body;
     try {
         const hashedpassword=await bcrypt.hash(password,10);
@@ -75,11 +84,23 @@ export async function userLogin(req,res){
 }
 
 
+export async function logout(req, res) {
+    res.clearCookie('userjwt'); // Clear the 'token' cookie
+    res.redirect('/login');   // Redirect to the login page
+}
+
+
+
 export async function shop(req,res){
     try {
         const product=await Product.find()
+
+        const userId=req.user;
+        const user=await getUser(userId);
+
         // console.log(product)
-        res.render('user/shop',{product:product})
+        res.render('user/shop',{product:product,user:user})
+
 
 
         
@@ -88,5 +109,55 @@ export async function shop(req,res){
         
     }
 }
+
+export async function quickView(req, res) {
+    try {
+        const userId=req.user;
+        const user=await getUser(userId);
+        const id = req.params.id;
+        const product = await Product.findById(id); 
+        // Use findById for a single product
+    
+    
+        
+        
+        if (!product) {
+            return res.status(404).send('Product not found'); // Handle case where product does not exist
+        }
+    
+
+        
+        res.render('user/quickView', { product ,user});
+    } catch (error) {
+        res.status(500).send(error.message); // Use appropriate status code
+    }
+}
+
+
+export async function productDetails(req,res) {
+    try {
+        const userId=req.user;
+        const user=await getUser(userId);
+
+
+        const id=req.params.id;
+        const product=await Product.findById(id);
+
+        
+      
+        res.render('user/productDetails',{user,product})
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+
+
+
+
+
 
 

@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     addProduct,productAdd ,product_list,category_list,add_category,edit_product,
-    delete_product,users,user_details} from "../controller/admincontroller.js";
+    delete_product,users,user_details,edit_single_product} from "../controller/admincontroller.js";
 
 // import upload from "../middlewares/arrayUploadMiddlware.js"
 import { uploadImages,getResult,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
@@ -25,8 +25,9 @@ routes.get('/user_details',user_details)
 
 routes.post('/signin',adminLogin)
 routes.post('/signup',adminSignup)
-routes.post('/addProduct',uploadImages,resizeImages,productAdd)
+routes.post('/productadd',uploadImages,resizeImages,productAdd)
 routes.post('/add_category',uploadfile.single('category_thumbnail'),add_category)//for uploading single image
+routes.post('/edit_single_product',edit_single_product)
 
 
 export default routes;

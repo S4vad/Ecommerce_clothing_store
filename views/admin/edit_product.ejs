@@ -1,9 +1,9 @@
 <%- include('./layouts/main'); -%>
-  <style>
-  
+    <style>
 
-  </style>
-  
+
+    </style>
+
     <%- include('./layouts/header'); -%>
 
 
@@ -31,9 +31,11 @@
 
 
 
-                            <form action="/admin/edit_product?id=<%= product._id %> " method="post" enctype="multipart/form-data">
-                            <div class="col-auto d-flex"><button class="btn btn-primary" type="submit">Save</button>
-                            </div>
+                            <form action="edit_single_product"method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="id" value="<%= product._id%>">
+
+                                <div class="col-auto d-flex"><button class="btn btn-primary" type="submit">Save</button>
+                                </div>
                         </div>
                     </div>
                     <div class="sa-entity-layout"
@@ -50,17 +52,15 @@
 
                                         <div class="mb-4"><label for="form-product/name"
                                                 class="form-label">Name</label><input type="text" class="form-control"
-                                                name="name" value="<%= product.name %> " id="form-product/name" required></div>
+                                                name="name" value="<%= product.Name %> " id="form-product/name"
+                                                required></div>
 
                                         <div class="mb-4"><label for="form-product/description"
                                                 class="form-label">Description</label>
-                                                <textarea
-                                                id="" name="description"
-                                                class=" form-control" rows="4" required><%= product.description %></textarea>
+                                            <textarea id="" name="description" class=" form-control" rows="4"
+                                                required><%= product.Description %></textarea>
                                         </div>
-                                        <div class="mb-4"><label for="form-product/name"
-                                            class="form-label">Brand</label><input type="text"value="<%= product.brand %>" class="form-control"
-                                            name="brand" id="form-product/name" required></div>
+
                                     </div>
                                 </div>
                                 <div class="card mt-5">
@@ -71,16 +71,17 @@
                                         <div class="row g-4">
                                             <div class="col"><label for="form-product/price"
                                                     class="form-label">Price</label><input type="number"
-                                                    class="form-control" id="form-product/price" value="<%= product.price %>" name="price" required>
+                                                    class="form-control" id="form-product/price"
+                                                    value="<%= product.Price %>" name="price" required>
                                             </div>
-                                            <div class="col"><label for="form-product/old-price"
+                                            <!-- <div class="col"><label for="form-product/old-price"
                                                     class="form-label">Discount</label><input type="number"
                                                     class="form-control" name="discount" value="<%= product.discount %>" id="form-product/old-price" required>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
-                         
+
                                 <div class="card mt-5">
                                     <div class="card-body p-5">
                                         <div class="mb-5">
@@ -89,7 +90,8 @@
 
                                         <div><label for="form-product/quantity" class="form-label">Stock
                                                 quantity</label><input type="number" class="form-control"
-                                                id="form-product/quantity" name="stock" value="<%= product.stock %>" required></div>
+                                                id="form-product/quantity" name="stock" value="<%= product.Stock %>"
+                                                required></div>
                                     </div>
                                 </div>
                                 <div class="card mt-5">
@@ -102,20 +104,21 @@
                                         <div class="sa-divider"></div>
                                         <div class="table-responsive">
                                             <div class="choose-imagefile-wrap mb-5">
-                                                    <div >
-                                                     <h2 class="ms-4 fs-exact-18">previous image preview</h2>
-                                                        <% for( let i = 0; i < product.product_image.length; i++ ) { %>
-                                                            <img src="data:<%= product.product_image[i].contentType %>;base64,<%= product.product_image[i].imageBase64 %>" height="215px" width="215px" alt="">
-                                                            <% } %>
-                        
-                                                    </div>
-                                                    <h2 class="mt-5 ms-4 fs-exact-18">replace image</h2>
-                                                    <input type="file" id="file-input"  class="form-control" name='images'  multiple>
-                                                    <div class="mb-4" id="preview">
-                                                    
-                                                    </div>
-                                                  
-                                              
+                                                <div>
+                                                    <% for( let i=0; i < product.Images.length; i++ ) { %>
+                                                        <img src="data:<%= product.Images[i].contentType %>;base64,<%= product.Images[i].imageBase64 %>"
+                                                            height="215px" width="215px" alt="">
+                                                        <% } %>
+
+                                                </div>
+                                                <h2 class="mt-5 ms-4 fs-exact-18">replace image</h2>
+                                                <input type="file" id="file-input" class="form-control" name='images'
+                                                    multiple>
+                                                <div class="mb-4" id="preview">
+
+                                                </div>
+
+
                                             </div>
 
                                         </div>
@@ -131,53 +134,34 @@
                                     <div class="card-body p-5">
                                         <div class="mb-5">
                                             <h2 class="mb-0 fs-exact-18">Categories</h2>
-                                        </div><select name="category" class="sa-select2 form-select" required>
-                                            <option value="<%= product.category._id %>" selected><%= product.category.category_name %></option>
-                                            <% for( let i=0; i < category.length; i++ ) { %>
-                                                <option value="<%= category[i]._id %>">
-                                                    <%= category[i].category_name %>
+                                        </div>
+                                        <select name="category" class="sa-select2 form-select" required>
+                                            <option value="<%= Category.category_name %>" selected>
+                                                <%= Category.category_name %>
+                                            </option>
+                                            <% for( let i=0; i < Category.length; i++ ) { %>
+                                                <option value="<%= Category[i].category_name %>">
+                                                    <%= Category[i].category_name %>
                                                 </option>
-                                            <% } %>
+                                                <% } %>
 
 
 
                                         </select>
 
                                     </div>
-                                    <div class="card-body p-5">
-                                        <div class="mb-5">
-                                            <h2 class="mb-0 fs-exact-18">Colors</h2>
-                                        </div><select name="colors" class="sa-select2 form-select" required multiple="">
-                                            <% for( let i = 0; i < product.colors.length; i++ ) { %>
-                                            <option selected><%= product.colors[i] %> </option>
-                                            <% } %>
-                                            
 
-                                            <option >Black</option>
-                                            <option>red</option>
-                                            <option >White</option>
-                                            <option>Green</option>
-                                            <option>#800020</option>
-
-                                        </select>
-                                    </div>
                                 </div>
                                 <div class="card w-100 mt-5">
                                     <div class="card-body p-5">
                                         <div class="mb-5">
-                                            <h2 class="mb-0 fs-exact-18">Tags</h2>
-                                        </div><select name="tags" class="sa-select2 form-select" data-tags="true" required multiple="">
-                                            <% for( let i = 0; i < product.tags.length; i++ ) { %>
-                                                <option selected><%= product.tags[i] %> </option>
-                                                <% } %>
-                                            <option>samsung</option>
-                                            <option>tv</option>
-                                            <option>laptop</option>
-                                            <option>ipad</option>
-                                        </select>
-                                        <div class="mt-4 mb-n2"><a href="/admin/category_list">Add new category</a>
+                                            <h2 class="mb-0 fs-exact-18">Brand</h2>
+                                            <div class="mb-4"><label for="form-product/brand"
+                                                    class="form-label"></label><input type="text" class="form-control"
+                                                    name="name" value="<%= product.Brand %> " id="form-product/brand"
+                                                    required></div>
                                         </div>
-                                    </form>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -186,43 +170,43 @@
                 </div>
             </div>
         </div><!-- sa-app__body / end -->
-<script>
+        <script>
 
 
-function previewImages() {
+            function previewImages() {
 
-var preview = document.querySelector('#preview');
+                var preview = document.querySelector('#preview');
 
-if (this.files) {
-  [].forEach.call(this.files, readAndPreview);
-}
+                if (this.files) {
+                    [].forEach.call(this.files, readAndPreview);
+                }
 
-function readAndPreview(file) {
+                function readAndPreview(file) {
 
-  // Make sure `file.name` matches our extensions criteria
-  if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
-    return alert(file.name + " is not an image");
-  } // else...
-  
-  var reader = new FileReader();
-  
-  reader.addEventListener("load", function() {
-    var image = new Image();
-    image.height = 100;
-    image.title  = file.name;
-    image.src    = this.result;
-    preview.appendChild(image);
-  });
-  
-  reader.readAsDataURL(file);
-  
-}
+                    // Make sure `file.name` matches our extensions criteria
+                    if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                        return alert(file.name + " is not an image");
+                    } // else...
 
-}
+                    var reader = new FileReader();
 
-document.querySelector('#file-input').addEventListener("change", previewImages);
+                    reader.addEventListener("load", function () {
+                        var image = new Image();
+                        image.height = 100;
+                        image.title = file.name;
+                        image.src = this.result;
+                        preview.appendChild(image);
+                    });
 
-</script>
+                    reader.readAsDataURL(file);
+
+                }
+
+            }
+
+            document.querySelector('#file-input').addEventListener("change", previewImages);
+
+        </script>
 
 
         <%- include('./layouts/footer'); -%>
