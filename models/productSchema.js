@@ -20,7 +20,7 @@ const addProductSchema = new mongoose.Schema({
 
     },
     Images: [
-
+        
     ],
     Categories:{
         type:mongoose.Schema.Types.ObjectId,
@@ -42,6 +42,6 @@ const addProductSchema = new mongoose.Schema({
 
 },{timestamps:true});//database time show cheyyan
 
-const Product = mongoose.model('Product', addProductSchema);
+const Product = mongoose.model('Products', addProductSchema);
 
 export default Product;

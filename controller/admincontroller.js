@@ -7,6 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import exp from "constants";
 import categorymodel from "../models/categorySchema.js";
+import bannerModel from "../models/bannerSchema.js";
 import fs from "fs";
 
 
@@ -32,6 +33,7 @@ export async function addProduct(req,res){
         res.render('admin/addProduct',{category})
         
     } catch (error) {
+        res.send(error.message)
         
     }
 
@@ -193,7 +195,7 @@ export async function delete_product(req,res){
 export async function category_list(req,res){
     try {
         const category=await categorymodel.find()
-        console.log(category)
+        
         res.render('admin/category_list',{category})
         
     } catch (error) {
@@ -213,7 +215,7 @@ export async function category_list(req,res){
     }
     const { category_name, category_description } = req.body
     const category =  await categorymodel.findOne({category_name:category_name})
-    console.log(category);
+
     if(category){
     res.send("<script>alert('Category exists'); window.location.href = '/admin/category_list'; </script>");
 
@@ -244,6 +246,49 @@ export async function category_list(req,res){
     
 }
 
+
+export async function delete_category(req,res) {
+    try {
+        const id=req.query.id;
+        await categorymodel.findByIdAndDelete(id)
+        res.redirect('/admin/category_list')
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+export async function edit_category(req, res) {
+    try {
+        const  id  = req.query.id;
+        let img = fs.readFileSync(category_thumbnail.path)
+        const encode_image = img.toString('base64')
+        const category_thumbnail = req.file
+        
+        const updatedProductData = {
+            category_name: req.body.category_name,
+            category_description: req.body.category_description,
+            category_thumbnail: req.body.category_thumbnail,
+            contentType: category_thumbnail.mimetype,
+            imageBase64: encode_image
+
+            // Handle images separately if needed
+        };
+        
+
+        // Handle images upload logic here if needed
+
+        await categorymodel.findByIdAndUpdate({_id:id}, updatedProductData);
+        res.redirect('/admin/category_list'); // Redirect to product list or desired page
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server error');
+    }
+}
+
+
 //User 
 
 export async function users(req,res){
@@ -267,6 +312,92 @@ export async function user_details(req,res){
         
     }
 }
+
+
+
+export async function addBanner(req,res) {
+    try {
+        res.render('admin/banner')
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+
+export async function banner(req,res) {
+    try {
+        const banner_image = req.file;
+       
+        const bannerName=req.body.bannerName;
+        const bannerInfo=req.body.bannerInfo;
+        let img = fs.readFileSync(banner_image.path)
+        const encode_image = img.toString('base64')
+        bannerModel.create({
+            bannerName:bannerName,
+            bannerInfo:bannerInfo,
+            image:banner_image.filename,
+            imageBase64:encode_image,
+            contentType: banner_image.mimetype,
+
+        })
+        res.redirect('/admin/bannerList')
+
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+export async function bannerList(req,res) {
+
+    try {
+
+        const banner=await bannerModel.find()
+        res.render('admin/bannerList',{banner:banner})
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+export async function editBanner(req,res) {
+    try {
+
+        
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+export async function deleteBanner(req,res) {
+
+    try {
+
+        const id=req.query.id;
+
+        await bannerModel.findByIdAndDelete(id)
+        res.redirect('/admin/bannerList')
+        
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+
 
 
 
