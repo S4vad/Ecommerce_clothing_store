@@ -10,7 +10,9 @@ import bannerModel from "../models/bannerSchema.js"
 import categorymodel from "../models/categorySchema.js";
 import contactModel from "../models/contactSchema.js";
 import wishlistModel from "../models/wishlist.js";
-
+import subBannerModel from "../models/subBanners.js";
+import { NONAME } from "dns";
+import { addAbortListener } from "events";
 
 
 
@@ -21,17 +23,30 @@ export async function userHome(req,res){
         
         const cart = await cartModel.find({ userId: userId}).populate('productId');
 
-        console.log(cart)
+       
         const cartItems = await cartModel.find().populate('productId');
         const cartCount = cartItems.length;
-        const banner=await bannerModel.find()
-        const category=await categorymodel.find()
-        const product=await Product.find().populate('Categories');
-       
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+        
 
         
 
-        res.render('user/index',{user:user,product:product,cart:cart,cartCount:cartCount,banner:banner,category:category})
+        const banner=await bannerModel.find()
+
+        const category=await categorymodel.find()
+
+        const product=await Product.find().populate('Categories');
+
+        const subBanner=await subBannerModel.find().populate('Categories')
+    
+
+
+
+
+
+       res.render('user/index',{user:user,product:product,cart:cart,cartCount:cartCount,banner:banner,category:category,wishListCount:wishListCount,subBanner:subBanner})
         //res.local.user=user; its another method to send something to ejs file like above solution
         
     } catch (error) {
@@ -48,7 +63,10 @@ export async function aboutPage(req,res) {
         const cartItems = await cartModel.find().populate('productId');
         const cartCount = cartItems.length;
 
-        res.render('user/about',{user:user,cartCount:cartCount})
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+
+        res.render('user/about',{user:user,cartCount:cartCount,wishListCount:wishListCount})
         
     } catch (error) {
         res.send(error.message)
@@ -65,13 +83,16 @@ export async function contactPage(req,res) {
         const cartItems = await cartModel.find().populate('productId');
         const cartCount = cartItems.length;
 
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+
     
 
         const message = req.query.message || " ";
 
 
 
-        res.render('user/contact',{user:user,cartCount:cartCount,message:message})
+        res.render('user/contact',{user:user,cartCount:cartCount,message:message,wishListCount:wishListCount})
         
     } catch (error) {
         res.send(error.message)
@@ -149,6 +170,8 @@ export async function logout(req, res) {
 
 export async function shop(req,res){
     try {
+
+    
         const product=await Product.find().populate('Categories')
 
         const userId=req.user;
@@ -157,11 +180,15 @@ export async function shop(req,res){
         const cartItems = await cartModel.find().populate('productId');
         const cartCount = cartItems.length;
 
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+
         const category=await categorymodel.find()
 
 
+
         // console.log(product)
-        res.render('user/shop',{product:product,user:user,cartCount:cartCount,category:category})
+        res.render('user/shop',{product:product,user:user,cartCount:cartCount,category:category,wishListCount:wishListCount})
 
 
 
@@ -209,8 +236,11 @@ export async function productDetails(req,res) {
 
         const cartItems = await cartModel.find().populate('productId');
         const cartCount = cartItems.length;
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
       
-        res.render('user/productDetails',{user,product,cart,cartCount:cartCount})
+        res.render('user/productDetails',{user,product,cart,cartCount:cartCount,wishListCount:wishListCount})
         
     } catch (error) {
         res.send(error.message)
@@ -219,14 +249,20 @@ export async function productDetails(req,res) {
     
 }
 
+
+
+
 export async function cart(req,res) {
     try {
         const user=req.user;
         const cart=await cartModel.find().populate(['productId','userId']);
         const cartItems = await cartModel.find().populate('productId');
         const cartCount = cartItems.length;
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
         
-        res.render('user/cart',{user:user,cart:cart,cartCount:cartCount})
+        res.render('user/cart',{user:user,cart:cart,cartCount:cartCount,wishListCount:wishListCount})
         
     } catch (error) {
         res.send(error.message)
@@ -265,12 +301,38 @@ export async function cartAdd(req,res) {
 
 export async function wishlist(req,res) {
     try {
+
+
         const user=req.user;
-        const cart=await cartModel.find().populate(['productId','userId']);
+        const wishList=await wishlistModel.find().populate(['productId','userId']);
         const cartItems = await cartModel.find().populate('productId');
         const cartCount = cartItems.length;
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
         
-        res.render('user/cart',{user:user,cart:cart,cartCount:cartCount})
+        res.render('user/wishList',{user:user,wishList:wishList,cartCount:cartCount,wishListCount:wishListCount})
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+
+
+export async function wishlistAdd(req,res) {
+    try {
+        const id=req.params.id;
+        const user=req.user
+        
+        await wishlistModel.create({
+            'productId':id,
+            'userId':user
+        })
+        res.redirect('/')
+
         
     } catch (error) {
         res.send(error.message)
@@ -305,6 +367,172 @@ export async function addContact(req,res) {
     }
     
 }
+
+
+
+
+export async function filter(req, res) {
+    try {
+
+
+
+        const priceRange = req.body.priceRange; 
+
+        
+
+        let product;
+
+        switch (priceRange) {
+            case '500AndBelow':
+                product = await Product.find({ Price: { $lt: 500 } }).populate("Categories");
+                break;  
+        
+            case '501To1000':
+                product = await Product.find({ Price: { $gt: 500, $lt: 1001 } }).populate("Categories");
+                break;  
+        
+            case '1001To5000':
+                product = await Product.find({ Price: { $gt: 1001, $lt: 5001 } }).populate("Categories");
+                break;  
+        
+            case '5001To10000':
+                product = await Product.find({ Price: { $gt: 5001, $lt: 10001 } }).populate("Categories");
+                break;  
+        
+            case '10001AndAbove':
+                product = await Product.find({ Price: { $gt: 10000 } }).populate("Categories");
+                break; 
+        }
+
+
+        const userId=req.user;
+        const user=await getUser(userId);
+        
+        const cart = await cartModel.find({ userId: userId}).populate('productId');
+
+       
+        const cartItems = await cartModel.find().populate('productId');
+        const cartCount = cartItems.length;
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+
+        const banner=await bannerModel.find()
+
+        const category=await categorymodel.find()
+        
+        const subBanner=await subBannerModel.find().populate('Categories')
+
+        res.render('user/index',{user:user,cart:cart,cartCount:cartCount,banner:banner,category:category,wishListCount:wishListCount,subBanner:subBanner,product:product || []})
+
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+
+export async function categoryShop(req,res) {
+    try {
+        var category_name=req.query.category || "default";
+    
+        if (category_name === "default") {
+            var product = await Product.find().populate('Categories');
+        } else {
+            const category = await categorymodel.findOne({ category_name: category_name });
+            if (category) {
+                var product = await Product.find({ Categories: category._id }).populate('Categories');
+            } else {
+                
+                var product = [];
+            }
+        }
+
+        const userId=req.user;
+        const user=await getUser(userId);
+
+        const cartItems = await cartModel.find().populate('productId');
+        const cartCount = cartItems.length;
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+
+
+
+
+
+    
+        res.render('user/categoryShop',{product:product,user:user,cartCount:cartCount,wishListCount:wishListCount,category_name:category_name})
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+export async function search(req,res) {
+
+    try {
+
+        const search=req.body.search;
+        const product=await Product.find({Name:search}).populate('Categories')
+
+        const userId=req.user;
+        const user=await getUser(userId);
+
+        const cartItems = await cartModel.find().populate('productId');
+        const cartCount = cartItems.length;
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+
+        
+
+        const category = await categorymodel.findOne({ category_name: search });
+
+        
+        let pd = null;
+        if (category) {
+            pd = await Product.find({ Categories: category._id }).populate('Categories');
+        }
+        if(!product && !pd)
+        {
+            res.send('product not found')
+        }
+
+        var category_name="";
+
+
+
+
+
+
+        res.render('user/categoryShop',{product:pd || product,user:user,cartCount:cartCount,wishListCount:wishListCount,category_name:category_name})
+
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+
+export async function order(req,res) {
+
+    try {
+        res.render('user/order')
+        
+    } catch (error) {
+        res.send(error.message)
+    }
+    
+}
+
+
+
 
 
 

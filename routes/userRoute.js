@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd} from "../controller/usercontroller.js";
+import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,order,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search} from "../controller/usercontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
 
@@ -26,12 +26,18 @@ routes.get('/cart',userAuthentication,cart)
 routes.get('/wishlist',userAuthentication,wishlist)
 routes.get('/about',userAuthentication,aboutPage)
 routes.get('/contact',userAuthentication,contactPage)
+routes.get('/categoryShop',userAuthentication,categoryShop)
+routes.get('order',userAuthentication,order)
+
 
 routes.post('/signin',userSignup)
 routes.post('/userlog',userLogin)
 routes.post('/cart',userAuthentication,cartAdd)
-routes.post('/cart',userAuthentication,wishlistAdd)
+routes.post('/wishlist/:id',userAuthentication,wishlistAdd)
 routes.post('/contact',userAuthentication,addContact)
+routes.post('/filter',userAuthentication,filter)
+routes.post('/search',userAuthentication,search)
+
 
 
 

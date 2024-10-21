@@ -1,7 +1,9 @@
 import express, { Router } from "express";
 import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     addProduct,productAdd ,product_list,category_list,add_category,edit_product,
-    delete_product,users,user_details,edit_single_product,delete_category,edit_category,addBanner,banner,bannerList,editBanner,deleteBanner} from "../controller/admincontroller.js";
+    delete_product,users,user_details,edit_single_product,delete_category,edit_category,
+    addBanner,banner,bannerList,editBanner,deleteBanner,addSubBanner,subBanner,subBannerList,
+    deleteSubBanner,editSubBanner} from "../controller/admincontroller.js";
 
 // import upload from "../middlewares/arrayUploadMiddlware.js"
 import { uploadImages,getResult,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
@@ -27,6 +29,11 @@ routes.get('/addBanner',addBanner)
 routes.get('/bannerList',bannerList)
 routes.get('/edit_banner',editBanner)
 routes.get('/delete_banner',deleteBanner)
+routes.get('/addSubBanner',addSubBanner)
+routes.get('/subBannerList',subBannerList)
+routes.get('/edit_sub_banner',editSubBanner)
+routes.get('/delete_sub_banner',deleteSubBanner)
+
 
 
 
@@ -38,6 +45,8 @@ routes.post('/add_category',uploadfile.single('category_thumbnail'),add_category
 routes.post('/edit_single_product',edit_single_product)
 routes.post('/edit_category',uploadfile.single('category_thumbnail'),edit_category)
 routes.post('/banner',uploadfile.single('bannerImage'),banner)
+routes.post('/subBanner',uploadfile.single('bannerImage'),subBanner)
+
 
 
 export default routes;

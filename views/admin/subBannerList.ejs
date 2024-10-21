@@ -15,7 +15,7 @@
                                         <li class="breadcrumb-item active" aria-current="page">Banners</li>
                                     </ol>
                                 </nav>
-                                <h1 class="h3 m-0">Banners List</h1>
+                                <h1 class="h3 m-0">Sub Banners List</h1>
                             </div>
                             <div class="col-auto d-flex"><a href="app-category.html" class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#exampleModalCenter"
@@ -34,7 +34,9 @@
                                 <th class="w-min" data-orderable="false"><input type="checkbox"
                                         class="form-check-input m-0 fs-exact-16 d-block" aria-label="..." />
                                 </th>
-                                <th class="min-w-20x">Banner</th>
+                                <th class="min-w-20x">Sub Banner</th>
+                                <th>Main head</th>
+
                              
                                 <th>secondary head</th>
                          
@@ -43,8 +45,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                                <% for( let i = 0; i < banner.length; i++ ) { %>
-                                
+                               <% for( let i = 0; i < banner.length; i++ ) { %>
+                               
                                 <tr>
                                     <td><input type="checkbox" class="form-check-input m-0 fs-exact-16 d-block"
                                             aria-label="..." /></td>
@@ -60,7 +62,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                            <div><a href="#id-<%= i %>" data-bs-toggle="modal" class="text-reset"><%= banner[i].bannerName %> </a>
+                                            <div><a href="#id-<%= i %>" data-bs-toggle="modal" class="text-reset"><%= banner[i].bannerHead %> </a>
                                                 <div class="text-muted mt-n1"></div>
                                             </div>
                                         
@@ -88,7 +90,7 @@
                                                 <li>
                                                     <hr class="dropdown-divider" />
                                                 </li>
-                                                <li><a class="dropdown-item text-danger" href="/admin/delete_banner?id=<%= banner[i]._id  %> "  >Delete</a></li>
+                                                <li><a class="dropdown-item text-danger" href="/admin/delete_sub_banner?id=<%= banner[i]._id  %> "  >Delete</a></li>
                                             </ul>
                                         </div>
                                     </td>
@@ -114,15 +116,15 @@
                                             <form class="row g-4 needs-validation" action="/admin/edit_banner?id=<%= banner[i]._id %> " method="post" >
                     
                                                 <div class="col-12 position-relative">
-                                                    <label for="validationTooltip01" class="form-label">Category name</label><input
-                                                        name="category_name" type="text" value="<%= banner[i].bannerName %> " class="form-control" id="validationTooltip01"
+                                                    <label for="validationTooltip01" class="form-label">Banner Head</label><input
+                                                        name="category_name" type="text" value="<%= banner[i].bannerHead %> " class="form-control" id="validationTooltip01"
                                                         required>
                                                     <div class="valid-tooltip">Looks good!</div>
                                                 </div>
                     
                     
                                                 <div class="col-12 position-relative">
-                                                    <label for="validationTooltip02" class="form-label">Descripton(optional)</label><textarea
+                                                    <label for="validationTooltip02" class="form-label">Banner Info</label><textarea
                                                         id="validationTooltip02"   name="category_description"
                                                         class="form-control" rows="4"><%= banner[i].bannerInfo %></textarea>
                                                 </div>

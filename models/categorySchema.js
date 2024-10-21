@@ -8,7 +8,7 @@ const categorySchema = new mongoose.Schema({
     product_count: {type: Number},
   category_thumbnail:{type: String},
   contentType:{type: String},
-  imageBase64:{type:String}
+  imageBase64:{type:String}.type
  
 },
 {

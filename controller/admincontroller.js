@@ -9,6 +9,7 @@ import exp from "constants";
 import categorymodel from "../models/categorySchema.js";
 import bannerModel from "../models/bannerSchema.js";
 import fs from "fs";
+import subBannerModel from "../models/subBanners.js";
 
 
 
@@ -100,7 +101,7 @@ export async function adminSignup(req,res){
 export async function productAdd(req,res,next){
     try {
         const files = req.body.images
-        console.log(req.body)
+  
         // const file = req.files
         const { name, description, price,stock, category, brand ,size} = req.body
         if (!files) {
@@ -388,6 +389,101 @@ export async function deleteBanner(req,res) {
 
         await bannerModel.findByIdAndDelete(id)
         res.redirect('/admin/bannerList')
+        
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+
+//subBanner
+
+
+export async function addSubBanner(req,res) {
+    try {
+        const category=await categorymodel.find()
+        res.render('admin/subBanner',{category:category})
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+//post function
+
+export async function subBanner(req,res) {
+    try {
+        const banner_image = req.file;
+        
+       
+        const bannerHead=req.body.bannerHead;
+        const bannerInfo=req.body.bannerInfo;
+        const category=req.body.category;
+        let img = fs.readFileSync(banner_image.path)
+        const encode_image = img.toString('base64')
+        subBannerModel.create({
+            bannerHead:bannerHead,
+            bannerInfo:bannerInfo,
+            image:banner_image.filename,
+            imageBase64:encode_image,
+            contentType: banner_image.mimetype,
+            Categories:category
+
+        })
+        res.redirect('/admin/subBannerList')
+
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+export async function subBannerList(req,res) {
+
+    try {
+
+        const banner=await subBannerModel.find().populate('Categories')
+        console.log(banner)
+        res.render('admin/subBannerList',{banner:banner})
+    } catch (error) {
+    res.send(error.message)
+        
+    }
+    
+}
+
+
+
+
+export async function editSubBanner(req,res) {
+    try {
+
+        
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+export async function deleteSubBanner(req,res) {
+
+    try {
+
+        const id=req.query.id;
+
+        await subBannerModel.findByIdAndDelete(id)
+        res.redirect('/admin/subBannerList')
         
         
     } catch (error) {
