@@ -234,9 +234,13 @@ export async function productDetails(req, res) {
         const wisListItems = await wishlistModel.find().populate("productId");
         const wishListCount = wisListItems.length;
 
-        console.log('Cart:', cart); 
+    
+        const message= req.query.message || "";
+        
+        
 
-        res.render('user/productDetails', { user, product, cart, cartCount, wishListCount });
+
+        res.render('user/productDetails', { user, product, cart, cartCount, wishListCount ,quantityAvailableOrNot:message});
         
     } catch (error) {
         console.error('Error in productDetails:', error); 
@@ -258,7 +262,12 @@ export async function cart(req,res) {
         const wisListItems=await wishlistModel.find().populate("productId")
         const wishListCount=wisListItems.length;
         
-        res.render('user/cart',{user:user,cart:cart,cartCount:cartCount,wishListCount:wishListCount})
+        res.render('user/cart',{
+            user:user,
+            cart:cart,
+            cartCount:cartCount,
+            wishListCount:wishListCount})
+
         
     } catch (error) {
         res.send(error.message)
@@ -267,37 +276,53 @@ export async function cart(req,res) {
     
 }
 
-export async function cartAdd(req,res) {
+export async function cartAdd(req, res) {
     try {
-        const userId=req.user;
-
+        const userId = req.user._id; 
+        const quantity = parseInt(req.body.quantity, 10); //ensure quanity integer
+        const current_product_specific = await Product.findById(req.body.productID); 
+        const stock=current_product_specific.Stock;
         
-        const current_product_specific=await Product.findOne({_id:req.body.productID});
-        const current_price=current_product_specific.Price;
-        const current_Total=req.body.quantity*current_price
+        if (!current_product_specific) {
+            throw new Error('Product not found');
+        }
+
+        const current_price = current_product_specific.Price;
+        const current_Total = quantity * current_price;
 
         await cartModel.create({
-            'productId':req.body.productID,
-            'quantity':req.body.quantity,
-            'userId':userId,
-            'size':req.body.size,
-            'subTotal':current_Total,
+            productId: req.body.productID,
+            quantity: quantity,
+            userId: userId,
+            size: req.body.size,
+            subTotal: current_Total,
         });
-        if (req.body.quickView){
-            res.redirect(`/quickView/${req.body.productID}`);
+        const updatedStock = stock- quantity;
 
-        }else{
-            res.redirect(`/productDetails/${req.body.productID}`);
+         let quantityAvailableOrNot = ""; 
 
+        if (updatedStock >= 0) {
+            await Product.findByIdAndUpdate(req.body.productID, { $set: { Stock: updatedStock } });
+        } else {
+            // quantityAvailableOrNot = `The stock is not available  ${quantity} units !!! The available units are ${stock} `;
+            quantityAvailableOrNot = `"Stock unavailable: Only 0 units left!"`;
+
+    
         }
+
+
+        res.locals.quantityAvailableOrNOt = quantityAvailableOrNot;
         
-         
+        const redirectUrl = req.body.quickView 
+            ? `/quickView/${req.body.productID}?message=${encodeURIComponent(quantityAvailableOrNot)}` 
+            : `/productDetails/${req.body.productID}?message=${encodeURIComponent(quantityAvailableOrNot)}`;
+
+        res.redirect(redirectUrl);
         
     } catch (error) {
-        res.send(error.message)
-        
+
+        res.status(500).send(error.message);
     }
-    
 }
 
 export async function wishlist(req,res) {
@@ -477,7 +502,7 @@ export async function search(req,res) {
     try {
 
         const search=req.body.search;
-        const product=await Product.find({Name:search}).populate('Categories')
+        const product=await Product.find({Name:{$regex:search}}).populate('Categories')
 
         const userId=req.user;
         const user=await getUser(userId);

@@ -59,23 +59,19 @@
 											</div>
 										</td>
 										<td class="column-5"><%= item.subTotal %></td>
-										<script>
-											function removeFromCart(cartId){
-												$.ajax({
-													url:"/cart/remove/"+cartId,
-													type:'DELETE',
-													success:function(response){
-														location.reload();
-													},
-													error: function(error) {
-														console.error('Error removing item from cart:', error);
-													}
-												});
-											}
-										</script>
 										
-										
-										
+										<!-- Adding a gap between Offers and Delete buttons -->
+										<td class="column-6" style="padding-right: 20px;">
+											<a href="/coupon"  class="text-success" style="font-weight: 900; font-size: 1.2rem;">
+												Offers
+											</a>
+										</td>
+									
+										<td class="column-7">
+											<button class="btn text-dark p-0 m-0 border-0 bg-transparent" onclick="removeFromCart('<%= item._id %>')" style="font-size: 0.9rem;">
+												Remove
+											</button>
+										</td>
 									</tr>
 									
 								<% }) %>

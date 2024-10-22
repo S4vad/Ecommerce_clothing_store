@@ -49,25 +49,6 @@ export async function order(req,res) {
 }
 
 
-// export async function order(req,res) {
-//     try {
-//         const user=req.user;
-//         const cart=await cartModel.find().populate(['productId','userId']);
-//         const cartItems = await cartModel.find().populate('productId');
-//         const cartCount = cartItems.length;
-
-//         const wisListItems=await wishlistModel.find().populate("productId")
-//         const wishListCount=wisListItems.length;
-        
-//         res.render('user/cart',{user:user,cart:cart,cartCount:cartCount,wishListCount:wishListCount})
-        
-//     } catch (error) {
-//         res.send(error.message)
-        
-//     }
-    
-// }
-
 export async function coupon(req,res) {
 
     try {
@@ -80,7 +61,7 @@ export async function coupon(req,res) {
         const wisListItems=await wishlistModel.find().populate("productId")
         const wishListCount=wisListItems.length;
 
-        res.render('user/coupon',{coupons:coupon,user,cartCount,wishListCount,moment})
+        res.render('user/coupon',{coupons:coupon,user,cartCount,wishListCount,moment,cart:cartItems})
         
     } catch (error) {
         res.send(error.message)
