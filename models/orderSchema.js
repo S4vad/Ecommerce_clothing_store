@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-const { isEmail } = require('validator');
-const bcrypt = require('bcrypt');
+
 
 const orderSchema = new mongoose.Schema({
     address:{
@@ -25,5 +24,5 @@ const orderSchema = new mongoose.Schema({
 );
 
 
-const ordermodel = mongoose.model("order",orderSchema )
-module.exports = ordermodel
+const orderModel = mongoose.model("order",orderSchema );
+export default orderModel;

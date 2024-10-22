@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import usermodel from "../models/userSchema.js";
 import Product from "../models/productSchema.js";
-import { name } from "ejs";
 import { getUser } from "../helpers/mainhelper.js";
 import cartModel from "../models/cartSchema.js";
 import bannerModel from "../models/bannerSchema.js"
@@ -11,8 +10,7 @@ import categorymodel from "../models/categorySchema.js";
 import contactModel from "../models/contactSchema.js";
 import wishlistModel from "../models/wishlist.js";
 import subBannerModel from "../models/subBanners.js";
-import { NONAME } from "dns";
-import { addAbortListener } from "events";
+
 
 
 
@@ -188,7 +186,7 @@ export async function shop(req,res){
 
 
         // console.log(product)
-        res.render('user/shop',{product:product,user:user,cartCount:cartCount,category:category,wishListCount:wishListCount})
+        res.render('user/shop',{product:product,user:user,cartCount:cartCount,category:category,wishListCount:wishListCount,cart:cartItems})
 
 
 
@@ -223,31 +221,29 @@ export async function quickView(req, res) {
 }
 
 
-export async function productDetails(req,res) {
+export async function productDetails(req, res) {
     try {
-        const userId=req.user;
-        const user=await getUser(userId);
+        const userId = req.user;
+        const user = await getUser(userId);
+        const id = req.params.id;
+        const product = await Product.findById(id);
+        
+        const cart = await cartModel.find().populate(['productId', 'userId']);
+        const cartCount = cart.length;
 
+        const wisListItems = await wishlistModel.find().populate("productId");
+        const wishListCount = wisListItems.length;
 
-        const id=req.params.id;
-        const product=await Product.findById(id);
+        console.log('Cart:', cart); 
 
-        const cart=await cartModel.find().populate(['productId','userId']);
-
-        const cartItems = await cartModel.find().populate('productId');
-        const cartCount = cartItems.length;
-
-        const wisListItems=await wishlistModel.find().populate("productId")
-        const wishListCount=wisListItems.length;
-      
-        res.render('user/productDetails',{user,product,cart,cartCount:cartCount,wishListCount:wishListCount})
+        res.render('user/productDetails', { user, product, cart, cartCount, wishListCount });
         
     } catch (error) {
-        res.send(error.message)
-        
+        console.error('Error in productDetails:', error); 
+        res.send(error.message);
     }
-    
 }
+
 
 
 
@@ -274,14 +270,19 @@ export async function cart(req,res) {
 export async function cartAdd(req,res) {
     try {
         const userId=req.user;
+
         
+        const current_product_specific=await Product.findOne({_id:req.body.productID});
+        const current_price=current_product_specific.Price;
+        const current_Total=req.body.quantity*current_price
+
         await cartModel.create({
             'productId':req.body.productID,
             'quantity':req.body.quantity,
             'userId':userId,
-            'size':req.body.size
-        })
-        console.log(req.body.quickView)
+            'size':req.body.size,
+            'subTotal':current_Total,
+        });
         if (req.body.quickView){
             res.redirect(`/quickView/${req.body.productID}`);
 
@@ -503,11 +504,6 @@ export async function search(req,res) {
 
         var category_name="";
 
-
-
-
-
-
         res.render('user/categoryShop',{product:pd || product,user:user,cartCount:cartCount,wishListCount:wishListCount,category_name:category_name})
 
 
@@ -519,17 +515,22 @@ export async function search(req,res) {
     
 }
 
-
-export async function order(req,res) {
-
+export async function cartDelete(req,res) {
     try {
-        res.render('user/order')
+        const delId=req.params.id;
+        await cartModel.findByIdAndDelete(delId)
+
+        res.render('user/cart')
         
     } catch (error) {
         res.send(error.message)
+        
     }
     
 }
+
+
+
 
 
 

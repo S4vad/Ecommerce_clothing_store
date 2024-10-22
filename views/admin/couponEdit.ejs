@@ -1,0 +1,112 @@
+
+<%- include('./layouts/main'); -%>
+<%- include('./layouts/header'); -%>
+
+
+
+<div id="top" class="sa-app__body">
+    <div class="mx-sm-2 px-2 px-sm-3 px-xxl-4 pb-6">
+        <div class="container container--max--xl">
+            <div class="py-5">
+                <div class="row g-4 align-items-center">
+                    <div class="col">
+                        <nav class="mb-2" aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-sa-simple">
+                                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="app-coupons-list.html">Coupons</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Edit Coupon</li>
+                            </ol>
+                        </nav>
+                        <h1 class="h3 m-0">Edit Coupon</h1>
+                    </div>
+
+
+
+       
+            </div>
+            
+
+            <form id="addcoupon" action="/admin/editCoupon?id=<%= id %> " method="post">
+                <div class="col-auto d-flex">
+                    <a href="#" class="btn btn-secondary me-3">Delete</a>
+                    <button
+                         class="btn btn-primary" type="submit">Edit
+                    </button>
+                </div>
+            </div>
+            <div class="sa-entity-layout"
+                data-sa-container-query="{&quot;920&quot;:&quot;sa-entity-layout--size--md&quot;,&quot;1100&quot;:&quot;sa-entity-layout--size--lg&quot;}">
+                <div class="sa-entity-layout__body">
+                    <div class="sa-entity-layout__main">
+                        <div class="card">
+                            <div class="card-body p-5">
+                                <div class="mb-5">
+                                    <h2 class="mb-0 fs-exact-18">Basic information</h2>
+                                </div>
+                         
+                                <div class="mb-4"><label for="form-coupon/code"
+                                        class="form-label">Code</label><input type="text"
+                                        class="form-control" value="<%= coupon.code %> " name="code" id="form-coupon/code" placeholder="QWERTY12" required/>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-label mb-3">Type</div><label class="form-check"><input
+                                            type="radio" class="form-check-input" name="type" value="percentage"
+                                            <%= coupon.type=='percentage'?'checked' :'' %> /><span
+                                            class="form-check-label">Percentage</span></label><label
+                                        class="form-check"><input type="radio" value="fixed" class="form-check-input"
+                                            name="type" <%= coupon.type=='fixed'?'checked' :'' %> /><span class="form-check-label">Fixed
+                                            amount</span></label>
+                                </div>
+                                <div class="mb-4"><label for="form-coupon/value" class="form-label">Discount
+                                        value</label><input type="number" class="form-control"
+                                        id="form-coupon/value" name="discount" value="<%= coupon.discount%>" required/></div>
+                                <div class="mb-4"><label for="form-coupon/limit" class="form-label">Usage
+                                        limit</label><input type="number" name="limit" class="form-control"
+                                        id="form-coupon/limit" value="<%= parseInt(coupon.limit) %>" required/></div>
+
+
+                                        <div class="mb-4"><label for="form-coupon/limit" class="form-label">description
+                                            </label><textarea class="form-control" name="description"  cols="30" rows="10"><%= coupon.description %> </textarea></div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sa-entity-layout__sidebar">
+                        <div class="card w-100">
+                            <div class="card-body p-5">
+                                <div class="mb-5">
+                                    <h2 class="mb-0 fs-exact-18">Status</h2>
+                                </div>
+                                <div class="mb-n2 mt-n3"><label class="form-check"><input type="radio"
+                                            class="form-check-input" name="status" value="enabled" <%= coupon.status=='enabled'?'checked':'' %>  /><span
+                                            class="form-check-label">Enabled</span></label><label
+                                        class="form-check mb-0"><input type="radio" class="form-check-input"
+                                            name="status" value="disabled" <%= coupon.status=='disabled'?'checked':'' %>/><span
+                                            class="form-check-label">Disabled</span></label></div>
+                            </div>
+                        </div>
+                        <div class="card w-100 mt-5">
+                            <div class="card-body p-5">
+                                <div class="mb-5">
+                                    <h2 class="mb-0 fs-exact-18">Schedule</h2>
+                                    <div class="mt-3 text-muted">Use these settings to limit the coupon
+                                        expiration date.</div>
+                                </div>
+                                <div class="mb-4"><label for="form-coupon/start-date"
+                                        class="form-label">Start date</label><input type="text"
+                                        class="form-control datepicker-here" name="startDate" id="form-coupon/start-date"
+                                        data-auto-close="true" value="<%= moment(coupon.startDate).format('YYYY/MM/DD') %>" data-language="en" required/></div>
+                                <div><label for="form-coupon/end-date" class="form-label">End
+                                        date</label><input type="text" name="endDate" class="form-control datepicker-here"
+                                        id="form-coupon/end-date" data-auto-close="true"
+                                        data-language="en" value="<%= moment(coupon.endDate).format('YYYY/MM/DD') %>"  required/></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- sa-app__body / end -->
+<%- include('./layouts/footer'); -%>

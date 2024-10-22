@@ -65,8 +65,3 @@ export const getResult = async (req, res) => {
   return res.send(`Images were uploaded:${images}`);
 };
 
-// module.exports = {
-//   uploadImages: uploadImages,
-//   resizeImages: resizeImages,
-//   getResult: getResult
-// };

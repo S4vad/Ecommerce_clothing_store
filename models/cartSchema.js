@@ -21,9 +21,15 @@ const cartSchema=mongoose.Schema({
     size:{
         type:String,
         require:true
-    }
+    },
+    subTotal:{
+        type:Number,
+        require:true
+    },
 
-
+},
+{
+    timestamps:true
 })
 
 const cartModel=mongoose.model('cart',cartSchema)

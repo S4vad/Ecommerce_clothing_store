@@ -3,10 +3,10 @@ import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     addProduct,productAdd ,product_list,category_list,add_category,edit_product,
     delete_product,users,user_details,edit_single_product,delete_category,edit_category,
     addBanner,banner,bannerList,editBanner,deleteBanner,addSubBanner,subBanner,subBannerList,
-    deleteSubBanner,editSubBanner} from "../controller/admincontroller.js";
+    deleteSubBanner,editSubBanner,coupon,addCoupon,
+    couponList,editCoupon,deleteCoupon,editCouponPost} from "../controller/admincontroller.js";
 
-// import upload from "../middlewares/arrayUploadMiddlware.js"
-import { uploadImages,getResult,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
+import { uploadImages,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
 import uploadfile from "../middlewares/fileUploadMiddleware.js"
 
 const routes=express.Router();
@@ -33,6 +33,11 @@ routes.get('/addSubBanner',addSubBanner)
 routes.get('/subBannerList',subBannerList)
 routes.get('/edit_sub_banner',editSubBanner)
 routes.get('/delete_sub_banner',deleteSubBanner)
+routes.get('/coupon',coupon)
+routes.get('/couponList',couponList)
+routes.get('/edit_coupon',editCoupon)
+routes.get('/delete_coupon',deleteCoupon)
+
 
 
 
@@ -46,6 +51,8 @@ routes.post('/edit_single_product',edit_single_product)
 routes.post('/edit_category',uploadfile.single('category_thumbnail'),edit_category)
 routes.post('/banner',uploadfile.single('bannerImage'),banner)
 routes.post('/subBanner',uploadfile.single('bannerImage'),subBanner)
+routes.post('/addCoupon',addCoupon)
+routes.post('/editCoupon',editCouponPost)
 
 
 

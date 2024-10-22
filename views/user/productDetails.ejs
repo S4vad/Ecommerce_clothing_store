@@ -288,9 +288,9 @@
 
 			
 			<div class="header-cart-content flex-w js-pscroll">
-				
+				<% cart.forEach((item)=>{  %>
 				<ul class="header-cart-wrapitem w-full">
-					<% cart.forEach((item)=>{  %>
+				
 					<li class="header-cart-item flex-w flex-t m-b-12">
 						<div class="header-cart-item-img">
 							<img src="/uploads/<%= item.productId.Images[0] %>" alt="IMG">
@@ -306,10 +306,10 @@
 							</span>
 						</div>
 					</li>
-					<% }) %>
+				
 
 				</ul>
-				
+				<% }) %>
 				
 
 
@@ -357,7 +357,7 @@
 	<!-- Product Detail -->
 	<section class="sec-product-detail bg0 p-t-65 p-b-60">
 		<div class="container">
-			<form action="/cart" method="post">
+			<form id="productForm" action="/wishlist/<%= product._id %>" method="post">
 				<div class="row">
 					<div class="col-md-6 col-lg-7 p-b-30">
 						<div class="p-l-25 p-r-30 p-lr-0-lg">
@@ -453,20 +453,30 @@
 											</div>
 										</div>
 
-										<button id="addToCart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
-											Add to cart
-										</button>
+										
+
 									</div>
+
 								</div>	
+								<div class="d-flex justify-content-center mt-5 gap-1rem">
+									<button id="addToCart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
+										ADD TO CART
+									</button>
+									<button id="buyNow" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
+										BUY NOW
+									</button>
+								</div>
+								
+								
+								
 							</div>
-						</form>
 
 							<!--  -->
 							<div class="flex-w flex-m p-l-100 p-t-40 respon7">
 								<div class="flex-m bor9 p-r-10 m-r-11">
-									<a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
+									<button id="whishList" type="submit" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
 										<i class="zmdi zmdi-favorite"></i>
-									</a>
+									</button>
 								</div>
 
 								<a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
@@ -484,6 +494,9 @@
 						</div>
 					</div>
 				</div>
+
+			</form>
+
 
 			<div class="bor10 m-t-50 p-t-43 p-b-40">
 				<!-- Tab01 -->
@@ -997,13 +1010,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 											</div>
 										</div>
 
-										<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-											Add to cart
-										</button>
-										<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-											Add to cart
-										</button>
 									</div>
+								</div>
+								<div class="d-flex justify-content-center mt-5 gap-1rem">
+									<button id="addToCart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
+										ADD TO CART
+									</button>
+									<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail  " type="submit">
+										BUY NOW
+									</button>
 								</div>	
 							</div>
 
@@ -1043,6 +1058,23 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="/user/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
 	<script src="/user/vendor/select2/select2.min.js"></script>
+
+	<script>
+
+		$(document).ready(function(){
+			$("#addToCart").click(function(event){
+				$("#productForm").attr('action','/cart')
+
+			})
+			$("#buyNow").click(function(event){
+				$("#productForm").attr('action','/order')
+
+			})
+			// $('#whishList').click(function(event){
+			// 	$("productForm").attr('action','/wishlist/<%= product._id %>')
+			// })
+		})
+	</script>
 	<script>
 		$(".js-select2").each(function(){
 			$(this).select2({

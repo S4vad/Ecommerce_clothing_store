@@ -1,7 +1,8 @@
-import express from "express";
+import express, { Router } from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,order,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search} from "../controller/usercontroller.js";
+import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search,cartDelete} from "../controller/usercontroller.js";
+import {order,orderGet,coupon} from "../controller/ordercontroller.js"
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
 
@@ -27,7 +28,9 @@ routes.get('/wishlist',userAuthentication,wishlist)
 routes.get('/about',userAuthentication,aboutPage)
 routes.get('/contact',userAuthentication,contactPage)
 routes.get('/categoryShop',userAuthentication,categoryShop)
-routes.get('order',userAuthentication,order)
+routes.get('/order',userAuthentication,orderGet)
+routes.delete('/cart/remove/:id',userAuthentication,cartDelete)
+routes.get('/coupon',userAuthentication,coupon)
 
 
 routes.post('/signin',userSignup)
@@ -37,6 +40,7 @@ routes.post('/wishlist/:id',userAuthentication,wishlistAdd)
 routes.post('/contact',userAuthentication,addContact)
 routes.post('/filter',userAuthentication,filter)
 routes.post('/search',userAuthentication,search)
+routes.post('/order',userAuthentication,order)
 
 
 

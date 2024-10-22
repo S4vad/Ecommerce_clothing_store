@@ -10,6 +10,8 @@ import categorymodel from "../models/categorySchema.js";
 import bannerModel from "../models/bannerSchema.js";
 import fs from "fs";
 import subBannerModel from "../models/subBanners.js";
+import couponModel from "../models/couponSchema.js"
+import moment from "moment";
 
 
 
@@ -101,7 +103,6 @@ export async function adminSignup(req,res){
 export async function productAdd(req,res,next){
     try {
         const files = req.body.images
-  
         // const file = req.files
         const { name, description, price,stock, category, brand ,size} = req.body
         if (!files) {
@@ -109,10 +110,8 @@ export async function productAdd(req,res,next){
             error.httpStatusCode = 400;
             return next(error)
         }
-        // console.log(files)
-// //sharp image
 
-        
+        //sharp image
         await productModel.create({ Name:name, Description:description, Brand:brand,Price: price,Categories: category, Stock:stock,Size:size, Images: files })
             // res.send({"success":data})
             res.redirect('/admin/product_list')
@@ -491,6 +490,100 @@ export async function deleteSubBanner(req,res) {
         
     }
     
+}
+
+
+export function coupon(req,res){
+
+    try {
+        res.render('admin/coupon')
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+
+}
+
+export  async function addCoupon(req,res){
+
+    try {
+
+        // const {code,type,discount,limit,description,status,startDate,endDate}=req.body
+        const data={...req.body}
+
+
+        await couponModel.create(data
+        )
+        res.redirect('/admin/couponList')
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+
+export async function couponList(req,res){
+    try {
+
+        const coupon=await couponModel.find()
+        res.locals.coupon = coupon || null //sharing localy
+        res.locals.moment = moment
+
+        res.render('admin/couponList')
+        
+    } catch (error) {
+        res.send(error.message)
+    }
+}
+
+export async function editCoupon(req,res){
+    try {
+        const id=req.query.id;
+        const coupon=await couponModel.find({_id:id});
+
+        res.locals.coupon=coupon || null;
+        res.locals.moment=moment;
+
+        res.render('admin/couponEdit',{id:id})
+        
+    } catch (error) {
+        res.send(error.message)
+    }
+}
+
+export async function editCouponPost(req, res) {
+    try {
+        const id = req.query.id;
+        const data = req.body; 
+        
+        console.log('The coupon id:', id);
+        console.log('Updated data:', data);
+        
+        await couponModel.findByIdAndUpdate(id, data);
+        
+        res.redirect('/admin/couponList');
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+
+
+export async function deleteCoupon(req,res){
+    try {
+        const id=req.query.id;
+        await couponModel.findByIdAndDelete(id)
+
+        const coupon=await couponModel.find()
+        res.render('admin/couponList',{coupon,moment})
+
+
+        
+    } catch (error) {
+        res.send(error.message)
+    }
 }
 
 
