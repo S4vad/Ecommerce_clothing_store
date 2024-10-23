@@ -1,0 +1,517 @@
+
+
+
+
+<%- include('./layouts/main'); -%>
+<link rel="stylesheet" href="user/assets/css/skins/skin-demo-13.css">
+<link rel="stylesheet" href="user/assets/css/demos/demo-13.css">
+<link rel="stylesheet" href="user/assets/css/orderlist.css">
+<link rel="stylesheet" href="user/assets/fonts/icofont/icofont.min.css">
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <%- include('./layouts/header'); -%>
+            <% if (alert) { %>
+                <script>alert("your banned")</script>
+                <% } %>
+
+
+
+
+
+ <main class="main">
+    <div class="page-header text-center" style="background-image: url('user/assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">My Account<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Account</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <aside class="col-md-2 col-lg-2">
+                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-dashboard-link"
+                                     href="/profile_dashboard" role="tab"
+                                    aria-controls="tab-dashboard"
+                                    aria-selected="true">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-orders-link" 
+                                    href="/profile_order"
+                                    aria-selected="false">Orders</a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-address-link" 
+                                    href="/profile_address" 
+                                    aria-selected="false">Adresses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-account-link" 
+                                    href="/profile_details" 
+                                    aria-selected="false">Account Details</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Sign Out</a>
+                            </li>
+                        </ul>
+                    </aside><!-- End .col-lg-3 -->
+
+                    <div class="col-md-10 col-lg-10">
+                        <div class="tab-content">
+                            <section class="inner-section orderlist-part">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-10">
+                                            <div class="orderlist-filter"> 
+                                                
+                                                
+                                     <% if (order) { %>
+
+
+                                                <h5>total order <span>- (<%= order.length %> )</span></h5>
+                                                <div class="filter-short"><label class="form-label">short by:</label><select
+                                                        class="form-select">
+                                                        <option value="all" selected>all order</option>
+                                                        <option value="recieved">recieved order</option>
+                                                        <option value="processed">processed order</option>
+                                                        <option value="shipped">shipped order</option>
+                                                        <option value="delivered">delivered order</option>
+                                                    </select></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-10">
+
+                                            <!-- loop by order -->
+
+                           
+                                             
+                                  
+                                            <% for( let i = 0; i < order.length; i++ ) { %>
+                                            <% if (order[i].status !='pending') { %>
+                                             
+                                           
+                                           
+                                            <div class="orderlist <%= order[i].status=='canceled'?'text-warning':'' %> ">
+                                                <div class="orderlist-head">
+                                                    <h5 class="<%= order[i].status=='canceled'?'text-warning':'' %>"><%= order[i]._id.toString().substring(16,22) %> </h5><span><%=order[i].createdAt  %> </span>
+                                                    <% if (order[i].status=='canceled') { %>
+                                                        <h5 class="<%= order[i].status=='canceled'?'text-warning':'' %>">order Canceled</h5>
+                                                    <% } else{%> 
+                                                    <h5 class="<%= order[i].status=='canceled'?'text-warning':'' %>">order recieved</h5>
+                                                    <% } %>
+                                                </div>
+                                                <div class="orderlist-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="order-track">
+                                                                <ul class="order-track-list">
+                                                                    <li class="order-track-item active"><i class="icofont-check"></i><span><%= order[i].status=='canceled'?'order canceled':'order recieved' %> </span></li>
+                                                                    <li class="order-track-item <%= order[i].status=='processed'||order[i].status=='shipped'|| order[i].status=='delivered'? 'active' : ' ' %>"><i class="<%= order[i].status=='processed'||order[i].status=='shipped'||order[i].status=='delivered'?'icofont-check':'icofont-close' %>">
+                                                                    </i><span>order processed</span></li>
+                                                                    <li class="order-track-item <%= order[i].status=='shipped'||order[i].status=='delivered'? 'active' : ' ' %>"><i class="<%= order[i].status=='shipped'|| order[i].status=='delivered'?'icofont-check':'icofont-close' %>"></i><span>order
+                                                                            shipped</span></li>
+                                                                    <li class="order-track-item <%= order[i].status=='delivered' ? 'active': ' ' %>"><i class="<%= order[i].status=='delivered'?'icofont-check':'icofont-close' %>"></i><span>order
+                                                                            delivered</span></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <ul class="orderlist-details">
+                                                                <li>
+                                                                    <h6>order id</h6>
+                                                                    <p><%= order[i]._id.toString().substring(16,22) %> </p>
+                                                                </li>
+                                                                <li>
+                                                                    <h6>Total Item</h6>
+                                                                    <p><%= cc=order[i].products.reduce((acc,cur)=>(acc+cur.quantity),0)  %>  Items</p>
+                                                                </li>
+                                                                <li>
+                                                                    <h6>Order Time</h6>
+                                                                    <p><%= moment(order[i].createdAt).format('MMMM d, YYYY, h:mm a')  %> </p>
+                                                                </li>
+                                                                <li>
+                                                                    <h6>Delivery Time</h6>
+                                                                    <p>12th February 2021</p>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <ul class="orderlist-details">
+                                                                <li>
+                                                                    <h6>Sub Total</h6>
+                                                                    <p>&#8377;<%=price = order[i].products.reduce((acc,cur)=>(acc+cur.item.price),0) %> </p>
+                                                                </li>
+                                                                <li>
+                                                                    <h6>discount</h6>
+                                                                    <p>&#8377;<%=discount = order[i].products.reduce((acc,cur)=>(acc+cur.item.discount),0)  %> </p>
+                                                                </li>
+                                                                <li>
+                                                                    <h6>delivery fee</h6>
+                                                                    <p>free(0)</p>
+                                                                </li>
+                                                                <li>
+                                                                    <h6>Total<small>(Incl. VAT)</small></h6>
+                                                                    <p>&#8377;<%= order[i].totalamount %>.00</p>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-lg-4 ">
+                                                            <div class="orderlist-deliver">
+                                                                <h6>Delivery location</h6>
+                                                                <p><%= order[i].address.address %>, <%=order[i].address.name %>, <%= order[i].address.city%>-<%= order[i].address.zip %> . <%=order[i].address.state %> </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="table-scroll">
+                                                                <table class="table-list">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Serial</th>
+                                                                            <th scope="col">Product</th>
+                                                                            <th scope="col">Name</th>
+                                                                            <th scope="col">Price</th>
+                                                                            <th scope="col">brand</th>
+                                                                            <th scope="col">quantity</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <% order[i].products.forEach((element,index) => { %>
+                                                                         
+                                                                     
+                                                                        <tr>
+                                                                            <td class="table-serial">
+                                                                                <h6><%=index+1 %>  </h6>
+                                                                            </td>
+                                                                            <td class="table-image"><img src="data:<%=element.item.product_image[0].contentType %>;base64,<%=element.item.product_image[0].imageBase64 %> "
+                                                                                    alt="product"></td>
+                                                                            <td class="table-name">
+                                                                                <a href="/product?id=<%= element.item._id%> ">
+                                                                                <h6><%= element.item.name.substring(0,33) %>... </h6>
+                                                                                </a>
+                                                                            </td>
+                                                                            <td class="table-price">
+                                                                                <h6>&#8377;<%= element.item.price-element.item.discount %></h6>
+                                                                            </td>
+                                                                            <td class="table-brand">
+                                                                                <h6><%= element.item.brand %> </h6>
+                                                                            </td>
+                                                                            <td class="table-quantity">
+                                                                                <h6><%= element.quantity %> </h6>
+                                                                            </td>
+                                                                        </tr>
+                                                                           <% }) %>
+                                                                       
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% if (order[i].status != 'delivered' &&order[i].status != 'canceled' ) { %>
+                                                 
+                                               
+                                                <div class="text-center"><button onclick="order_cancel('<%= order[i]._id %>')" class="btn btn-outline-warning rounded">Cancel order</button></div>
+                                                     <% } %> 
+                                            </div>
+                                            <% }else {%>
+                                                
+
+                                                <div class="orderlist text-danger">
+                                                    <div class="orderlist-head failed">
+                                                        <h5 class="text-danger">failed </h5><span><%=order[i].createdAt  %> </span>
+                                                        <h5 class="text-danger">order failed</h5>
+                                                    </div>
+                                                    <div class="orderlist-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="order-track">
+                                                                    <ul class="order-track-list">
+                                                                        <li class="order-track-item active"><i class="icofont-close"></i><span>order
+                                                                                failed</span></li>
+                                                                        <li class="order-track-item "><i class="icofont-close"></i><span>order
+                                                                                processed</span></li>
+                                                                        <li class="order-track-item"><i class="icofont-close"></i><span>order
+                                                                                shipped</span></li>
+                                                                        <li class="order-track-item"><i class="icofont-close"></i><span>order
+                                                                                delivered</span></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <ul class="orderlist-details">
+                                                                    <li>
+                                                                        <h6>order id</h6>
+                                                                        <p><%= order[i]._id.toString().substring(16,20) %> </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h6>Total Item</h6>
+                                                                        <p><%= cc=order[i].products.reduce((acc,cur)=>(acc+cur.quantity),0)  %>  Items</p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h6>Order Time</h6>
+                                                                        <p><%= moment(order[i].createdAt).format('MMMM d, YYYY, h:mm a')  %> </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h6>Delivery Time</h6>
+                                                                        <p>12th February 2021</p>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                <ul class="orderlist-details">
+                                                                    <li>
+                                                                        <h6>Sub Total</h6>
+                                                                        <p>&#8377;<%=price = order[i].products.reduce((acc,cur)=>(acc+cur.item.price),0) %> </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h6>discount</h6>
+                                                                        <p>&#8377;<%=discount = order[i].products.reduce((acc,cur)=>(acc+cur.item.discount),0)  %> </p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h6>delivery fee</h6>
+                                                                        <p>free(0)</p>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h6>Total<small>(Incl. VAT)</small></h6>
+                                                                        <p>&#8377;<%= order[i].totalamount %>.00</p>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-lg-4 ">
+                                                                <div class="orderlist-deliver">
+                                                                    <h6>Delivery location</h6>
+                                                                    <p><%= order[i].address.address %>, <%=order[i].address.name %>, <%= order[i].address.city%>-<%= order[i].address.zip %> . <%=order[i].address.state %> </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-12">
+                                                                <div class="table-scroll">
+                                                                    <table class="table-list">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Serial</th>
+                                                                                <th scope="col">Product</th>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">Price</th>
+                                                                                <th scope="col">brand</th>
+                                                                                <th scope="col">quantity</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <% order[i].products.forEach((element,index) => { %>
+                                                                             
+                                                                         
+                                                                            <tr>
+                                                                                <td class="table-serial">
+                                                                                    <h6><%=index+1 %>  </h6>
+                                                                                </td>
+                                                                                <td class="table-image"><img src="data:<%=element.item.product_image[0].contentType %>;base64,<%=element.item.product_image[0].imageBase64 %> "
+                                                                                        alt="product"></td>
+                                                                                <td class="table-name">
+                                                                                    <a href="/product?id=<%= element.item._id%> ">
+                                                                                    <h6><%= element.item.name.substring(0,33) %>... </h6>
+                                                                                    </a>
+                                                                                </td>
+                                                                                <td class="table-price">
+                                                                                    <h6>&#8377;<%= element.item.price-element.item.discount %></h6>
+                                                                                </td>
+                                                                                <td class="table-brand">
+                                                                                    <h6><%= element.item.brand %> </h6>
+                                                                                </td>
+                                                                                <td class="table-quantity">
+                                                                                    <h6><%= element.quantity %> </h6>
+                                                                                </td>
+                                                                            </tr>
+                                                                               <% }) %>
+                                                                           
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center"><button onclick="place_orders('<%= order[i]._id %>')" class="btn btn-outline-danger rounded">Try again</button></div>
+
+                                                </div>
+
+
+
+
+
+
+
+                                                
+                                                <%} %> 
+
+
+
+                                            <% } %>
+                                            <% } else {%> 
+
+                                                Your not ordered 
+
+                                                <% } %>
+                                            
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <ul class="pagination">
+                                                <li class="page-item"><a class="page-link" href="#"><i class="icofont-arrow-left"></i></a></li>
+                                                <li class="page-item"><a class="page-link active" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item">...</li>
+                                                <li class="page-item"><a class="page-link" href="#">65</a></li>
+                                                <li class="page-item"><a class="page-link" href="#"><i class="icofont-arrow-right"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+                            <script>
+                                function place_orders(orderId){
+                                    $.ajax({
+                                        url:'/place_failed_order',
+                                        method:'post',
+                                        data:{
+                                            orderId:orderId,
+                                        },
+                                        success:((response)=>{
+                                            if(response.status){
+                                                razorpayPayment(response) 
+                                            }
+                                        })
+                                    })
+                                }
+
+                                function order_cancel(orderId){
+                                    Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "You won't be able to revert this!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, delete it!'
+                                    }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $.ajax({
+                                            url:'/order_cancel',
+                                            method:'post',
+                                            data:{
+                                                orderId:orderId,
+                                            },
+                                            success:((response)=>{
+
+                                                Swal.fire(
+                                        'Deleted!',
+                                        'Your Order is canceled.',
+                                        'success'
+                                        )
+                                            setTimeout(()=>location.reload(),1200)
+                                        
+                                    })
+                                    })
+                                   
+                                }
+                            })
+                        }
+                         
+   
+
+                                  
+                            </script>
+                
+                <script>
+                    function razorpayPayment(order) {
+                        console.log(order.order.amount)
+                        var options = {
+                            "key": "rzp_test_lD5aVhNHRC1GZC", // Enter the Key ID generated from the Dashboard
+                            "amount": order.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                            "currency": "INR",
+                            "name": "Electro",
+                            "description": "Test Transaction",
+                            "image": "https://example.com/your_logo",
+                            "order_id": order.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                            "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+                            "prefill": {
+                                "name": "Gaurav Kumar",
+                                "email": "gaurav.kumar@example.com",
+                                "contact": "9746854699"
+                            },
+                            "notes": {
+                                "address": "Razorpay Corporate Office"
+                            },
+                            "theme": {
+                                "color": "#528FF0"
+                            },
+                            "handler": function (response) {
+                                location.reload();
+                                verifyPayment(response, order.order);
+                            }
+                        };
+                       
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                
+                    };
+                
+                
+                
+                
+                    function verifyPayment(payment, order) {
+                        $.ajax({
+                            url: '/verify-payment',
+                            method:'post',
+                            data: {
+                                payment,
+                                order
+                            },
+                            success:((response)=>{
+                                if(status){
+                                    window.location.href = '/ordersuccess'
+                                }else{
+                                    window.location.href = '/ordersuccess'
+                                }
+                               
+                            })
+                        })
+                    }
+                </script>
+                          
+
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<%- include('./layouts/footer'); -%>

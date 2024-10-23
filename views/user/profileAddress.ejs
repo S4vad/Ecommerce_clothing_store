@@ -1,468 +1,448 @@
-<%- include('./layouts/main'); -%>
-    <link rel="stylesheet" href="user/assets/css/skins/skin-demo-13.css">
-    <link rel="stylesheet" href="user/assets/css/demos/demo-13.css">
-    </head>
-
-    <body>
-        <div class="page-wrapper">
-            <%- include('./layouts/header'); -%>
-                <% if (alert) { %>
-                    <script>alert("your banned")</script>
-                    <% } %>
+<%- include("./layouts/main"); -%>
+<%- include("./layouts/header"); -%>
+<%- include('./layouts/carticon'); -%>
+	
 
 
+	<!-- breadcrumb -->
+	<section class="bg-img1 txt-center p-lr-15 p-tb-40" style="background-image: url('/user/images/bg-01.jpg'); margin-top: 80px;">
+		<h2 class="ltext-105 cl0 txt-center">
+            My Account<br><span></span>
+			
+		</h2>
+	</section>	
+    
+
+		
+
+    <div class="page-content" style="margin-top: 30px;">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <aside class="col-md-4 col-lg-3">
+                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist" style="background-color: rgb(244, 244, 238);">
+                            <li class="nav-item">
+                                <a class="nav-link active text-dark" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="tab-address-link" data-toggle="tab" href="/profileAddress" role="tab" aria-controls="tab-address" aria-selected="false">Addresses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" href="#">Sign Out</a>
+                            </li>
+                        </ul>
+                    </aside>
+                    
+
+                    <div class="col-md-8 col-lg-9">
+                        <div class="tab-content">
+                            <div class="">
+                                <p>The following addresses will be used on the checkout page by
+                                    default.</p>
 
 
+                                <% if (address !='' ) { %>
+                                    <div class="row">
+                                        <% for( let i=0; i < address.length; i++ ) {
+                                            %>
+                                            <div class="col-lg-6">
+                                                <div class="card card-dashboard">
+                                                    <div class="card-body">
+                                                        <h3 class="card-title">Billing Address (
+                                                            <%= i+1 %> )
+                                                        </h3>
+                                                        <!-- End .card-title -->
+
+                                                        <p>
+                                                            <%= address[i].address[0].name %>
+                                                                <br>
+                                                                <%= address[i].address[0].address
+                                                                    %><br>
+                                                                    <%= address[i].address[0].city
+                                                                        %><br>
+                                                                        <%= address[i].address[0].state
+                                                                            %>, <%=
+                                                                                address[i].address[0].zip
+                                                                                %><br>
+                                                                                +91 <%=
+                                                                                    address[i].address[0].phone
+                                                                                    %><br>
+                                                                                    <%= address[i].address[0].email
+                                                                                        %><br>
+                                                                                        <a data-toggle="collapse"
+                                                                                            href="#id-<% address[i]._id %>"
+                                                                                            role="button"
+                                                                                            aria-expanded="false"
+                                                                                            aria-controls="collapseExample">Edit
+                                                                                            <i
+                                                                                                class="icon-edit"></i></a>
+                                                        </p>
 
 
+                                                        <button
+                                                            onclick="deleteAddress('<%= address[i]._id %>')">Delete
+                                                            <i class="icon-del"></i></button></p>
 
-
-
-
-                        <main class="main">
-                            <div class="page-header text-center"
-                                style="background-image: url('user/assets/images/page-header-bg.jpg')">
-                                <div class="container">
-                                    <h1 class="page-title">My Account<span>Shop</span></h1>
-                                </div><!-- End .container -->
-                            </div><!-- End .page-header -->
-                            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
-                                <div class="container">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">My Account</li>
-                                    </ol>
-                                </div><!-- End .container -->
-                            </nav><!-- End .breadcrumb-nav -->
-
-                            <div class="page-content">
-                                <div class="dashboard">
-                                    <div class="container">
-                                        <div class="row">
-                                            <aside class="col-md-4 col-lg-3">
-                                                <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link " id="tab-dashboard-link"
-                                                            href="/profile_dashboard" role="tab"
-                                                            aria-controls="tab-dashboard"
-                                                            aria-selected="true">Dashboard</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" id="tab-orders-link" href="/profile_order"
-                                                            aria-selected="false">Orders</a>
-                                                    </li>
-
-                                                    <li class="nav-item">
-                                                        <a class="nav-link active" href="/profile_address"
-                                                            aria-selected="false">Adresses</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" id="tab-account-link"
-                                                            href="/profile_details" aria-selected="false">Account
-                                                            Details</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Sign Out</a>
-                                                    </li>
-                                                </ul>
-                                            </aside><!-- End .col-lg-3 -->
-
-                                            <div class="col-md-8 col-lg-9">
-                                                <div class="tab-content">
-                                                    <div class="">
-                                                        <p>The following addresses will be used on the checkout page by
-                                                            default.</p>
-
-
-                                                        <% if (address !='' ) { %>
-                                                            <div class="row">
-                                                                <% for( let i=0; i < address[0].address.length; i++ ) {
-                                                                    %>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="card card-dashboard">
-                                                                            <div class="card-body">
-                                                                                <h3 class="card-title">Billing Address (
-                                                                                    <%= i+1 %> )
-                                                                                </h3>
-                                                                                <!-- End .card-title -->
-
-                                                                                <p>
-                                                                                    <%= address[0].address[i].name %>
-                                                                                        <br>
-                                                                                        <%= address[0].address[i].address
-                                                                                            %><br>
-                                                                                            <%= address[0].address[i].city
-                                                                                                %><br>
-                                                                                                <%= address[0].address[i].state
-                                                                                                    %>, <%=
-                                                                                                        address[0].address[i].zip
-                                                                                                        %><br>
-                                                                                                        +91 <%=
-                                                                                                            address[0].address[i].phone
-                                                                                                            %><br>
-                                                                                                            <%= address[0].address[i].email
-                                                                                                                %><br>
-                                                                                                                <a data-toggle="collapse"
-                                                                                                                    href="#id-<%=address[0].address[i]._id %>"
-                                                                                                                    role="button"
-                                                                                                                    aria-expanded="false"
-                                                                                                                    aria-controls="collapseExample">Edit
-                                                                                                                    <i
-                                                                                                                        class="icon-edit"></i></a>
-                                                                                </p>
-
-
-                                                                                <a
-                                                                                    onclick="deleteAddress('<%= address[0].address[i]._id %>')">Delete
-                                                                                    <i class="icon-del"></i></a></p>
-
-                                                                            </div><!-- End .card-body -->
-                                                                        </div><!-- End .card-dashboard -->
-                                                                    </div><!-- End .col-lg-6 -->
-
-
-                                                                    <div class="collapse"
-                                                                        id="id-<%=address[0].address[i]._id %>">
-                                                                        <div class="" id="tab-account" role="tabpanel"
-                                                                            aria-labelledby="tab-account-link">
-                                                                            <form action="/edit_address?id=<%= i %>"
-                                                                                method="post">
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-6">
-                                                                                        <label> Name *</label>
-                                                                                        <input name="name"
-                                                                                            value=" <%= address[0].address[i].name %>"
-                                                                                            type="text"
-                                                                                            class="form-control"
-                                                                                            required>
-                                                                                    </div><!-- End .col-sm-6 -->
-
-
-                                                                                </div><!-- End .row -->
-
-                                                                                <label>Address (Area and street)
-                                                                                    *</label>
-                                                                                <input name="address" type="text"
-                                                                                    value=" <%= address[0].address[i].address %>"
-                                                                                    class="form-control"
-                                                                                    placeholder="House number and Street name"
-                                                                                    required>
-
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-6">
-                                                                                        <label>Town / City *</label>
-                                                                                        <input name="city"
-                                                                                            value=" <%= address[0].address[i].city %>"
-                                                                                            type="text"
-                                                                                            class="form-control"
-                                                                                            required>
-                                                                                    </div><!-- End .col-sm-6 -->
-
-                                                                                    <div class="col-sm-6">
-                                                                                        <label>State </label>
-                                                                                        <select name="state" id="state"
-                                                                                            class="form-control">
-                                                                                            <option selected
-                                                                                                value=" <%= address[0].address[i].state %>">
-                                                                                                <%= address[0].address[i].state
-                                                                                                    %>
-                                                                                            </option>
-                                                                                            <option
-                                                                                                value="Andhra Pradesh">
-                                                                                                Andhra
-                                                                                                Pradesh
-                                                                                            </option>
-                                                                                            <option
-                                                                                                value="Andaman and Nicobar Islands">
-                                                                                                Andaman
-                                                                                                and
-                                                                                                Nicobar Islands</option>
-                                                                                            <option
-                                                                                                value="Arunachal Pradesh">
-                                                                                                Arunachal
-                                                                                                Pradesh
-                                                                                            </option>
-                                                                                            <option value="Assam">Assam
-                                                                                            </option>
-                                                                                            <option value="Bihar">Bihar
-                                                                                            </option>
-
-                                                                                            <option value="Delhi">Delhi
-                                                                                            </option>
-
-                                                                                            <option value="Goa">Goa
-                                                                                            </option>
-                                                                                            <option value="Gujarat">
-                                                                                                Gujarat</option>
-                                                                                            <option value="Haryana">
-                                                                                                Haryana</option>
-                                                                                            <option
-                                                                                                value="Himachal Pradesh">
-                                                                                                Himachal
-                                                                                                Pradesh
-                                                                                            </option>
-                                                                                            <option
-                                                                                                value="Jammu and Kashmir">
-                                                                                                Jammu and
-                                                                                                Kashmir
-                                                                                            </option>
-                                                                                            <option value="Jharkhand">
-                                                                                                Jharkhand</option>
-                                                                                            <option value="Karnataka">
-                                                                                                Karnataka</option>
-                                                                                            <option value="Kerala">
-                                                                                                Kerala</option>
-                                                                                            <option
-                                                                                                value="Madhya Pradesh">
-                                                                                                Madhya
-                                                                                                Pradesh
-                                                                                            </option>
-                                                                                            <option value="Maharashtra">
-                                                                                                Maharashtra
-                                                                                            </option>
-                                                                                            <option value="Manipur">
-                                                                                                Manipur</option>
-                                                                                            <option value="Meghalaya">
-                                                                                                Meghalaya</option>
-                                                                                            <option value="Mizoram">
-                                                                                                Mizoram</option>
-                                                                                            <option value="Nagaland">
-                                                                                                Nagaland</option>
-                                                                                            <option value="Odisha">
-                                                                                                Odisha</option>
-                                                                                            <option value="Punjab">
-                                                                                                Punjab</option>
-                                                                                            <option value="Rajasthan">
-                                                                                                Rajasthan</option>
-                                                                                            <option value="Sikkim">
-                                                                                                Sikkim</option>
-                                                                                            <option value="Tamil Nadu">
-                                                                                                Tamil Nadu
-                                                                                            </option>
-                                                                                            <option value="Telangana">
-                                                                                                Telangana</option>
-                                                                                            <option value="Tripura">
-                                                                                                Tripura</option>
-                                                                                            <option
-                                                                                                value="Uttar Pradesh">
-                                                                                                Uttar Pradesh
-                                                                                            </option>
-                                                                                            <option value="Uttarakhand">
-                                                                                                Uttarakhand
-                                                                                            </option>
-                                                                                            <option value="West Bengal">
-                                                                                                West Bengal
-                                                                                            </option>
-                                                                                        </select>
-                                                                                    </div><!-- End .col-sm-6 -->
-                                                                                </div><!-- End .row -->
-
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-6">
-                                                                                        <label>Postcode / ZIP *</label>
-                                                                                        <input name="zip"
-                                                                                            value=" <%= address[0].address[i].zip %>"
-                                                                                            type="text"
-                                                                                            class="form-control"
-                                                                                            required>
-                                                                                    </div><!-- End .col-sm-6 -->
-
-                                                                                    <div class="col-sm-6">
-                                                                                        <label>Phone *</label>
-                                                                                        <input name="phone" type="tel"
-                                                                                            class="form-control"
-                                                                                            value=" <%= address[0].address[i].phone %>"
-                                                                                            required>
-                                                                                    </div><!-- End .col-sm-6 -->
-                                                                                </div><!-- End .row -->
-
-                                                                                <label>Email address *</label>
-                                                                                <input type="email" class="form-control"
-                                                                                    name="email"
-                                                                                    value=" <%= address[0].address[i].email %>"
-                                                                                    required>
-
-                                                                                <button type="submit"
-                                                                                    class="btn btn-outline-primary-2">
-                                                                                    <span>SAVE CHANGES</span>
-                                                                                    <i
-                                                                                        class="icon-long-arrow-right"></i>
-                                                                                </button>
-                                                                            </form>
-                                                                        </div><!-- .End .tab-pane -->
-                                                                    </div>
-
-
-
-                                                                    <% } %>
-                                                            </div><!-- End .row -->
-                                                            <% } else{%>
-                                                                Address is not added
-                                                                <% } %>
-                                                                    <script>
-                                                                        function deleteAddress(addressId) {
-                                                                            Swal.fire({
-                                                                                title: 'Are you sure?',
-                                                                                text: "You won't be able to revert this!",
-                                                                                icon: 'warning',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonColor: '#3085d6',
-                                                                                cancelButtonColor: '#d33',
-                                                                                confirmButtonText: 'Yes, proceed to delete!'
-                                                                            }).then((result) => {
-                                                                                if (result.isConfirmed) {
-                                                                                    Swal.fire(
-                                                                                        'deleted!',
-                                                                                        'your address delete.',
-                                                                                        'success'
-                                                                                    )
-                                                                                    $.ajax({
-                                                                                        url: '/delete_address',
-                                                                                        method: 'post',
-                                                                                        data: {
-                                                                                            address: addressId,
-                                                                                        },
-                                                                                        success: (response) => {
-                                                                                            setTimeout(() => {
-
-                                                                                                window.location.href = '/profile_address'
-
-                                                                                            }, 1200)
-
-                                                                                        }
-                                                                                    })
-
-                                                                                }
-                                                                            })
-
-                                                                        }
-                                                                    </script>
-
-                                                    </div><!-- .End .tab-pane -->
-                                                    <a data-toggle="collapse" href="#collapseExample" role="button"
-                                                        aria-expanded="false" aria-controls="collapseExample">Add
-                                                        address <i class="icon-edit"></i></a>
-
-
-
-                                                    <div class="collapse" id="collapseExample">
-                                                        <div class="" id="tab-account" role="tabpanel"
-                                                            aria-labelledby="tab-account-link">
-                                                            <form action="/add_address" method="post">
-                                                                <div class="row">
-                                                                    <div class="col-sm-6">
-                                                                        <label> Name *</label>
-                                                                        <input name="name" type="text"
-                                                                            class="form-control" required>
-                                                                    </div><!-- End .col-sm-6 -->
-
-
-                                                                </div><!-- End .row -->
-
-                                                                <label>Address (Area and street) *</label>
-                                                                <input name="address" type="text" class="form-control"
-                                                                    placeholder="House number and Street name" required>
-
-                                                                <div class="row">
-                                                                    <div class="col-sm-6">
-                                                                        <label>Town / City *</label>
-                                                                        <input name="city" type="text"
-                                                                            class="form-control" required>
-                                                                    </div><!-- End .col-sm-6 -->
-
-                                                                    <div class="col-sm-6">
-                                                                        <label>State </label>
-                                                                        <select name="state" id="state"
-                                                                            class="form-control">
-                                                                            <option value="Andhra Pradesh">Andhra
-                                                                                Pradesh
-                                                                            </option>
-                                                                            <option value="Andaman and Nicobar Islands">
-                                                                                Andaman
-                                                                                and
-                                                                                Nicobar Islands</option>
-                                                                            <option value="Arunachal Pradesh">Arunachal
-                                                                                Pradesh
-                                                                            </option>
-                                                                            <option value="Assam">Assam</option>
-                                                                            <option value="Bihar">Bihar</option>
-
-                                                                            <option value="Delhi">Delhi</option>
-
-                                                                            <option value="Goa">Goa</option>
-                                                                            <option value="Gujarat">Gujarat</option>
-                                                                            <option value="Haryana">Haryana</option>
-                                                                            <option value="Himachal Pradesh">Himachal
-                                                                                Pradesh
-                                                                            </option>
-                                                                            <option value="Jammu and Kashmir">Jammu and
-                                                                                Kashmir
-                                                                            </option>
-                                                                            <option value="Jharkhand">Jharkhand</option>
-                                                                            <option value="Karnataka">Karnataka</option>
-                                                                            <option value="Kerala">Kerala</option>
-                                                                            <option value="Madhya Pradesh">Madhya
-                                                                                Pradesh
-                                                                            </option>
-                                                                            <option value="Maharashtra">Maharashtra
-                                                                            </option>
-                                                                            <option value="Manipur">Manipur</option>
-                                                                            <option value="Meghalaya">Meghalaya</option>
-                                                                            <option value="Mizoram">Mizoram</option>
-                                                                            <option value="Nagaland">Nagaland</option>
-                                                                            <option value="Odisha">Odisha</option>
-                                                                            <option value="Punjab">Punjab</option>
-                                                                            <option value="Rajasthan">Rajasthan</option>
-                                                                            <option value="Sikkim">Sikkim</option>
-                                                                            <option value="Tamil Nadu">Tamil Nadu
-                                                                            </option>
-                                                                            <option value="Telangana">Telangana</option>
-                                                                            <option value="Tripura">Tripura</option>
-                                                                            <option value="Uttar Pradesh">Uttar Pradesh
-                                                                            </option>
-                                                                            <option value="Uttarakhand">Uttarakhand
-                                                                            </option>
-                                                                            <option value="West Bengal">West Bengal
-                                                                            </option>
-                                                                        </select>
-                                                                    </div><!-- End .col-sm-6 -->
-                                                                </div><!-- End .row -->
-
-                                                                <div class="row">
-                                                                    <div class="col-sm-6">
-                                                                        <label>Postcode / ZIP *</label>
-                                                                        <input name="zip" type="text"
-                                                                            class="form-control" required>
-                                                                    </div><!-- End .col-sm-6 -->
-
-                                                                    <div class="col-sm-6">
-                                                                        <label>Phone *</label>
-                                                                        <input name="phone" type="tel"
-                                                                            class="form-control" required>
-                                                                    </div><!-- End .col-sm-6 -->
-                                                                </div><!-- End .row -->
-
-                                                                <label>Email address *</label>
-                                                                <input type="email" name="email" class="form-control"
-                                                                    required>
-
-                                                                <button type="submit" class="btn btn-outline-primary-2">
-                                                                    <span>SAVE CHANGES</span>
-                                                                    <i class="icon-long-arrow-right"></i>
-                                                                </button>
-                                                            </form>
-                                                        </div><!-- .End .tab-pane -->
                                                     </div>
-
-
-                                                    <!-- .End .tab-pane -->
                                                 </div>
-                                            </div><!-- End .col-lg-9 -->
+                                            </div>
+
+                                            <!-- edit panel -->
+                                            <div class="collapse"
+                                                id="id-<%=address[i]._id %>">
+                                                <div class="" id="tab-account" role="tabpanel"
+                                                    aria-labelledby="tab-account-link">
+                                                    <form action="/editAddress?id=<%= address[i]._id  %>"
+                                                        method="post">
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <label> Name *</label>
+                                                                <input name="name"
+                                                                    value=" <%= address[i].address[0].name %>"
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    required>
+                                                            </div><!-- End .col-sm-6 -->
+
+
+                                                        </div><!-- End .row -->
+
+                                                        <label>Address (Area and street)
+                                                            *</label>
+                                                        <input name="address" type="text"
+                                                            value=" <%= address[i].address[0].address %>"
+                                                            class="form-control"
+                                                            placeholder="House number and Street name"
+                                                            required>
+
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <label>Town / City *</label>
+                                                                <input name="city"
+                                                                    value=" <%= address[i].address[0].city %>"
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    required>
+                                                            </div><!-- End .col-sm-6 -->
+
+                                                            <div class="col-sm-6">
+                                                                <label>State </label>
+                                                                <select name="state" id="state"
+                                                                    class="form-control">
+                                                                    <option selected
+                                                                        value=" <%= address[i].address[0].state %>">
+                                                                        <%= address[i].address[0].state
+                                                                            %>
+                                                                    </option>
+                                                                    <option
+                                                                        value="Andhra Pradesh">
+                                                                        Andhra
+                                                                        Pradesh
+                                                                    </option>
+                                                                    <option
+                                                                        value="Andaman and Nicobar Islands">
+                                                                        Andaman
+                                                                        and
+                                                                        Nicobar Islands</option>
+                                                                    <option
+                                                                        value="Arunachal Pradesh">
+                                                                        Arunachal
+                                                                        Pradesh
+                                                                    </option>
+                                                                    <option value="Assam">Assam
+                                                                    </option>
+                                                                    <option value="Bihar">Bihar
+                                                                    </option>
+
+                                                                    <option value="Delhi">Delhi
+                                                                    </option>
+
+                                                                    <option value="Goa">Goa
+                                                                    </option>
+                                                                    <option value="Gujarat">
+                                                                        Gujarat</option>
+                                                                    <option value="Haryana">
+                                                                        Haryana</option>
+                                                                    <option
+                                                                        value="Himachal Pradesh">
+                                                                        Himachal
+                                                                        Pradesh
+                                                                    </option>
+                                                                    <option
+                                                                        value="Jammu and Kashmir">
+                                                                        Jammu and
+                                                                        Kashmir
+                                                                    </option>
+                                                                    <option value="Jharkhand">
+                                                                        Jharkhand</option>
+                                                                    <option value="Karnataka">
+                                                                        Karnataka</option>
+                                                                    <option value="Kerala">
+                                                                        Kerala</option>
+                                                                    <option
+                                                                        value="Madhya Pradesh">
+                                                                        Madhya
+                                                                        Pradesh
+                                                                    </option>
+                                                                    <option value="Maharashtra">
+                                                                        Maharashtra
+                                                                    </option>
+                                                                    <option value="Manipur">
+                                                                        Manipur</option>
+                                                                    <option value="Meghalaya">
+                                                                        Meghalaya</option>
+                                                                    <option value="Mizoram">
+                                                                        Mizoram</option>
+                                                                    <option value="Nagaland">
+                                                                        Nagaland</option>
+                                                                    <option value="Odisha">
+                                                                        Odisha</option>
+                                                                    <option value="Punjab">
+                                                                        Punjab</option>
+                                                                    <option value="Rajasthan">
+                                                                        Rajasthan</option>
+                                                                    <option value="Sikkim">
+                                                                        Sikkim</option>
+                                                                    <option value="Tamil Nadu">
+                                                                        Tamil Nadu
+                                                                    </option>
+                                                                    <option value="Telangana">
+                                                                        Telangana</option>
+                                                                    <option value="Tripura">
+                                                                        Tripura</option>
+                                                                    <option
+                                                                        value="Uttar Pradesh">
+                                                                        Uttar Pradesh
+                                                                    </option>
+                                                                    <option value="Uttarakhand">
+                                                                        Uttarakhand
+                                                                    </option>
+                                                                    <option value="West Bengal">
+                                                                        West Bengal
+                                                                    </option>
+                                                                </select>
+                                                            </div><!-- End .col-sm-6 -->
+                                                        </div><!-- End .row -->
+
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <label>Postcode / ZIP *</label>
+                                                                <input name="zip"
+                                                                    value=" <%= address[i].address[0].zip %>"
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    required>
+                                                            </div><!-- End .col-sm-6 -->
+
+                                                            <div class="col-sm-6">
+                                                                <label>Phone *</label>
+                                                                <input name="phone" type="tel"
+                                                                    class="form-control"
+                                                                    value=" <%= address[i].address[0].phone %>"
+                                                                    required>
+                                                            </div><!-- End .col-sm-6 -->
+                                                        </div><!-- End .row -->
+
+                                                        <label>Email address *</label>
+                                                        <input type="email" class="form-control"
+                                                            name="email"
+                                                            value=" <%=     address[i].address[0].email %>"
+                                                            required>
+
+                                                        <button type="submit"
+                                                            class="btn btn-outline-primary-2">
+                                                            <span>SAVE CHANGES</span>
+                                                            <i
+                                                                class="icon-long-arrow-right"></i>
+                                                        </button>
+                                                    </form>
+                                                </div><!-- .End .tab-pane -->
+                                            </div>
+
+
+
+                                            <% } %>
+                                    </div><!-- End .row -->
+                                    <% } else{%>
+                                        Address is not added
+                                        <% } %>
+                                            <script>
+                                                function deleteAddress(addressId) {
+                                                    Swal.fire({
+                                                        title: 'Are you sure?',
+                                                        text: "You won't be able to revert this!",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Yes, proceed to delete!'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            Swal.fire(
+                                                                'deleted!',
+                                                                'your address delete.',
+                                                                'success'
+                                                            )
+                                                            $.ajax({
+                                                                url: '/deleteAddress',
+                                                                method: 'post',
+                                                                data: {
+                                                                    address: addressId,
+                                                                },
+                                                                success: (response) => {
+                                                                    setTimeout(() => {
+
+                                                                        window.location.href = '/profileAddress'
+
+                                                                    }, 1200)
+
+                                                                }
+                                                            })
+
+                                                        }
+                                                    })
+
+                                                }
+                                            </script>
+
+                            </div><!-- .End .tab-pane -->
+                            <a data-toggle="collapse" href="#collapseExample" role="button"
+                                aria-expanded="false" aria-controls="collapseExample">Add
+                                address <i class="icon-edit"></i></a>
+
+
+
+                            <div class="collapse" id="collapseExample">
+                                <div class="" id="tab-account" role="tabpanel"
+                                    aria-labelledby="tab-account-link">
+                                    <form action="/addAddress" method="post">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label> Name *</label>
+                                                <input name="name" type="text"
+                                                    class="form-control" required>
+                                            </div><!-- End .col-sm-6 -->
+
+
                                         </div><!-- End .row -->
-                                    </div><!-- End .container -->
-                                </div><!-- End .dashboard -->
-                            </div><!-- End .page-content -->
-                        </main><!-- End .main -->
-                        <%- include('./layouts/footer'); -%>
-                        
+
+                                        <label>Address (Area and street) *</label>
+                                        <input name="address" type="text" class="form-control"
+                                            placeholder="House number and Street name" required>
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Town / City *</label>
+                                                <input name="city" type="text"
+                                                    class="form-control" required>
+                                            </div><!-- End .col-sm-6 -->
+
+                                            <div class="col-sm-6">
+                                                <label>State </label>
+                                                <select name="state" id="state"
+                                                    class="form-control">
+                                                    <option value="Andhra Pradesh">Andhra
+                                                        Pradesh
+                                                    </option>
+                                                    <option value="Andaman and Nicobar Islands">
+                                                        Andaman
+                                                        and
+                                                        Nicobar Islands</option>
+                                                    <option value="Arunachal Pradesh">Arunachal
+                                                        Pradesh
+                                                    </option>
+                                                    <option value="Assam">Assam</option>
+                                                    <option value="Bihar">Bihar</option>
+
+                                                    <option value="Delhi">Delhi</option>
+
+                                                    <option value="Goa">Goa</option>
+                                                    <option value="Gujarat">Gujarat</option>
+                                                    <option value="Haryana">Haryana</option>
+                                                    <option value="Himachal Pradesh">Himachal
+                                                        Pradesh
+                                                    </option>
+                                                    <option value="Jammu and Kashmir">Jammu and
+                                                        Kashmir
+                                                    </option>
+                                                    <option value="Jharkhand">Jharkhand</option>
+                                                    <option value="Karnataka">Karnataka</option>
+                                                    <option value="Kerala">Kerala</option>
+                                                    <option value="Madhya Pradesh">Madhya
+                                                        Pradesh
+                                                    </option>
+                                                    <option value="Maharashtra">Maharashtra
+                                                    </option>
+                                                    <option value="Manipur">Manipur</option>
+                                                    <option value="Meghalaya">Meghalaya</option>
+                                                    <option value="Mizoram">Mizoram</option>
+                                                    <option value="Nagaland">Nagaland</option>
+                                                    <option value="Odisha">Odisha</option>
+                                                    <option value="Punjab">Punjab</option>
+                                                    <option value="Rajasthan">Rajasthan</option>
+                                                    <option value="Sikkim">Sikkim</option>
+                                                    <option value="Tamil Nadu">Tamil Nadu
+                                                    </option>
+                                                    <option value="Telangana">Telangana</option>
+                                                    <option value="Tripura">Tripura</option>
+                                                    <option value="Uttar Pradesh">Uttar Pradesh
+                                                    </option>
+                                                    <option value="Uttarakhand">Uttarakhand
+                                                    </option>
+                                                    <option value="West Bengal">West Bengal
+                                                    </option>
+                                                </select>
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Postcode / ZIP *</label>
+                                                <input name="zip" type="text"
+                                                    class="form-control" required>
+                                            </div><!-- End .col-sm-6 -->
+
+                                            <div class="col-sm-6">
+                                                <label>Phone *</label>
+                                                <input name="phone" type="tel"
+                                                    class="form-control" required>
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+
+                                        <label>Email address *</label>
+                                        <input type="email" name="email" class="form-control"
+                                            required>
+
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SAVE CHANGES</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </div><!-- .End .tab-pane -->
+                            </div>
+
+
+                            <!-- .End .tab-pane -->
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                <div>
+            </div>
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+		
+	
+		
+
+<%- include("./layouts/footer"); -%>
+<%- include("./layouts/additional"); -%>
+
+
