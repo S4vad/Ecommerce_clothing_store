@@ -10,6 +10,7 @@ import categorymodel from "../models/categorySchema.js";
 import contactModel from "../models/contactSchema.js";
 import wishlistModel from "../models/wishlist.js";
 import subBannerModel from "../models/subBanners.js";
+import exp from "constants";
 
 
 
@@ -234,8 +235,14 @@ export async function productDetails(req, res) {
         const wisListItems = await wishlistModel.find().populate("productId");
         const wishListCount = wisListItems.length;
 
+        const currentStock=product.Stock<=0;
+        let stockStatus;
+        if (currentStock){
+            stockStatus="The product is Unavailable Now !!"
+        }
+
     
-        const message= req.query.message || "";
+        const message= stockStatus || req.query.message;
         
         
 
@@ -304,8 +311,7 @@ export async function cartAdd(req, res) {
         if (updatedStock >= 0) {
             await Product.findByIdAndUpdate(req.body.productID, { $set: { Stock: updatedStock } });
         } else {
-            // quantityAvailableOrNot = `The stock is not available  ${quantity} units !!! The available units are ${stock} `;
-            quantityAvailableOrNot = `"Stock unavailable: Only 0 units left!"`;
+            quantityAvailableOrNot = ` ${quantity} units requested; only ${stock} available. `;
 
     
         }
@@ -549,6 +555,20 @@ export async function cartDelete(req,res) {
         
     } catch (error) {
         res.send(error.message)
+        
+    }
+    
+}
+
+export async function cartSubTotalUpdate(req,res) {
+    try {
+        const{id,price,subTotal}=req.params;
+        const  remainingSubTotal=subTotal-price;
+        await cartModel.findByIdAndUpdate(id,{$set:{subTotal:remainingSubTotal}})
+        res.json({remainingSubTotal:remainingSubTotal})
+        
+    } catch (error) {
+        res.status(500).jason({message:error.message})
         
     }
     

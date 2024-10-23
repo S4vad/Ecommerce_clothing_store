@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search,cartDelete} from "../controller/usercontroller.js";
+import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search,cartDelete,cartSubTotalUpdate} from "../controller/usercontroller.js";
 import {order,orderGet,coupon} from "../controller/ordercontroller.js"
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
@@ -41,6 +41,7 @@ routes.post('/contact',userAuthentication,addContact)
 routes.post('/filter',userAuthentication,filter)
 routes.post('/search',userAuthentication,search)
 routes.post('/order',userAuthentication,order)
+routes.post('update/:id/:price/:subTotal',cartSubTotalUpdate)
 
 
 

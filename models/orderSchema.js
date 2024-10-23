@@ -2,13 +2,10 @@ import mongoose from 'mongoose';
 
 
 const orderSchema = new mongoose.Schema({
-    address:{
-        name: String,
-        address:String,
-        city:String,
-        state:String,
-        zip:Number,
-        phone:String,
+    address:{ type:mongoose.Schema.Types.ObjectId,
+      require:true,
+      ref:"address"
+
     },
     user:{type:mongoose.Types.ObjectId,
           ref:'user'
@@ -17,6 +14,21 @@ const orderSchema = new mongoose.Schema({
     products:Array,
     totalamount:Number,
     status:String,
+    paymentMethod: {
+      type: String,
+      required: true
+  },
+  invodiceNumber:{
+    type:Number,
+
+  },
+  invoiceDate: {
+    type: Date,
+    default: Date.now
+  },
+  dueDate: {
+      type: Date
+  },
 },
 {
   timestamps:true,
@@ -26,3 +38,9 @@ const orderSchema = new mongoose.Schema({
 
 const orderModel = mongoose.model("order",orderSchema );
 export default orderModel;
+
+
+
+
+
+

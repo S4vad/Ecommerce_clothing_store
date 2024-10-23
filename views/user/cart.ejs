@@ -48,7 +48,10 @@
 										<td class="column-4">
 											<div class="wrap-num-product flex-w m-l-auto m-r-0">
 												<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-													<i class="fs-16 zmdi zmdi-minus"></i>
+													<button class="fs-16 zmdi zmdi-minus" onclick="minus('234', '234', '2345')">
+													</button>
+													
+
 												</div>
 									
 												<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="<%= item.quantity %>">
@@ -58,9 +61,9 @@
 												</div>
 											</div>
 										</td>
-										<td class="column-5"><%= item.subTotal %></td>
+										<td class="column-5" id="subTotal-<%= item.productId %>"><%= item.subTotal %></td>
 										
-										<!-- Adding a gap between Offers and Delete buttons -->
+
 										<td class="column-6" style="padding-right: 20px;">
 											<a href="/coupon"  class="text-success" style="font-weight: 900; font-size: 1.2rem;">
 												Offers
@@ -163,6 +166,33 @@
 
 <!--===============================================================================================-->	
 	<script src="/user/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script>
+
+			$(document).ready(function() {
+
+				function minus(price,subTotal,productId){
+
+					console.log('the aisfadopjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+
+					$.ajax({
+						url: `/cart/update/${productId}/${price}/${subTotal}`,
+						method:"post",
+						success:function(response){
+								let remainingSubTotal=response.remainingSubTotal;
+								$('#subTotal-'+productId).html(remainingSubTotal);
+
+
+						},
+						error: function(error) {
+						console.error('Error updating quantity:', error);
+						}
+
+					})
+				}
+			});
+	</script>
+
+
 <!--===============================================================================================-->
 	<script src="/user/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
@@ -171,12 +201,9 @@
 <!--===============================================================================================-->
 	<script src="/user/vendor/select2/select2.min.js"></script>
 	<script>
-		$(".js-select2").each(function(){
-			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
-			});
-		})
+
+
+		
 	</script>
 
 	<script>
@@ -193,6 +220,8 @@
     		});
 		}
 	</script>
+
+	
 <!--===============================================================================================-->
 	<script src="/user/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 <!--===============================================================================================-->

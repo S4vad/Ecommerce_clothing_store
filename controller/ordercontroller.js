@@ -69,4 +69,8 @@ export async function coupon(req,res) {
     
 }
 
+function getDiscount(){
+    
+}
+
 
