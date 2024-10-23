@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search,cartDelete,cartSubTotalUpdate} from "../controller/usercontroller.js";
 import {order,orderGet,coupon} from "../controller/ordercontroller.js"
-import { profile,profileAddress,addAddressPost,editAddress} from "../controller/profilecontroller.js";
+import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress} from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
 
@@ -34,6 +34,8 @@ routes.delete('/cart/remove/:id',userAuthentication,cartDelete)
 routes.get('/coupon',userAuthentication,coupon)
 routes.get('/profile',userAuthentication,profile)
 routes.get('/profileAddress',userAuthentication,profileAddress)
+routes.get('/profileDashboard',userAuthentication,profileDashboard)
+
 
 
 
@@ -48,6 +50,8 @@ routes.post('/order',userAuthentication,order)
 routes.post('/update/:id/:price/:subTotal',cartSubTotalUpdate)
 routes.post('/addAddress',userAuthentication,addAddressPost)
 routes.post('/editAddress',userAuthentication,editAddress)
+routes.post('/deleteAddress',deleteAddress)
+
 
 
 

@@ -129,3 +129,45 @@ export async function editAddress(req,res) {
     }
     
 }
+
+
+export async function deleteAddress(req,res) {
+
+    try {
+       const AddressId=req.body.address;
+
+       await addressModel.findByIdAndDelete(AddressId)
+       res.sendStatus(200); 
+       
+       
+       
+   } catch (error) {
+       res.send(error.message)
+       res.sendStatus(500); 
+   }
+   
+}
+
+
+export async function profileDashboard(req,res){
+    try {
+        const userId=req.user;
+        const user=getUser(userId)
+        
+
+        const cart = await cartModel.find({ userId: userId}).populate('productId');
+
+       
+        const cartItems = await cartModel.find().populate('productId');
+        const cartCount = cartItems.length;
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+
+        res.render('user/profileDashboard',{user,alert:false,cart,cartCount,wishListCount,user})
+        
+    } catch (error) {
+        res.status(500).send(error.message)
+        
+    }
+}
