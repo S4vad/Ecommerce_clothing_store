@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search,cartDelete,cartSubTotalUpdate} from "../controller/usercontroller.js";
 import {order,orderGet,coupon} from "../controller/ordercontroller.js"
+import { profile } from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
 
@@ -31,6 +32,7 @@ routes.get('/categoryShop',userAuthentication,categoryShop)
 routes.get('/order',userAuthentication,orderGet)
 routes.delete('/cart/remove/:id',userAuthentication,cartDelete)
 routes.get('/coupon',userAuthentication,coupon)
+routes.get('/profile',userAuthentication,profile)
 
 
 routes.post('/signin',userSignup)
