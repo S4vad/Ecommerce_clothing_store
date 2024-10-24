@@ -30,7 +30,7 @@ routes.get('/about',userAuthentication,aboutPage)
 routes.get('/contact',userAuthentication,contactPage)
 routes.get('/categoryShop',userAuthentication,categoryShop)
 routes.get('/order',userAuthentication,orderGet)
-routes.delete('/cart/remove/:id',userAuthentication,cartDelete)
+routes.delete('/cart/remove/:id',userAuthentication, cartDelete); // Temporarily without middleware
 routes.get('/coupon',userAuthentication,coupon)
 routes.get('/profile',userAuthentication,profile)
 routes.get('/profileAddress',userAuthentication,profileAddress)

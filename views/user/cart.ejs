@@ -76,6 +76,8 @@
 											<button class="btn text-dark p-0 m-0 border-0 bg-transparent" onclick="removeFromCart('<%= product.item._id %>')" style="font-size: 0.9rem;">
 												Remove
 											</button>
+											
+											
 										</td>
 									</tr>
 									<% }) %>
@@ -206,18 +208,22 @@
 	</script>
 
 	<script>
-		function removeFromCart(productId){
+		function removeFromCart(productId) {
+
+
 			$.ajax({
-				url:"/cart/remove/"+productId,
-				type:'DELETE',
-				success:function(response){
-					location.reload();
+				url: "/cart/remove/"+ productId, 
+				type: 'DELETE',
+				success: function(response) {
+					console.log('Item removed successfully:', response);
+					location.reload(); 
 				},
 				error: function(error) {
-            		console.error('Error removing item from cart:', error);
-        		}
-    		});
+					console.error('Error removing item from cart:', error);
+				}
+			});
 		}
+
 	</script>
 
 	

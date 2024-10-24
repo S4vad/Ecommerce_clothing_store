@@ -487,22 +487,48 @@ export async function search(req,res) {
     
 }
 
-export async function cartDelete(req,res) {
-    try {
-        const user=req.user;
-        const delId=req.params.id;
-        
-        const userCart = await cartModel.findOne({ user: user }).populate('products.item');
-        
 
-        res.render('user/cart')
+export async function cartDelete(req, res) {
+    try {
+        const userId = req.user; 
+        const productId = req.params.id; 
         
+        const userCart = await cartModel.findOne({ user: userId });
+
+        if (!userCart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        const productIndex = userCart.products.findIndex(p => p.item.toString() === productId);
+
+        if (productIndex !== -1) {
+            // Get the current product's quantity and total price before removal
+            const productToRemove = userCart.products[productIndex];
+            const quantityToRemove = productToRemove.quantity;
+            const currentProductTotal = productToRemove.currentProductTotal;
+
+            // Remove the product from the products array
+            userCart.products.splice(productIndex, 1);
+
+            // Update totalQuantity and subtotal after product removal
+            userCart.totalQuantity -= quantityToRemove;
+            userCart.subtotal -= currentProductTotal;
+
+            // Save the updated cart
+            await userCart.save();
+
+            // Send JSON response for AJAX success
+            return res.status(200).json({ message: 'Product removed from cart' });
+        } else {
+            return res.status(404).json({ message: 'Product not found in cart' });
+        }
+
     } catch (error) {
-        res.send(error.message)
-        
+        return res.status(500).json({ message: error.message });
     }
-    
 }
+
+
 
 export async function cartSubTotalUpdate(req,res) {
     try {
