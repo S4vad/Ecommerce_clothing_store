@@ -532,10 +532,11 @@ export async function cartDelete(req, res) {
 
 export async function cartSubTotalUpdate(req,res) {
     try {
-        const{id,price,subTotal}=req.params;
-        const  remainingSubTotal=subTotal-price;
-        await cartModel.findByIdAndUpdate(id,{$set:{subtotal:remainingSubTotal}})
-        res.json({remainingSubTotal:remainingSubTotal})
+        const productId =req.params.id;
+        const userId=req.user;
+        const cart=await cartModel.find({user:userId});
+
+     
 
         //extra changer
 
@@ -544,6 +545,9 @@ export async function cartSubTotalUpdate(req,res) {
         productPrice= userCart.products.Price;
         const productIndex = userCart.products.findIndex(p => p.item.toString() === delId);
         cart.products[productIndex].currentProductTotal=Number(cart.products[productIndex].currentProductTotal)-productPrice;
+
+        res.json({remainingSubTotal:remainingSubTotal})
+
         
     } catch (error) {
         res.status(500).jason({message:error.message})

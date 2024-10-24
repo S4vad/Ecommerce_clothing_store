@@ -161,14 +161,14 @@
 
                                                                         <tr>
                                                                             <td><a href="#">
-                                                                                    <%= cart.products[i].item.name.substring(0,60)
+                                                                                    <%= cart.products[i].item.Name
                                                                                         %>...
                                                                                 </a> (qty:<%= cart.products[i].quantity
                                                                                     %>)
                                                                             </td>
                                                                             <td>
                                                                                 &#8377;<%=
-                                                                                    cart.products[i].item.price*cart.products[i].quantity
+                                                                                    cart.products[i].item.Price*cart.products[i].quantity
                                                                                     %>
                                                                             </td>
                                                                         </tr>
@@ -177,7 +177,7 @@
 
                                                                             <tr class="summary-subtotal">
                                                                                 <td>Subtotal:</td>
-                                                                                <td>RS. <%= total %>
+                                                                                <td>RS. <%= cart.subtotal %>
                                                                                 </td>
                                                                             </tr><!-- End .summary-subtotal -->
                                                                             <tr>
@@ -192,7 +192,7 @@
                                                                             </tr>
                                                                             <tr class="summary-total">
                                                                                 <td>Total:</td>
-                                                                                <td>RS.<span id="totalspan"> <%= total-discount %></span>
+                                                                                <td>RS.<span id="totalspan"> <%= totalDiscount %></span>
                                                                                 </td>
                                                                             </tr><!-- End .summary-total -->
                                                                             <% } %>

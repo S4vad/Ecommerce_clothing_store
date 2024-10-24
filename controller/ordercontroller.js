@@ -5,6 +5,7 @@ import cartModel from "../models/cartSchema.js";
 import wishlistModel from "../models/wishlist.js";
 import moment from "moment";
 import addressModel from "../models/addressSchem.js";
+import getUserCartWishlistData from "../helpers/mainhelper.js";
 
 export async function orderGet(req,res) {
 
@@ -53,16 +54,13 @@ export async function order(req,res) {
 export async function coupon(req,res) {
 
     try {
-        const user=req.user;
+
         const coupon=await couponModel.find()
 
-        const cartItems = await cartModel.find().populate('productId');
-        const cartCount = cartItems.length;
+        const userId = req.user; 
+        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
-        const wisListItems=await wishlistModel.find().populate("productId")
-        const wishListCount=wisListItems.length;
-
-        res.render('user/coupon',{coupons:coupon,user,cartCount,wishListCount,moment,cart:cartItems})
+        res.render('user/coupon',{coupons:coupon,user,cartCount,wishListCount,moment,cart:cart})
         
     } catch (error) {
         res.send(error.message)
@@ -79,18 +77,24 @@ function getDiscount(){
 export async function checkout(req,res) {
 
     try {
-        const user=req.user;
         const coupon=await couponModel.find()
 
-        const cartItems = await cartModel.find().populate('productId');
-        const cartCount = cartItems.length;
-
-        const wisListItems=await wishlistModel.find().populate("productId")
-        const wishListCount=wisListItems.length;
+        const userId = req.user; 
+        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
         const address=await addressModel.find()
 
-        res.render('user/checkout',{coupons:coupon,user,cartCount,wishListCount,moment,cart:cartItems,address,alert:false})
+        res.render('user/checkout',{
+            coupons:coupon,
+            user,
+            cartCount,
+            wishListCount,
+            moment,
+            cart:cart,
+            address,
+            alert:false,
+            discount:345,
+            totalDiscount:345})
         
     } catch (error) {
         res.send(error.message)
