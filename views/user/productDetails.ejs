@@ -288,28 +288,27 @@
 
 			
 			<div class="header-cart-content flex-w js-pscroll">
-				<% cart.forEach((item)=>{  %>
 				<ul class="header-cart-wrapitem w-full">
 				
 					<li class="header-cart-item flex-w flex-t m-b-12">
 						<div class="header-cart-item-img">
-							<img src="/uploads/<%= item.productId.Images[0] %>" alt="IMG">
+							<img src="/uploads/<%= cart.products[0].item.Images[0] %>" alt="IMG">
+
 						</div>
 
 						<div class="header-cart-item-txt p-t-8">
 							<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-								<%= item.productId.Name %>
+								<%= cart.products[0].item.Name %>
 							</a>
 
 							<span class="header-cart-item-info">
-								<%= item.quantity %> x <%= item.productId.Price %>
+								<%= cart.quantity %> x <%= cart.products[0].item.Name %>
 							</span>
 						</div>
 					</li>
 				
 
 				</ul>
-				<% }) %>
 				
 
 
