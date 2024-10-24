@@ -16,7 +16,7 @@ const addProductSchema = new mongoose.Schema({
     },
     Stock:{
         type:Number,
-        require:true,
+        required:true,
 
     },
     Images: [
@@ -29,11 +29,11 @@ const addProductSchema = new mongoose.Schema({
       },
     Brand:{
         type:String,
-        require:true
+        required:true
     },
     Size:{
         type:String,
-        require:true
+        required:true
     },
     
 

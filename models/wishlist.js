@@ -19,3 +19,5 @@ const wishlist=mongoose.Schema({
 
 const wishlistModel=mongoose.model('wishlist',wishlist)
 export default wishlistModel;
+
+

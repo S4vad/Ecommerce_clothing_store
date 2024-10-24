@@ -4,6 +4,7 @@ import couponModel from "../models/couponSchema.js";
 import cartModel from "../models/cartSchema.js";
 import wishlistModel from "../models/wishlist.js";
 import moment from "moment";
+import addressModel from "../models/addressSchem.js";
 
 export async function orderGet(req,res) {
 
@@ -70,6 +71,30 @@ export async function coupon(req,res) {
 }
 
 function getDiscount(){
+    
+}
+
+
+
+export async function checkout(req,res) {
+
+    try {
+        const user=req.user;
+        const coupon=await couponModel.find()
+
+        const cartItems = await cartModel.find().populate('productId');
+        const cartCount = cartItems.length;
+
+        const wisListItems=await wishlistModel.find().populate("productId")
+        const wishListCount=wisListItems.length;
+
+        const address=await addressModel.find()
+
+        res.render('user/checkout',{coupons:coupon,user,cartCount,wishListCount,moment,cart:cartItems,address,alert:false})
+        
+    } catch (error) {
+        res.send(error.message)
+    }
     
 }
 

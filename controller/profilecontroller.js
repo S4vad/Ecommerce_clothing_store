@@ -5,6 +5,9 @@ import wishlistModel from "../models/wishlist.js";
 import addressModel from "../models/addressSchem.js";
 import exp from "constants";
 import { truncateSync } from "fs";
+
+
+
 export async function profile(req,res){
     try {
         const userId=req.user;
@@ -20,7 +23,9 @@ export async function profile(req,res){
         const wisListItems=await wishlistModel.find().populate("productId")
         const wishListCount=wisListItems.length;
 
-        res.render('user/profile',{user,alert:false,cart,cartCount,wishListCount,user})
+        const address=await addressModel.find()
+
+        res.render('user/profile',{user,alert:false,cart,cartCount,wishListCount,user,address})
         
     } catch (error) {
         res.status(500).send(error.message)

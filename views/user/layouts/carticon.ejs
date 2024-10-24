@@ -1,4 +1,4 @@
-	<!-- Cart -->
+	
 	<div class="wrap-header-cart js-panel-cart">
 		<div class="s-full js-hide-cart"></div>
 
@@ -19,70 +19,64 @@
 			<div class="header-cart-content flex-w js-pscroll">
 				
 				<ul class="header-cart-wrapitem w-full">
-					<% cart.forEach((item) => { %>
-						<% if (item.productId) { %> <!-- Check if productId exists -->
-							<li class="header-cart-item flex-w flex-t m-b-12">
-								<div class="header-cart-item-img">
-									<% if (item.productId.Images && item.productId.Images.length > 0) { %>
-										<img src="/uploads/<%= item.productId.Images[0] %>" alt="IMG">
-									<% } else { %>
-										<img src="/uploads/images-2d324f2f-3aff-49f3-bda1-de4f6d75eb9b-1717506018348.jpeg" alt="IMG"> <!-- Default image -->
-									<% } %>
-								</div>
-					
-								<div class="header-cart-item-txt p-t-8">
-									<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-										<%= item.productId.Name %>
-									</a>
-					
-									<span class="header-cart-item-info">
-										<%= item.quantity %> x <%= item.productId.Price %>
-									</span>
-								</div>
-							</li>
-						<% } else { %>
-							<li class="header-cart-item flex-w flex-t m-b-12">
-								<div class="header-cart-item-txt p-t-8">
-									<p>Product information is unavailable.</p>
-								</div>
-							</li>
-						<% } %>
-					<% }) %>
-					
-				</ul>
+
+						<% if (cart.products[0]) { %> 
+						<li class="header-cart-item flex-w flex-t m-b-12">
+							<div class="header-cart-item-img">
+								<% if (cart.products[0].item.Images && cart.products[0].item.Images.length > 0) { %>
+									<img src="/uploads/<%= cart.products[0].item.Images[0] %>" alt="IMG">
+								<% } else { %>
+									<img src="/uploads/images-2d324f2f-3aff-49f3-bda1-de4f6d75eb9b-1717506018348.jpeg" alt="IMG"> <!-- Default image -->
+								<% } %>
+							</div>
 				
+							<div class="header-cart-item-txt p-t-8">
+								<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+									<%= cart.products[0].item.Name[0] %>
+								</a>
 				
+								<span class="header-cart-item-info">
+									<%= cart.products[0].quantity %> x <%= cart.products[0].item.Price %>
+								</span>
+							</div>
+						</li>
+					<% } else { %>
+						<li class="header-cart-item flex-w flex-t m-b-12">
+							<div class="header-cart-item-txt p-t-8">
+								<p>Product information is unavailable.</p>
+							</div>
+						</li>
+					<% } %>
+
+				
+			</ul>
+			
+			
 
 
-				<div class="w-full">
-                    <div class="header-cart-total w-full p-tb-40">
-                        <% let subTotal=0; %>
-                        <%cart.forEach((item)=>{ %>
-                            <% subTotal+=item.subTotal %>
+			<div class="w-full">
+				<div class="header-cart-total w-full p-tb-40">
 
-
-                        <% }) %>
-                        <div class="mtext-110 cl2">
-                            <%= subTotal %> .Rs
-                        
-                        </div>
-
-                    </div>
-
-
-					<div class="header-cart-buttons flex-w w-full">
-						<a href="/cart" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
-							View Cart
-						</a>
-
-						<a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
-							Check Out
-						</a>
+					<div class="mtext-110 cl2">
+						<%= cart.subtotal %>
+					
 					</div>
+
+				</div>
+
+
+				<div class="header-cart-buttons flex-w w-full">
+					<a href="/cart" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+						View Cart
+					</a>
+
+					<a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
+						Check Out
+					</a>
 				</div>
 			</div>
-			
 		</div>
+		
 	</div>
+</div>
 
-	

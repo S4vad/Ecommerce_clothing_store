@@ -36,15 +36,15 @@
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
 								</tr>
-								<% cart.forEach((item)=>{  %>
+						
 									<tr class="table_row">
 										<td class="column-1">
 											<div class="how-itemcart1">
-												<img src="/uploads/<%= item.productId.Images[0] %>" alt="IMG">
+												<img src="/uploads/<%= cart.products[0].item.Images[0] %>" alt="IMG">
 											</div>
 										</td>
-										<td class="column-2"><%= item.productId.Name %></td>
-										<td class="column-3"><%= item.productId.Price %></td>
+										<td class="column-2"><%= cart.products[0].item.Name %></td>
+										<td class="column-3"><%= cart.products[0].item.Price %></td>
 										<td class="column-4">
 											<div class="wrap-num-product flex-w m-l-auto m-r-0">
 												<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
@@ -54,14 +54,14 @@
 
 												</div>
 									
-												<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="<%= item.quantity %>">
+												<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="<%= cart.products[0].quantity %>">
 									
 												<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 													<i class="fs-16 zmdi zmdi-plus"></i>
 												</div>
 											</div>
 										</td>
-										<td class="column-5" id="subTotal-<%= item.productId %>"><%= item.subTotal %></td>
+										<td class="column-5" id="subTotal-<%= cart.products[0]._id %>"><%= cart.subTotal %></td>
 										
 
 										<td class="column-6" style="padding-right: 20px;">
@@ -71,13 +71,13 @@
 										</td>
 									
 										<td class="column-7">
-											<button class="btn text-dark p-0 m-0 border-0 bg-transparent" onclick="removeFromCart('<%= item._id %>')" style="font-size: 0.9rem;">
+											<button class="btn text-dark p-0 m-0 border-0 bg-transparent" onclick="removeFromCart('<%= cart.products[0]._id %>')" style="font-size: 0.9rem;">
 												Remove
 											</button>
 										</td>
 									</tr>
 									
-								<% }) %>
+								
 
 								
 							</table>
@@ -127,14 +127,9 @@
 							</div>
 
 							<div class="size-209 p-t-1">
-								<% let subTotal=0; %>
-								<%cart.forEach((item)=>{ %>
-									<% subTotal+=item.subTotal %>
 
-
-								<% }) %>
 								<span class="mtext-110 cl2">
-									<%= subTotal %>
+									<%= cart.subtotal %>
 								
 								</span>
 
