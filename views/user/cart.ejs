@@ -50,20 +50,20 @@
 										<td class="column-4">
 											<div class="wrap-num-product flex-w m-l-auto m-r-0">
 												<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-													<button class="fs-16 zmdi zmdi-minus" onclick="minus('234', '234', '2345')">
+													<button class="fs-16 zmdi zmdi-minus" onclick="minus('<%= product.item._id %>')">
 													</button>
 													
 
 												</div>
 									
-												<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="<%= cart.products[0].quantity %>">
+												<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="<%= product.quantity %>">
 									
 												<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 													<i class="fs-16 zmdi zmdi-plus"></i>
 												</div>
 											</div>
 										</td>
-										<td class="column-5" id="subTotal-<%= cart.products[0]._id %>"><%= cart.subtotal %></td>
+										<td class="column-5" id="subTotal-<%= cart.products[0]._id %>"><%= product.currentProductTotal %></td>
 										
 
 										<td class="column-6" style="padding-right: 20px;">
@@ -73,7 +73,7 @@
 										</td>
 									
 										<td class="column-7">
-											<button class="btn text-dark p-0 m-0 border-0 bg-transparent" onclick="removeFromCart('<%= cart.products[0]._id %>')" style="font-size: 0.9rem;">
+											<button class="btn text-dark p-0 m-0 border-0 bg-transparent" onclick="removeFromCart('<%= product.item._id %>')" style="font-size: 0.9rem;">
 												Remove
 											</button>
 										</td>
@@ -169,12 +169,12 @@
 
 			$(document).ready(function() {
 
-				function minus(price,subTotal,productId){
+				function minus(productId){
 
 					console.log('the aisfadopjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
 
 					$.ajax({
-						url: `/cart/update/${productId}/${price}/${subTotal}`,
+						url: `/cart/update/${productId}`,
 						method:"post",
 						success:function(response){
 								let remainingSubTotal=response.remainingSubTotal;
@@ -206,9 +206,9 @@
 	</script>
 
 	<script>
-		function removeFromCart(cartId){
+		function removeFromCart(productId){
 			$.ajax({
-				url:"/cart/remove/"+cartId,
+				url:"/cart/remove/"+productId,
 				type:'DELETE',
 				success:function(response){
 					location.reload();

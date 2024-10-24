@@ -212,7 +212,8 @@ export async function cart(req,res) {
             user:user,
             cart:cart,
             cartCount:cartCount,
-            wishListCount:wishListCount})
+            wishListCount:wishListCount,
+            userId:userId})
 
         
     } catch (error) {
@@ -239,7 +240,8 @@ export async function cartAdd(req, res) {
 
         const product = { 
             item: req.body.productID, 
-            quantity: quantity 
+            quantity: quantity ,
+            currentProductTotal:current_Total
         };
             
         const cart = await cartModel.findOne({ user: userId });
@@ -251,29 +253,30 @@ export async function cartAdd(req, res) {
             if (productIndex !== -1) {
                 // Product exists in cart, update its quantity
                 cart.products[productIndex].quantity = Number(cart.products[productIndex].quantity) + quantity; 
+                cart.products[productIndex].currentProductTotal=Number(cart.products[productIndex].currentProductTotal)+current_Total;
                 
             } else {
 
                 cart.products.push(product);
             }
 
-            
-
             cart.totalQuantity = Number(cart.totalQuantity) + quantity; 
             cart.subtotal = Number(cart.subtotal) + current_Total;
             
-            await cart.save(); // Save the updated cart
+            await cart.save(); 
         } else {
 
             await cartModel.create({
                 user: userId,
                 products: [product],
                 totalQuantity: quantity,
-                subtotal: current_Total, 
+                subtotal: current_Total
             });
         }
 
         const updatedStock = stock - quantity;
+
+        
 
         let quantityAvailableOrNot = ""; 
 
@@ -489,7 +492,8 @@ export async function cartDelete(req,res) {
         const user=req.user;
         const delId=req.params.id;
         
-        const userCart = await cartModel.findOne({ user: userId });
+        const userCart = await cartModel.findOne({ user: user }).populate('products.item');
+        
 
         res.render('user/cart')
         
@@ -506,6 +510,14 @@ export async function cartSubTotalUpdate(req,res) {
         const  remainingSubTotal=subTotal-price;
         await cartModel.findByIdAndUpdate(id,{$set:{subtotal:remainingSubTotal}})
         res.json({remainingSubTotal:remainingSubTotal})
+
+        //extra changer
+
+
+        const userCart = await cartModel.findOne({ user: user }).populate('products.item');
+        productPrice= userCart.products.Price;
+        const productIndex = userCart.products.findIndex(p => p.item.toString() === delId);
+        cart.products[productIndex].currentProductTotal=Number(cart.products[productIndex].currentProductTotal)-productPrice;
         
     } catch (error) {
         res.status(500).jason({message:error.message})
