@@ -1,335 +1,168 @@
 <%- include('./layouts/main'); -%>
-    <link rel="stylesheet" href="user/assets/css/skins/skin-demo-13.css">
-    <link rel="stylesheet" href="user/assets/css/demos/demo-13.css">
-    <link rel="stylesheet" href="user/assets/css/checkout.css">
-    <link rel="stylesheet" href="user/assets/fonts/icofont/icofont.min.css">
+    <link rel="stylesheet" href="user/css/skins/skin-demo-13.css">
+    <link rel="stylesheet" href="user/css/demos/demo-13.css">
+    <link rel="stylesheet" href="user/css/checkout.css">
+    <link rel="stylesheet" href="user/fonts/icofont/icofont.min.css">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     </head>
 
     <body>
-        <div class="page-wrapper">
+        
             <%- include('./layouts/header'); -%>
                 <% if (alert) { %>
                     <script>alert("your banned")</script>
                     <% } %>
 
 
-                        <main class="main">
-                            <div class="page-header text-center"
-                                style="background-image: url('user/assets/images/page-header-bg.jpg')">
-                                <div class="container">
-                                    <h1 class="page-title">Checkout<span>Shop</span></h1>
-                                </div><!-- End .container -->
-                            </div><!-- End .page-header -->
-                            <nav aria-label="breadcrumb" class="breadcrumb-nav">
-                                <div class="container">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="/shop">Shop</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-                                    </ol>
-                                </div><!-- End .container -->
-                            </nav><!-- End .breadcrumb-nav -->
-                            <% if (cart.products !='') { %>
-
-
-                                <div class="page-content">
-                                    <div class="checkout">
-                                        <div class="container">
-                                            <div class="checkout-discount">
-                                                <form action="" id="checkout-form">
-                                                    <!-- <input type="text" name="coupon" class="form-control" 
-                                                        id="checkout-discount-input">
-                                                    <label for="checkout-discount-input" class="text-truncate coupon">Have a
-                                                        coupon? <span>Click here to enter your code</span></label> -->
-                                         
-                                            </div><!-- End .checkout-discount -->
-
-
-
-
-
+                    <main class="main" style="min-height: 100vh;">
+                        <!-- breadcrumb -->
+                        <div class="container" style="margin-top: 80px;">
+                            <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+                                <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+                                    Home
+                                    <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+                                </a>
+                                <span class="stext-109 cl4">Shopping Cart</span>
+                            </div>
+                        </div>
+                    
+                        <% if (cart.products != '') { %>
+                        <div class="container mt-4">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <!-- Delivery Address -->
+                                    <div class="account-card mb-4">
+                                        <div class="account-title">
+                                            <h4>Delivery Address</h4>
+                                            <a href="/profile_address" class="btn btn-outline-primary btn-sm">Add Address</a>
+                                        </div>
+                                        <div class="account-content">
                                             <div class="row">
-                                                <div class="col-lg-9">
-
-                                                    <div class="account-card">
-                                                        <div class="account-title">
-                                                            <h4>delivery address</h4><a href="/profile_address">add
-                                                                address</a>
-                                                        </div>
-                                                        <div class="account-content">
-                                                            <div class="row">
-                                                            <% if (address != '') { %>
-                                                             
-                                                            
-
-                                                                <% for( let i=0; i < address[0].address.length; i++ ) {
-                                                                    %>
-
-
-
-                                                                    <div class="col-md-6 col-lg-4 alert fade show">
-                                                                        <div class="profile-card address slctaddress <%= i==0?'active':'' %> "
-                                                                            data-address="<%= i %>">
-                                                                            <h6>Home</h6>
-                                                                            <p>
-                                                                                <%= address[0].address[i].address %>,
-                                                                                    <%= address[0].address[i].name %>,
-                                                                                        <%= address[0].address[i].city
-                                                                                            %>-<%=
-                                                                                                address[0].address[i].zip
-                                                                                                %>. <%=
-                                                                                                    address[0].address[i].state
-                                                                                                    %>
-                                                                            </p>
-                                                                            <ul class="user-action">
-                                                                                <li><button class="edit icofont-edit"
-                                                                                        title="Edit This"
-                                                                                        data-bs-toggle="modal"
-                                                                                        data-bs-target="#address-edit"></button>
-                                                                                </li>
-                                                                                <li><button
-                                                                                        class="trash icofont-ui-delete"
-                                                                                        title="Remove This"
-                                                                                        data-bs-dismiss="alert"></button>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                    <% } %>
-                                                                    <% } %> 
-
-
+                                                <% if (address != '') { %>
+                                                    <% for(let i = 0; i < address[0].address.length; i++) { %>
+                                                        <div class="col-md-6 col-lg-4 alert fade show">
+                                                            <div class="profile-card address slctaddress <%= i == 0 ? 'active' : '' %>" data-address="<%= i %>">
+                                                                <h6>Home</h6>
+                                                                <p>
+                                                                    <%= address[0].address[i].address %>, <%= address[0].address[i].name %>, 
+                                                                    <%= address[0].address[i].city %>-<%= address[0].address[i].zip %>, <%= address[0].address[i].state %>
+                                                                </p>
+                                                                <ul class="user-action list-inline">
+                                                                    <li class="list-inline-item">
+                                                                        <button class="edit icofont-edit" title="Edit This" data-bs-toggle="modal" data-bs-target="#address-edit"></button>
+                                                                    </li>
+                                                                    <li class="list-inline-item">
+                                                                        <button class="trash icofont-ui-delete" title="Remove This" data-bs-dismiss="alert"></button>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
                                                         </div>
-                                                    </div>
-
-                                                    <div class="cart-bottom">
-                                                <div class="cart-discount">
-                                                
-                                                        <div class="input-group">
-                                                            <input id="couponcheckid" name="coupon" type="text" class="form-control" 
-                                                                placeholder="coupon code">
-                                                                
-                                                          
-                                                            <div class="">
-                                                                <a  id="couponCheck" class="btn btn-outline-primary-2"
-                                                                ><i
-                                                                        class="icon-long-arrow-right"></i></a>
-
-                                                                        <a  id="coupencancel" class="d-none btn btn-outline-primary-2"
-                                                                >cancel</a>
-                                                                        <span id="insertcoupon" class=""></span>
-                                                            </div><!-- .End .input-group-append -->
-                                                            
-                                                        </div><!-- End .input-group -->
-                                             
-                                                </div><!-- End .cart-discount -->
-
-                                                <a href="/shop" class="btn btn-outline-dark-2"><span>Go
-                                                        Shop</span><i class="icon-refresh"></i></a>
-                                            </div><!-- End .cart-bottom -->
-
-                                                    <!-- <button class="mt-2 btn btn-outline-primary" type="button"
-                                                        data-toggle="collapse" data-target="#collapseExample"
-                                                        aria-expanded="false" aria-controls="collapseExample">
-                                                        New address ?
-                                                    </button> -->
-
-
-                                                </div><!-- End .col-lg-9 -->
-                                                <aside class="col-lg-3">
-                                                    <div class="summary">
-                                                        <h3 class="summary-title">Your Order</h3>
-                                                        <!-- End .summary-title -->
-
-                                                        <table class="table table-summary">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Product</th>
-                                                                    <th>Total</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody>
-                                                                <% if (cart !=null) { %>
-
-
-                                                                    <% for( let i=0; i < cart.products.length; i++ ) {
-                                                                        %>
-
-
-                                                                        <tr>
-                                                                            <td><a href="#">
-                                                                                    <%= cart.products[i].item.Name
-                                                                                        %>...
-                                                                                </a> (qty:<%= cart.products[i].quantity
-                                                                                    %>)
-                                                                            </td>
-                                                                            <td>
-                                                                                &#8377;<%=
-                                                                                    cart.products[i].item.Price*cart.products[i].quantity
-                                                                                    %>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <% } %>
-
-
-                                                                            <tr class="summary-subtotal">
-                                                                                <td>Subtotal:</td>
-                                                                                <td>RS. <%= cart.subtotal %>
-                                                                                </td>
-                                                                            </tr><!-- End .summary-subtotal -->
-                                                                            <tr>
-                                                                                <td>Shipping:</td>
-                                                                                <td>Free shipping</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>Discount:</td>
-                                                                                <td><span class="text-danger"> -&#8377;
-                                                                                       <span id="discountspan"> <%= discount %></span>
-                                                                                    </span></td>
-                                                                            </tr>
-                                                                            <tr class="summary-total">
-                                                                                <td>Total:</td>
-                                                                                <td>RS.<span id="totalspan"> <%= totalDiscount %></span>
-                                                                                </td>
-                                                                            </tr><!-- End .summary-total -->
-                                                                            <% } %>
-                                                            </tbody>
-                                                        </table><!-- End .table table-summary -->
-
-                                                       
-                                                            <div class="accordion-summary" id="accordion-payment">
-                                                                <div class="card">
-                                                                    <div class="card-header" id="heading-3">
-                                                                        <h2 class="card-title">
-                                                                            <input value="cod" name="payment"
-                                                                                type="radio" data-toggle="collapse"
-                                                                                data-target=".collapseOne:not(.in)"
-                                                                                checked>
-                                                                            Cash on
-                                                                            delivery
-
-                                                                        </h2>
-                                                                    </div><!-- End .card-header -->
-
-
-
-                                                                    <div class="panel-group" id="accordion">
-                                                                        <div class="panel panel-default">
-
-                                                                            <div
-                                                                                class="collapseOne panel-collapse collapse">
-                                                                                <div class="panel-body">
-                                                                                    <p>If you are not comfortable making
-                                                                                        an
-                                                                                        online payment on
-                                                                                        electroshop.com,
-                                                                                        you
-                                                                                        can opt for the Cash on Delivery
-                                                                                        (C-o-D)
-                                                                                        payment method instead. With
-                                                                                        C-o-D
-                                                                                        you
-                                                                                        can pay in cash at the time of
-                                                                                        actual
-                                                                                        delivery of the product at your
-                                                                                        doorstep, without requiring you
-                                                                                        to
-                                                                                        make
-                                                                                        any advance payment online.</p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div><!-- End .card -->
-                                                                <div class="card">
-
-                                                                    <div class="card-header" id="heading-3">
-
-                                                                        <h2 class="card-title mt-1 mb-2">
-                                                                            <input name="payment" type="radio"
-                                                                                data-toggle="collapse" value="online"
-                                                                                data-target=".collapseTwo:not(.in)" />
-                                                                            Online
-                                                                            Payment
-
-                                                                        </h2>
-                                                                    </div><!-- End .card-header -->
-
-
-                                                                    <div class="panel-group" id="accordion">
-                                                                        <div class="panel panel-default">
-
-                                                                            <div
-                                                                                class="collapseTwo panel-collapse collapse">
-                                                                                <div class="panel-body">
-                                                                                    <p>Online payments</p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div><!-- End .card -->
-
-                                                                <button type="submit"
-                                                                    class="btn btn-outline-primary-2 btn-order btn-block">
-                                                                    <span class="btn-text">Place Order</span>
-                                                                    <span class="btn-hover-text">Proceed to
-                                                                        Checkout</span>
-
-                                                                </button>
-                                                            </div><!-- End .summary -->
-                                                        </form>
-
-
-                                                        <div class="modal fade" id="address-add">
-                                                            <div class="modal-dialog modal-dialog-centered">
-                                                                <div class="modal-content"><button class="modal-close"
-                                                                        data-dismiss="modal"><i
-                                                                            class="icofont-close"></i></button>
-                                                                    <form class="modal-form">
-                                                                        <div class="form-title">
-                                                                            <h3>add new address</h3>
-                                                                        </div>
-                                                                        <div class="form-group"><label
-                                                                                class="form-label">title</label><select
-                                                                                class="form-select">
-                                                                                <option selected>choose title</option>
-                                                                                <option value="home">home</option>
-                                                                                <option value="office">office</option>
-                                                                                <option value="Bussiness">Bussiness
-                                                                                </option>
-                                                                                <option value="academy">academy</option>
-                                                                                <option value="others">others</option>
-                                                                            </select></div>
-                                                                        <div class="form-group"><label
-                                                                                class="form-label">address</label><textarea
-                                                                                class="form-control"
-                                                                                placeholder="Enter your address"></textarea>
-                                                                        </div><button class="form-btn"
-                                                                            type="submit">save address info</button>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                </aside><!-- End .col-lg-3 -->
-                                            </div><!-- End .row -->
-                                            </form>
-                                        </div><!-- End .container -->
+                                                    <% } %>
+                                                <% } %>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <% } else{%>
-                                        <div class="text-center" id="tab-orders" role=""
-                                            aria-labelledby="tab-orders-link">
-                                            <p><h6> Checkout is empty.</h6></p>
-                                            <a href="/shop" class="btn btn-outline-primary-2"><span>GO SHOP</span><i
-                                                    class="icon-long-arrow-right"></i></a>
-                                        </div><!-- .End .tab-pane -->
-                                        <!-- End .checkout -->
-                                </div><!-- End .page-content -->
-                                <% } %>
-                        </main><!-- End .main -->
+                    
+                                    <!-- Cart Bottom (Discount & Go Shop) -->
+                                    <div class="cart-bottom mb-4  p-3 rounded">
+                                        <div class="input-group">
+                                            <input id="couponcheckid" name="coupon" type="text" class="form-control" placeholder="Coupon Code" style="width: 50%;">
+                                            <div class="input-group-append">
+                                                <a id="couponCheck" class="btn btn-outline-primary btn-sm"><i class="icon-long-arrow-right"></i></a>
+                                                <a id="coupencancel" class="d-none btn btn-outline-danger btn-sm">Cancel</a>
+                                                <span id="insertcoupon" class="ml-2"></span>
+                                            </div>
+                                        </div>
+                                        <a href="/shop" class="btn btn-outline-dark-2 mt-3"><span>Go Shop</span><i class="icon-refresh"></i></a>
+                                    </div>
+                                </div>
+                    
+                                <!-- Order Summary Section -->
+                                <aside class="col-lg-3">
+                                    <div class="summary bg-light p-3 rounded">
+                                        <h3 class="summary-title">Your Order</h3>
+                                        <table class="table table-sm table-summary">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (cart != null) { %>
+                                                    <% for(let i = 0; i < cart.products.length; i++) { %>
+                                                        <tr>
+                                                            <td><a href="#"><%= cart.products[i].item.Name %></a> (qty:<%= cart.products[i].quantity %>)</td>
+                                                            <td>&#8377;<%= cart.products[i].item.Price * cart.products[i].quantity %></td>
+                                                        </tr>
+                                                    <% } %>
+                                                    <tr class="summary-subtotal">
+                                                        <td>Subtotal:</td>
+                                                        <td>&#8377;<%= cart.subtotal %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Shipping:</td>
+                                                        <td>Free shipping</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Discount:</td>
+                                                        <td class="text-danger"> -&#8377;<span id="discountspan"><%= discount %></span></td>
+                                                    </tr>
+                                                    <tr class="summary-total">
+                                                        <td>Total:</td>
+                                                        <td>&#8377;<span id="totalspan"><%= totalDiscount %></span></td>
+                                                    </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                    
+<!-- Payment Methods -->
+<!-- Payment Methods -->
+<div class="accordion-summary" id="accordion-payment">
+    <div class="card">
+        <div class="card-header" style="padding: 0.5rem;">
+            <h2 class="card-title d-flex justify-content-between align-items-center m-0">
+                <span  style="font-size: 14px;">Cash on Delivery</span>
+                <input value="cod" name="payment" type="radio" class="form-check-input" id="payment-cod" style="width: 20px; height: 20px;" checked>
+            </h2>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header" style="padding: 0.5rem; ">
+            <h2 class="card-title d-flex justify-content-between align-items-center ms-7"  >
+                <span style="font-size: 14px;">Online Payment</span>
+                <input name="payment" type="radio" value="online" class="form-check-input" id="payment-online" style="width: 20px; height: 20px;">
+            </h2>
+        </div>
+        <div class="collapseTwo panel-collapse collapse">
+            <div class="panel-body" style="padding: 0.5rem;">
+                <p style="font-size: 12px;">Proceed with online payment options.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                    
+                                        <!-- Place Order Button -->
+                                        <button type="submit" class="btn btn-outline-primary btn-sm btn-block mt-4">
+                                            <span class="btn-text">Place Order</span>
+                                            <span class="btn-hover-text">Proceed to Checkout</span>
+                                        </button>
+                                    </div>
+                                </aside>
+                            </div>
+                        </div>
+                        <% } else { %>
+                            <div class="text-center" id="tab-orders">
+                                <h6>Your cart is empty.</h6>
+                                <a href="/shop" class="btn btn-outline-primary-2 mt-3">
+                                    <span>Go Shop</span><i class="icon-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        <% } %>
+                    </main>
+                    
 
                         <%- include('./layouts/footer'); -%>
                             <script>
