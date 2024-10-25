@@ -303,13 +303,12 @@ export async function cartAdd(req, res) {
 export async function wishlist(req,res) {
     try {
 
-
         const userId = req.user; 
-        const { user, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cartCount, wishListCount,cart } = await getUserCartWishlistData(userId);
 
-        const wishList=await wishlistModel.find().populate(['productId','userId'])
+        const wishList=await wishlistModel.find({user:userId}).populate('products')
         
-        res.render('user/wishList',{user:user,wishList:wishList,cartCount:cartCount,wishListCount:wishListCount})
+        res.render('user/wishList',{user:user,wishList:wishList,cartCount:cartCount,wishListCount:wishListCount,cart})
         
     } catch (error) {
         res.send(error.message)
@@ -320,24 +319,49 @@ export async function wishlist(req,res) {
 
 
 
-export async function wishlistAdd(req,res) {
+
+
+
+
+export async function addWishlist(req, res) {
     try {
-        const id=req.params.id;
-        const user=req.user
-        
-        await wishlistModel.create({
-            'productId':id,
-            'userId':user
-        })
-        res.redirect('/')
+        const userId = req.user; 
+        const productId=req.params.id;
+ 
+        const wishlist = await wishlistModel.findOne({ user: userId });
+        let message ="";
+        const product ={item:productId}
+
+        if (wishlist) {
+            const productIndex = wishlist.products.findIndex(p => p.item.toString() === productId);
+
+            if (productIndex !== -1) {
+                message="product Added already"
+            } else {
+
+                wishlist.products.push(product);
+                message="product Added succesfully"
+            }
+            
+            await wishlist.save(); 
+ 
+        } else {
+
+            await wishlistModel.create({
+                user: userId,
+                products: [product],
+
+            });
+        }
+        res.json({message:message})
 
         
     } catch (error) {
-        res.send(error.message)
-        
+        res.status(500).send(error.message);
     }
-    
 }
+
+
 
 
 export async function addContact(req,res) {
@@ -579,6 +603,22 @@ export async function review(req,res) {
         
     } catch (error) {
         res.send(error.message)
+        
+    }
+    
+}
+
+
+
+export async function wishListDelete(req,res) {
+
+    try {
+
+        const delId=req.params.id;
+        await wishlistModel.findById
+        
+    } catch (error) {
+        res.status(500).send(error.message)
         
     }
     

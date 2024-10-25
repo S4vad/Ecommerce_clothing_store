@@ -1,7 +1,9 @@
 import express, { Router } from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search,cartDelete,cartSubTotalUpdate ,review} from "../controller/usercontroller.js";
+import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,
+        aboutPage,contactPage,addContact,wishlist,filter,categoryShop,search,cartDelete,cartSubTotalUpdate ,
+        review,wishListDelete,addWishlist} from "../controller/usercontroller.js";
 import {order,orderGet,coupon,checkout} from "../controller/ordercontroller.js"
 import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress} from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
@@ -36,6 +38,8 @@ routes.get('/profile',userAuthentication,profile)
 routes.get('/profileAddress',userAuthentication,profileAddress)
 routes.get('/profileDashboard',userAuthentication,profileDashboard)
 routes.get('/checkout',userAuthentication,checkout)
+routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
+
 
 
 
@@ -44,7 +48,6 @@ routes.get('/checkout',userAuthentication,checkout)
 routes.post('/signin',userSignup)
 routes.post('/userlog',userLogin)
 routes.post('/cart',userAuthentication,cartAdd)
-routes.post('/wishlist/:id',userAuthentication,wishlistAdd)
 routes.post('/contact',userAuthentication,addContact)
 routes.post('/filter',userAuthentication,filter)
 routes.post('/search',userAuthentication,search)
@@ -54,6 +57,7 @@ routes.post('/addAddress',userAuthentication,addAddressPost)
 routes.post('/editAddress',userAuthentication,editAddress)
 routes.post('/deleteAddress',deleteAddress)
 routes.post('/review',userAuthentication,review)
+routes.post('/addWishlist/:id',userAuthentication,addWishlist)
 
 
 

@@ -29,7 +29,7 @@ export default async function getUserCartWishlistData(userId) {
     const user = await getUser(userId);
     const cart = await cartModel.findOne({ user: userId }).populate('products.item');
     const cartCount = cart ? cart.products.length : 0; 
-    const wisListItems = await wishlistModel.find({ user: userId }).populate("productId");
+    const wisListItems = await wishlistModel.find({ user: userId }).populate("products.item");
     const wishListCount = wisListItems.length;
 
     return {
