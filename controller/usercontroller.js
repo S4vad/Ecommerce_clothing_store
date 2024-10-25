@@ -226,46 +226,40 @@ export async function cart(req,res) {
 export async function cartAdd(req, res) {
     try {
         const userId = req.user; 
-        const quantity = Number(req.body.quantity);
-
-        const current_product_specific = await Product.findById(req.body.productID); 
-        const stock=current_product_specific.Stock;
+        const quantity = Number(req.body.quantity) || 1;
+        const productId = req.body.productID || req.query.productId;
         
+        const current_product_specific = await Product.findById(productId); 
         if (!current_product_specific) {
-            throw new Error('Product not found');
+            return res.status(404).json({ message: 'Product not found' });
         }
 
+        const stock = current_product_specific.Stock;
         const current_price = current_product_specific.Price;
         const current_Total = quantity * current_price;
 
         const product = { 
-            item: req.body.productID, 
-            quantity: quantity ,
-            currentProductTotal:current_Total
+            item: productId, 
+            quantity: quantity,
+            currentProductTotal: current_Total
         };
-            
+        
         const cart = await cartModel.findOne({ user: userId });
 
         if (cart) {
-            // check if the product is already in the cart
-            const productIndex = cart.products.findIndex(p => p.item.toString() === req.body.productID);
+            const productIndex = cart.products.findIndex(p => p.item.toString() === productId);
 
             if (productIndex !== -1) {
-                // Product exists in cart, update its quantity
-                cart.products[productIndex].quantity = Number(cart.products[productIndex].quantity) + quantity; 
-                cart.products[productIndex].currentProductTotal=Number(cart.products[productIndex].currentProductTotal)+current_Total;
-                
+                cart.products[productIndex].quantity += quantity;
+                cart.products[productIndex].currentProductTotal += current_Total;
             } else {
-
                 cart.products.push(product);
             }
 
-            cart.totalQuantity = Number(cart.totalQuantity) + quantity; 
-            cart.subtotal = Number(cart.subtotal) + current_Total;
-            
+            cart.totalQuantity += quantity;
+            cart.subtotal += current_Total;
             await cart.save(); 
         } else {
-
             await cartModel.create({
                 user: userId,
                 products: [product],
@@ -275,27 +269,26 @@ export async function cartAdd(req, res) {
         }
 
         const updatedStock = stock - quantity;
-
-        
-
-        let quantityAvailableOrNot = ""; 
-
+        let quantityAvailableOrNot = "";
         if (updatedStock >= 0) {
-            await Product.findByIdAndUpdate(req.body.productID, { $set: { Stock: updatedStock } });
+            await Product.findByIdAndUpdate(productId, { $set: { Stock: updatedStock } });
         } else {
-            quantityAvailableOrNot = ` ${quantity} units requested; only ${stock} available. `;
+            quantityAvailableOrNot = `${quantity} units requested; only ${stock} available.`;
         }
 
-        res.locals.quantityAvailableOrNOt = quantityAvailableOrNot;
+        if (req.xhr) {
+            // Return JSON if it is an AJAX request
+            return res.status(200).json({ message: 'Product added to cart successfully', quantityAvailableOrNot });
+        } else {
+            // Redirect if it's a normal request
+            const redirectUrl = req.body.quickView 
+                ? `/quickView/${productId}?message=${encodeURIComponent(quantityAvailableOrNot)}` 
+                : `/productDetails/${productId}?message=${encodeURIComponent(quantityAvailableOrNot)}`;
+            return res.redirect(redirectUrl);
+        }
 
-        const redirectUrl = req.body.quickView 
-            ? `/quickView/${req.body.productID}?message=${encodeURIComponent(quantityAvailableOrNot)}` 
-            : `/productDetails/${req.body.productID}?message=${encodeURIComponent(quantityAvailableOrNot)}`;
-
-        res.redirect(redirectUrl);
-        
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: error.message });
     }
 }
 
@@ -306,8 +299,8 @@ export async function wishlist(req,res) {
         const userId = req.user; 
         const { user, cartCount, wishListCount,cart } = await getUserCartWishlistData(userId);
 
-        const wishList=await wishlistModel.find({user:userId}).populate('products')
-        
+        const wishList = await wishlistModel.findOne({ user: userId }).populate('products.item');
+
         res.render('user/wishList',{user:user,wishList:wishList,cartCount:cartCount,wishListCount:wishListCount,cart})
         
     } catch (error) {
@@ -353,6 +346,7 @@ export async function addWishlist(req, res) {
 
             });
         }
+
         res.json({message:message})
 
         
@@ -560,10 +554,6 @@ export async function cartSubTotalUpdate(req,res) {
         const userId=req.user;
         const cart=await cartModel.find({user:userId});
 
-     
-
-        //extra changer
-
 
         const userCart = await cartModel.findOne({ user: user }).populate('products.item');
         productPrice= userCart.products.Price;
@@ -610,19 +600,26 @@ export async function review(req,res) {
 
 
 
-export async function wishListDelete(req,res) {
-
+export async function wishListDelete(req, res) {
     try {
+        const userId = req.user; // Assumes you have the user's ID from req.user
+        const productId = req.params.id; // Product ID to delete from wishlist
+        
+        // Find the wishlist and remove the specific product item
+       await wishlistModel.findOneAndUpdate(
+            { user: userId },
+            { $pull: { products: { item: productId } } }, // Removes the specific product from products array
+            { new: true } // Returns the updated wishlist document
+        );
 
-        const delId=req.params.id;
-        await wishlistModel.findById
+
+        res.status(200).send("Product removed from wishlist successfully");
         
     } catch (error) {
-        res.status(500).send(error.message)
-        
+        res.status(500).send(error.message);
     }
-    
 }
+
 
 
 

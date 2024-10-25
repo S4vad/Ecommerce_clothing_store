@@ -265,11 +265,17 @@
 									</span>
 								</div>
 								<div class="block2-txt-child2 flex-r p-t-3">
+									<div class="d-flex">
+										<span id="message-<%= item._id %>" class="small text-bold text-truncate" style="max-width: 150px; display: inline-block;"></span>
+									</div>
+									
+
 									
 									<button onclick="addWishlist('<%= item._id %>')" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
 										<img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png" alt="ICON">
 										<img class="icon-heart2 dis-block trans-04 ab-t-l" src="user/images/icons/icon-heart-02.png" alt="ICON">
-										<span id="message-<%= item._id %>"></span>
+										
+
 									</button>
 									
 
@@ -301,12 +307,17 @@
 				url:`/addWishlist/${productId}`,
 				method:'post',
 				success:function(response){
-					const respo=respose.message;
+					const respo=response.message;
 					$(`#message-${productId}`).html(respo)
+					setTimeout(()=>{
+					$(`#message-${productId}`).html(" ")
+
+
+					},1500)
 				},
 				error:function(error){
 
-					console.log(erro)
+					console.log(error)
 
 				}
 			})

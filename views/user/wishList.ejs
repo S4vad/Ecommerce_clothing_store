@@ -26,16 +26,16 @@
 				<ul class="header-cart-wrapitem w-full">
 					<li class="header-cart-item flex-w flex-t m-b-12">
 						<div class="header-cart-item-img">
-							<img src="/uploads/<%= prodcut.item.Images[0] %>" alt="IMG">
+							<img src="/uploads/<%= product.item.Images[0] %>" alt="IMG">
 						</div>
 
 						<div class="header-cart-item-txt p-t-8">
 							<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-								<%= prodcut.item.Name %>
+								<%= product.item.Name %>
 							</a>
 
 							<span class="header-cart-item-info">
-								<%= prodcut.item.Price %>
+								<%= product.item.Price %>
 							</span>
 						</div>
 					</li>
@@ -95,49 +95,46 @@
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
 								</tr>
-								<% if (wishList) {%>
-									<% wishList.products.forEach((product)=>{  %>
-									<tr class="table_row">
-										<td class="column-1">
-											<div class="how-itemcart1">
-												<img src="/uploads/<%= item.productId.Images[0] %>" alt="IMG">
-											</div>
-										</td>
-										<td class="column-2"><%= prodcut.item.Name %></td>
-										<td class="column-3"><%= prodcut.item.Price %></td>
-										<td class="column-4">
-											<div class="wrap-num-product flex-w m-l-auto m-r-0">
-												<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-													<i class="fs-16 zmdi zmdi-minus"></i>
+								<% if (wishList && wishList.products && Array.isArray(wishList.products)) { %>
+									<% wishList.products.forEach((product) => { %> <!-- Correct variable name -->
+										<tr class="table_row" >
+											<td class="column-1">
+												<div class="how-itemcart1">
+													<img src="/uploads/<%= product.item.Images[0] %>" alt="IMG"> <!-- Corrected from prodcut to product -->
 												</div>
-
-												<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="1">
-
-												<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-													<i class="fs-16 zmdi zmdi-plus"></i>
+											</td>
+											<td class="column-2"><%= product.item.Name %></td> <!-- Corrected from prodcut to product -->
+											<td class="column-3"><%= product.item.Price %></td> <!-- Corrected from prodcut to product -->
+											<td class="column-4">
+												<div class="wrap-num-product flex-w m-l-auto m-r-0">
+													<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+														<i class="fs-16 zmdi zmdi-minus"></i>
+													</div>
+								
+													<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="1">
+								
+													<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+														<i class="fs-16 zmdi zmdi-plus"></i>
+													</div>
 												</div>
-											</div>
-										</td>
-										<td class="column-5"><%= prodcut.item.Price %></td>
-										<td class="column-6 text-center d-flex mt-5"  >  
-											<a href="/coupon" class="text-success mb-1" style="font-weight: 300; font-size: 0.9rem;">
-												<i class="fas fa-cart-plus" ></i> <!-- Add to cart icon -->
-											</a>
-										</td>
-										<td class="column-7 text-center d-flex ">
-											<button class="btn text-dark p-0 m-0 border-0 bg-transparent" onclick="removeFromWishList(' <%= prodcut.item._id  %>')" style="font-size: 0.9rem;">
-												<i class="fas fa-trash"></i> <!-- Delete icon -->
-											</button>
-										</td>
-										
-										
-										
-									</tr>
+											</td>
+											<td class="column-5"><%= product.item.Price %></td> <!-- Corrected from prodcut to product -->
+											<td class="column-6 text-center d-flex mt-5">
+												<button  type="submit"  class="text-success mb-1" onclick="addToCart('<%= product.item._id %>')" style="font-weight: 300; font-size: 0.9rem;">
+													<i class="fas fa-cart-plus"></i> <!-- Add to cart icon -->
+												</button>
+											</td>
+											<td class="column-7 text-center d-flex">
+												<button class="btn text-dark p-0 m-0 border-0 bg-transparent" onclick="removeFromWishList('<%= product.item._id %>')" style="font-size: 0.9rem;"> <!-- Corrected from prodcut to product -->
+													<i class="fas fa-trash"></i> <!-- Delete icon -->
+												</button>
+											</td>
+										</tr>
 									<% }) %>
-									<% } else{ %>
-										<p>No item added in WishList</p>
-
-									<% } %>
+								<% } else { %>
+									<p>No items added in WishList</p>
+								<% } %>
+								
 								
 							</table>
 						</div>
@@ -182,26 +179,58 @@
 		})
 	</script>
 
-	<script>
-		$(document).ready(function(){
+<script>
 
-			function removeFromWishList(productId){
-				$.ajax({
-					url:`removeWishList/${productId}`,
-					method:'DELETE',
-					success:function(response){
-						console.log('Item removed successfully:', response);
+
+function addToCart(productId) {
+    
+    $.ajax({
+        url:`/cart?productId=${productId}`,
+        method: 'POST',
+        success: function(response) {
+            console.log('Item added to cart successfully:', response)
+            $.ajax({
+                url: `/removeWishList/${productId}`,
+                method: 'DELETE',
+                success: function(response) {
+                    console.log('Item removed from wishlist successfully:', response);
+                    $(`#wishlist-item-${productId}`).remove(); 
+                },
+                error: function(error) {
+                    console.log('Item removal from wishlist unsuccessful:', error);
+                }
+            });
+        },
+        error: function(error) {
+            console.log('Item added to cart unsuccessfully:', error);
+        }
+    });
+}
+
+
+</script>
+
+	<script>
+		
+
+		function removeFromWishList(productId){
+			$.ajax({
+				url:`removeWishList/${productId}`,
+				method:'DELETE',
+				success:function(response){
+					console.log('Item removed successfully:', response);
+
+					$(`#wishlist-item-${productId}`).remove();
+
+				},
+				error:function(error){
+				console.log('Item removed unsuccessfully:', error);
 
 					
-					},
-					error:function(error){
-					console.log('Item removed unsuccessfully:', error);
+				}
+			})
+		}
 
-						
-					}
-				})
-			}
-		})
 	</script>
 <!--===============================================================================================-->
 	<script src="/user/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
