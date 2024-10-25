@@ -103,3 +103,34 @@ export async function checkout(req,res) {
 }
 
 
+
+
+export async function applyCoupon(req,res) {
+
+    try {
+        const coupon=await couponModel.find()
+        const couponCode=coupon.code;
+        const discount=coupon.discount;
+
+        const userId = req.user; 
+      
+
+        const address=await addressModel.find()
+
+        const userCouponCode = req.body.coupon;
+    
+
+        if (userCouponCode === couponCode) { // Example check
+            res.json({ success: true, message: `Coupon applied: ${discount} discount` });
+        } else {
+            res.json({ success: false, message: 'Invalid coupon code' });
+        }
+
+        res.redirect('checkout')
+        
+    } catch (error) {
+        res.send(error.message)
+    }
+    
+}
+

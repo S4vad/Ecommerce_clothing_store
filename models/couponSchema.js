@@ -9,6 +9,11 @@ const couponSchema = new mongoose.Schema({
     status:String,
     startDate:Date,
     endDate:Date,
+    user:[{
+      userId:{type:mongoose.Types.ObjectId,
+              ref:'user',
+            }
+    }]
 },
 {
   timestamps:true,

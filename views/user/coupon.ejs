@@ -144,8 +144,8 @@
                             <% for( let i=0; i < coupons.length; i++ ) { %>
                              
 
-                                <div class="col-4 ml-5">
-                                    <div class="card">
+                                <div class="col-8 ml-5 " >
+                                    <div class="card"  >
                                         <div class="main">
                                             <div class="co-img">
                                                 <img src="user/images/icons/couponlogo.png" alt="" />
@@ -169,25 +169,8 @@
                                     </div>
                            
                                 </div>
-                                <script>
-                                        function copyIt(index) {
-                                                // Get the input element for the specific coupon
-                                                let copyInput = document.querySelector(`#copyvalue${index}`);
 
-                                                // Select the text inside the input
-                                                copyInput.select();
-
-                                                // Copy the text inside the input
-                                                document.execCommand("copy");
-
-                                                // Change the button text to 'COPIED'
-                                                let copybtn = document.querySelector(`#copybtn${index}`);
-                                                copybtn.textContent = "COPIED";
-                                            }
-                                            
-    
-                                </script>
-                                <% } %>
+                            <% } %>
                         </div>
 
 
@@ -213,7 +196,24 @@
 	</div>
 
 <!--===============================================================================================-->	
-	
+<script>
+    function copyIt(index) {
+            // Get the input element for the specific coupon
+            let copyInput = document.querySelector(`#copyvalue${index}`);
+
+            // Select the text inside the input
+            copyInput.select();
+
+            // Copy the text inside the input
+            document.execCommand("copy");
+
+            // Change the button text to 'COPIED'
+            let copybtn = document.querySelector(`#copybtn${index}`);
+            copybtn.textContent = "COPIED";
+        }
+        
+
+</script>
 
 <!--===============================================================================================-->
 	<script src="/user/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>

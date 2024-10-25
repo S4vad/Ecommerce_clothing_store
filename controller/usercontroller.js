@@ -235,7 +235,7 @@ export async function cartAdd(req, res) {
         }
 
         const stock = current_product_specific.Stock;
-        const current_price = current_product_specific.Price;
+        const current_price = Number(current_product_specific.Price);
         const current_Total = quantity * current_price;
 
         const product = { 
@@ -256,8 +256,8 @@ export async function cartAdd(req, res) {
                 cart.products.push(product);
             }
 
-            cart.totalQuantity += quantity;
-            cart.subtotal += current_Total;
+            cart.totalQuantity =Number(cart.totalQuantity)+Number(quantity);
+            cart.subtotal =Number(cart.subtotal) +Number(current_Total);
             await cart.save(); 
         } else {
             await cartModel.create({
