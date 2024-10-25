@@ -6,6 +6,7 @@ import wishlistModel from "../models/wishlist.js";
 import moment from "moment";
 import addressModel from "../models/addressSchem.js";
 import getUserCartWishlistData from "../helpers/mainhelper.js";
+import { cart } from "./usercontroller.js";
 
 export async function orderGet(req,res) {
 
@@ -105,32 +106,40 @@ export async function checkout(req,res) {
 
 
 
-export async function applyCoupon(req,res) {
-
+export async function applyCoupon(req, res) {
     try {
-        const coupon=await couponModel.find()
-        const couponCode=coupon.code;
-        const discount=coupon.discount;
+        const userCouponCode = req.body.coupon.trim(); // Trim to remove any extra spaces
+        const userId = req.user; // Ensure userId is retrieved from req.user or JWT
 
-        const userId = req.user; 
-      
+        // Find the coupon in the database
+        const appliedCoupon = await couponModel.findOne({ code: userCouponCode });
+        
+        if (appliedCoupon) {
+            const discount = appliedCoupon.discount;
 
-        const address=await addressModel.find()
+            // Find the user's cart
+            const cart = await cartModel.findOne({ user: userId });
+            
+            if (cart) {
+                // Calculate the new subtotal after applying the discount
+                const newSubTotal = Number(cart.subtotal) - Number(discount);
+                
+                // Update the subtotal and discount fields in the cart
+                cart.subtotal = newSubTotal; 
+                cart.discount = discount; // Save discount applied
 
-        const userCouponCode = req.body.coupon;
-    
+                // Save changes to the cart document
+                await cart.save();
 
-        if (userCouponCode === couponCode) { // Example check
-            res.json({ success: true, message: `Coupon applied: ${discount} discount` });
+                res.json({ success: true, message: `Coupon applied: ${discount}% discount` });
+            } else {
+                res.json({ success: false, message: 'Cart not found for this user.' });
+            }
         } else {
             res.json({ success: false, message: 'Invalid coupon code' });
         }
-
-        res.redirect('checkout')
-        
     } catch (error) {
-        res.send(error.message)
+        res.send(error.message);
     }
-    
 }
 

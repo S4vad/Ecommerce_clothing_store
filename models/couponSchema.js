@@ -20,5 +20,5 @@ const couponSchema = new mongoose.Schema({
 }
 );
 
-const couponmodel = mongoose.model("coupon",couponSchema )
-export default couponmodel;
+const couponModel = mongoose.model("coupon",couponSchema )
+export default couponModel;
