@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search,cartDelete,cartSubTotalUpdate} from "../controller/usercontroller.js";
+import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,aboutPage,contactPage,addContact,wishlist,wishlistAdd,filter,categoryShop,search,cartDelete,cartSubTotalUpdate ,review} from "../controller/usercontroller.js";
 import {order,orderGet,coupon,checkout} from "../controller/ordercontroller.js"
 import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress} from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
@@ -40,6 +40,7 @@ routes.get('/checkout',userAuthentication,checkout)
 
 
 
+
 routes.post('/signin',userSignup)
 routes.post('/userlog',userLogin)
 routes.post('/cart',userAuthentication,cartAdd)
@@ -52,6 +53,7 @@ routes.post('/cart/update/:id',userAuthentication,cartSubTotalUpdate)
 routes.post('/addAddress',userAuthentication,addAddressPost)
 routes.post('/editAddress',userAuthentication,editAddress)
 routes.post('/deleteAddress',deleteAddress)
+routes.post('/review',userAuthentication,review)
 
 
 

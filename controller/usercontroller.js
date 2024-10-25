@@ -12,7 +12,7 @@ import wishlistModel from "../models/wishlist.js";
 import subBannerModel from "../models/subBanners.js";
 import exp from "constants";
 import getUserCartWishlistData from "../helpers/mainhelper.js";
-
+import reviewModel from "../models/reviewSchema.js";
 
 
 
@@ -146,7 +146,7 @@ export async function shop(req,res){
 
         const category=await categorymodel.find();
 
-        res.render('user/shop',{product:product,user:user,cartCount:cartCount,category:category,wishListCount:wishListCount,cart:cartItems});
+        res.render('user/shop',{product:product,user:user,cartCount:cartCount,category:category,wishListCount:wishListCount,cart:cart});
         
     } catch (error) {
         res.send(error.message)
@@ -556,6 +556,33 @@ export async function cartSubTotalUpdate(req,res) {
     
 }
 
+
+export async function review(req,res) {
+
+    try {
+        const userId=req.user;
+        const productId=req.query.productId;
+
+        const {rating,review,name,email}=req.body;
+
+        await reviewModel.create({
+            user:userId,
+            product:productId,
+            rating:rating,
+            review:review,
+            name:name,
+            email:email
+
+        })
+        res.redirect(`/productDetails/${productId}`)
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
 
 
 

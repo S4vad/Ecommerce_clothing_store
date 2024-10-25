@@ -613,7 +613,7 @@
 										</div>
 										
 										<!-- Add review -->
-										<form class="w-full">
+										<form class="w-full" method="post" action="/review?productId=<%= product._id %>">
 											<h5 class="mtext-108 cl2 p-b-7">
 												Add a review
 											</h5>
@@ -654,7 +654,7 @@
 												</div>
 											</div>
 
-											<button class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
+											<button type="submit"  class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
 												Submit
 											</button>
 										</form>

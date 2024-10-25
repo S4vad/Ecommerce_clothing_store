@@ -34,7 +34,7 @@
                                     <div class="account-card mb-4">
                                         <div class="account-title">
                                             <h4>Delivery Address</h4>
-                                            <a href="/profile_address" class="btn btn-outline-primary btn-sm">Add Address</a>
+                                            <a href="/profileAddress" class="btn btn-outline-primary btn-sm">Add Address</a>
                                         </div>
                                         <div class="account-content">
                                             <div class="row">
@@ -63,17 +63,19 @@
                                         </div>
                                     </div>
                     
-                                    <!-- Cart Bottom (Discount & Go Shop) -->
-                                    <div class="cart-bottom mb-4  p-3 rounded">
-                                        <div class="input-group">
-                                            <input id="couponcheckid" name="coupon" type="text" class="form-control" placeholder="Coupon Code" style="width: 50%;">
-                                            <div class="input-group-append">
-                                                <a id="couponCheck" class="btn btn-outline-primary btn-sm"><i class="icon-long-arrow-right"></i></a>
-                                                <a id="coupencancel" class="d-none btn btn-outline-danger btn-sm">Cancel</a>
-                                                <span id="insertcoupon" class="ml-2"></span>
+
+                                    <div class="cart-bottom mb-4 p-3 rounded">
+                                        <div class="d-flex align-items-center">
+                                            <div class="input-group" style="width: auto;">
+                                                <input id="couponcheckid" name="coupon" type="text" class="form-control" placeholder="Coupon Code" style="width: 200px;">
+                                                <div class="input-group-append">
+                                                    <a id="couponCheck" class="btn btn-outline-primary btn-sm mt-1">Apply<i class="icon-long-arrow-right"></i></a>
+                                                    <a id="coupencancel" class="d-none btn btn-outline-danger btn-sm">cancel</a>
+                                                    <span id="insertcoupon" class="ml-2"></span>
+                                                </div>
                                             </div>
+                                            <a href="/shop" class="btn btn-outline-dark-2 ml-auto"><span>Go Shop</span><i class="icon-refresh"></i></a>
                                         </div>
-                                        <a href="/shop" class="btn btn-outline-dark-2 mt-3"><span>Go Shop</span><i class="icon-refresh"></i></a>
                                     </div>
                                 </div>
                     
