@@ -23,8 +23,7 @@ print(data.sample(5))
 
 
 
-
-data=data[0:40000]
+data=data[0:30000]
 
 
 
