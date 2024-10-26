@@ -68,5 +68,10 @@ output = model.predict(data)
 print(output)
 
 
+import os
+
+print("Model size:", os.path.getsize('python_ml_models/password_strength_model.joblib'))  # Check the size of the Joblib file
+
+
 
 
