@@ -67,9 +67,7 @@
 										
 
 										<td class="column-6" style="padding-right: 20px;">
-											<a href="/coupon"  class="text-success" style="font-weight: 900; font-size: 1.2rem;">
-												Offers
-											</a>
+					
 										</td>
 									
 										<td class="column-7">
@@ -92,17 +90,20 @@
 
 						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
 							<div class="flex-w flex-m m-r-20 m-tb-5">
-								<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
+								<input id="couponcheckid" class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
 									
-								<div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+								<button type="button" id="couponCheck" class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
 									Apply coupon
-								</div>
+								</button>
+								
+
 							</div>
 
 							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
 								Update Cart
 							</div>
 						</div>
+						
 					</div>
 				</div>
 				
@@ -117,7 +118,9 @@
 						<div class="flex-w flex-t bor12 p-b-13">
 							<div class="size-208">
 								<span class="stext-110 cl2">
-									Subtotal:
+									<a href="/coupon"  class="text-success" style="font-weight: 900; font-size: 1.2rem;">
+										Your offers
+									</a>
 								</span>
 							</div>
 
@@ -134,9 +137,8 @@
 
 							<div class="size-209 p-t-1">
 
-								<span class="mtext-110 cl2">
-									<%= cart.subtotal %>
-								
+								<span id= "subTotal" class="mtext-110 cl2">
+									&#8377;<%= cart.subtotal %>
 								</span>
 
 							</div>
@@ -167,6 +169,61 @@
 
 <!--===============================================================================================-->	
 	<script src="/user/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+	<script>
+			   document.getElementById('couponCheck').addEventListener('click', function() {
+					const couponCode = document.getElementById('couponcheckid').value;
+					
+					
+					
+					fetch('/applyCoupon', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ coupon: couponCode })
+					})
+					.then(response => response.json())
+					.then(data => {
+					
+						const subTotal = document.getElementById('subTotal');
+						const buttonValue=document.getElementById('couponCheck');
+						if (data.success) {
+							
+							subTotal.textContent = ''; 
+							subTotal.innerHTML = `&#8377; ${data.newSubTotal}`;
+
+							buttonValue.textContent = data.message;
+							buttonValue.classList.add('btn-success', 'text-success');
+
+						
+							setTimeout(() => {
+								buttonValue.textContent = 'Apply Coupon'; 
+								buttonValue.classList.remove('btn-success', 'text-success'); 
+							}, 3000); 
+
+
+							insertCouponElement.classList.remove('d-none');
+						} else {
+		
+							buttonValue.textContent = data.message;
+							buttonValue.classList.add('btn-danger', 'text-danger');
+
+						
+							setTimeout(() => {
+								buttonValue.textContent = 'Apply Coupon'; 
+								buttonValue.classList.remove('btn-danger', 'text-danger'); 
+							}, 3000); 
+
+
+						}
+					})
+					.catch(error => console.error('Error:', error));
+				});
+
+	</script>
+
 	<script>
 
 			$(document).ready(function() {

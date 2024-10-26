@@ -133,12 +133,12 @@ export async function applyCoupon(req, res) {
         const appliedCoupon = await couponModel.findOne({ code: userCouponCode });
 
         if (!appliedCoupon) {
-            return res.json({ success: false, message: 'Invalid coupon code or The coupon expired' });
+            return res.json({ success: false, message: 'Invalid code' });
         }
 
         const isExpired = appliedCoupon.isExpired;
         if (isExpired) {
-            return res.json({ success: false, message: 'The coupon has expired.' });
+            return res.json({ success: false, message: 'Coupon expired' });
         }
 
         //checking user is already used coupon or not
@@ -151,10 +151,14 @@ export async function applyCoupon(req, res) {
 
         }
 
-        const discount = appliedCoupon.discount;
+        const discountPercentage = Number(appliedCoupon.discount);
         const cart = await cartModel.findOne({ user: userId })
 
-        const newSubTotal = Number(cart.subtotal) - Number(discount);
+        const subtotal = Number(cart.subtotal); 
+        const discountAmount = (subtotal * discountPercentage) / 100; // Calculate discount amount
+        const newSubTotal = Math.floor(subtotal - discountAmount);
+
+
         cart.subtotal = newSubTotal;
 
         await cart.save();
@@ -167,7 +171,11 @@ export async function applyCoupon(req, res) {
 
         await appliedCoupon.save()
 
-        res.json({ success: true, message: `Coupon applied: ${discount}% discount` })
+
+        console.log('the nerw'+newSubTotal)
+
+        res.json({ success: true, message: `Applied ${discountPercentage}% discount`, newSubTotal: newSubTotal });
+
 
 
     } catch (error) {

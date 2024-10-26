@@ -100,7 +100,7 @@
                                                     <% } %>
                                                     <tr class="summary-subtotal">
                                                         <td>Subtotal:</td>
-                                                        <td>&#8377;<%= cart.subtotal %></td>
+                                                        <td id="subTotal">&#8377;<%= cart.subtotal %></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Shipping:</td>
@@ -171,6 +171,7 @@
                                 document.getElementById('couponCheck').addEventListener('click', function() {
                                     const couponCode = document.getElementById('couponcheckid').value;
                                     
+                                    
                                     fetch('/applyCoupon', {
                                         method: 'POST',
                                         headers: {
@@ -180,11 +181,22 @@
                                     })
                                     .then(response => response.json())
                                     .then(data => {
+                                        const insertCouponElement = document.getElementById('insertcoupon');
+                                        const subTotal = document.getElementById('subTotal');
                                         if (data.success) {
-                                            document.getElementById('insertcoupon').textContent = 'Coupon applied successfully!';
-                                            document.getElementById('coupencancel').classList.remove('d-none');
+                                            insertCouponElement.textContent = data.message;
+                                            subTotal.textContent = ''; 
+                                            subTotal.textContent = `&#8377; ${data.newSubTotal}`;
+
+                                            insertCouponElement.classList.add('text-success')
+                                            insertCouponElement.classList.remove('text-danger')
+
+
+                                            insertCouponElement.classList.remove('d-none');
                                         } else {
-                                            document.getElementById('insertcoupon').textContent = data.message;
+                                            insertCouponElement.textContent = data.message;
+                                            insertCouponElement.classList.remove('text-success')
+                                            insertCouponElement.classList.add('text-danger')
                                         }
                                     })
                                     .catch(error => console.error('Error:', error));
