@@ -1,7 +1,10 @@
 
 
 
-import pickle
+from joblib import dump
+
+
+
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
@@ -54,8 +57,8 @@ model.fit(xtrain, ytrain)
 print(model.score(xtest, ytest))
 
 
-with open("./python_ml_models/password_strength_model.pkl", "wb") as file:
-    pickle.dump(model, file)
+model_filename = 'python_ml_models/password_strength_model.joblib'
+dump(model, model_filename)
 
 
 import getpass
