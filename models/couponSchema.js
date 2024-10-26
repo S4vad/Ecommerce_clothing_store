@@ -8,12 +8,22 @@ const couponSchema = new mongoose.Schema({
     description:String,
     status:String,
     startDate:Date,
-    endDate:Date,
-    user:[{
-      userId:{type:mongoose.Types.ObjectId,
-              ref:'user',
-            }
-    }]
+    endDate:Date ,
+    users: [{
+      userId: {
+          type: mongoose.Types.ObjectId,
+          ref: 'user',
+      },
+      isUsed: {
+          type: Boolean,
+          default: false
+      }
+  }],
+    isExpired:{
+      type:Boolean,
+      default:false
+    },
+
 },
 {
   timestamps:true,
