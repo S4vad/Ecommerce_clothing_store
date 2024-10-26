@@ -1,1 +1,2 @@
 python_ml_models/password_strength_model.pkl filter=lfs diff=lfs merge=lfs -text
+python_ml_models/password_strength_model.pkl.gz filter=lfs diff=lfs merge=lfs -text
