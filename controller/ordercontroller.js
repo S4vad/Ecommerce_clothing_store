@@ -10,7 +10,7 @@ import { cart } from "./usercontroller.js";
 import Razorpay from "razorpay";
 
 import 'dotenv/config'; // Load environment variables from .env file
-import products from "razorpay/dist/types/products.js";
+
 
 
 const razorpay = new Razorpay({
@@ -31,13 +31,28 @@ export async function orderGet(req,res) {
 }
 
 export async function order(req,res) {
-    const {  user,paymentMethod } = req.body;
-    const address=await addressModel.findOne({user:user}).select(address).address[0];
+
+    const {  user,paymentMethod,appliedCoupon} = req.body;
+    console.log('the applied coupon'+appliedCoupon)
+
+    const addre=await addressModel.findOne({user:user}).select('address');
+    const address=addre.address[0]
+
     const cart=await cartModel.findOne({user:user}).populate("products.item");
-    const amount=cart.subtotal-
-    const products=cart.prodcuts.item;
-    console.log(products)
+
+    const coupon=await couponModel.find({code:appliedCoupon})
+
+    const discountPercentage = Number(coupon.discount);
+    console.log('the coupon discout is '+discountPercentage)
+    const subtotal=Number(cart.subtotal)
     
+
+    const discountAmount = (subtotal * discountPercentage) / 100; // Calculate discount amount
+    const amount = Math.floor(subtotal - discountAmount) || subtotal;
+
+    console.log("Calculated amount (in paise):", amount * 100); // Log amount in paise
+
+
 
     try {
       const options = {
@@ -218,7 +233,7 @@ export async function applyCoupon(req, res) {
 
         console.log('the nerw'+newSubTotal)
 
-        res.json({ success: true, message: `Applied ${discountPercentage}% discount`, newSubTotal: newSubTotal });
+        res.json({ success: true, message: `Applied ${discountPercentage}% discount`, newSubTotal: newSubTotal ,couponCode:userCouponCode});
 
 
 

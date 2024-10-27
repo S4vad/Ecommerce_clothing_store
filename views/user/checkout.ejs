@@ -111,8 +111,14 @@
                                                         <td>Free shipping</td>
                                                     </tr>
                                                     <tr>
+                                                        <td>Coupon:</td>
+                                                        <td class="text-success"> <span id="appliedCoupon"></span></td>
+                                                        
+                                                    </tr>
+                                                    <tr>
                                                         <td>Discount:</td>
                                                         <td class="text-danger"> -&#8377;<span id="discountspan"><%= discount %></span></td>
+
                                                     </tr>
                                                     <tr class="summary-total">
                                                         <td>Total:</td>
@@ -199,10 +205,12 @@
                                     .then(data => {
                                         const insertCouponElement = document.getElementById('insertcoupon');
                                         const subTotal = document.getElementById('subTotal');
+                                        const appliedCoupon=document.getElementById('appliedCoupon');
                                         if (data.success) {
                                             insertCouponElement.textContent = data.message;
                                             subTotal.textContent = ''; 
                                             subTotal.textContent = `&#8377; ${data.newSubTotal}`;
+                                            appliedCoupon.textContent=data.couponCode;
 
                                             insertCouponElement.classList.add('text-success')
                                             insertCouponElement.classList.remove('text-danger')
@@ -278,10 +286,14 @@
                             </script>
                             <script>
                                 async function placeOrder() {
+                                    event.preventDefault()
+                                    appliedCoupon=document.getElementById('appliedCoupon').value;
+                                    
 
                                     const orderData = {  // Adjust amount as needed
                                     user: "<%= user._id %>", // Pass user ID dynamically if available // Set address ID dynamically// Set products dynamically
-                                    paymentMethod: "razorpay" // example payment method
+                                    paymentMethod: "razorpay",// example payment method
+                                    appliedCoupon:appliedCoupon
                                     };
 
                                     const response = await fetch('/order', {
