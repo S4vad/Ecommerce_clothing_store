@@ -38,31 +38,31 @@
                                         </div>
                                         <div class="account-content">
                                             <div class="row">
-                                                <% if (address.length > 0) { %>
-                                                    <% for(let j = 0; j < address.length; j++) { %>
-                                                        <% for(let i = 0; i < address[j].address.length; i++) { %>
-                                                            <div class="col-md-6 col-lg-4 alert fade show">
-                                                                <div class="profile-card address slctaddress <%= i == 0 ? 'active' : '' %>" data-address="<%= i %>">
-                                                                    <h6><%= address[j].address[i].name || 'Home' %></h6>
-                                                                    <p>
-                                                                        <%= address[j].address[i].address %>, <%= address[j].address[i].name %>, 
-                                                                        <%= address[j].address[i].city %>-<%= address[j].address[i].zip %>, <%= address[j].address[i].state %>
-                                                                    </p>
-                                                                    <ul class="user-action list-inline">
-                                                                        <li class="list-inline-item">
-                                                                            <button type="submit" onclick="addressEdit('<%= address[j].address[i]._id %>')" class="edit icofont-edit" title="Edit This" data-bs-toggle="modal" data-bs-target="#address-edit"></button>
-                                                                        </li>
-                                                                        <li class="list-inline-item">
-                                                                            <button type="submit" onclick="addressDelete('<%= address[i]._id %>')" class="trash icofont-ui-delete" title="Remove This" data-bs-dismiss="alert"></button>
-                                                                        </li>
-                                                                        
-                                                                    </ul>
-                                                                </div>
+                                                <% if (address != '') { %>
+
+
+                                                    <% address.address.forEach((addr, i) => { %>
+                                                        <div class="col-md-6 col-lg-4 alert fade show">
+                                                            <div class="profile-card address slctaddress " data-address="<%= i %>" onclick="selectAddress(this)">
+                                                                <h6><%= addr.name || 'Home' %></h6>
+                                                                <p>
+                                                                    <%= addr.address %>, <%= addr.name %>, 
+                                                                    <%= addr.city %>-<%= addr.zip %>, <%= addr.state %>
+                                                                </p>
+                                                                <ul class="user-action list-inline">
+                                                                    <li class="list-inline-item">
+                                                                        <button type="submit" onclick="addressEdit('<%= addr._id %>')" class="edit icofont-edit" title="Edit This" data-bs-toggle="modal" data-bs-target="#address-edit"></button>
+                                                                    </li>
+                                                                    <li class="list-inline-item">
+                                                                        <button type="submit" onclick="addressDelete('<%= addr._id %>')" class="trash icofont-ui-delete" title="Remove This" data-bs-dismiss="alert"></button>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
-                                                        <% } %>
-                                                    <% } %>
+                                                        </div>
+                                                    <% }) %>
                                                 <% } %>
-                                                
+
+                                   
                                             </div>
                                         </div>
                                     </div>
@@ -151,7 +151,7 @@
 
                     
                                         <!-- Place Order Button -->
-                                        <button type="submit" class="btn btn-outline-primary btn-sm btn-block mt-4">
+                                        <button type="button" onclick="placeOrder()"  class="btn btn-outline-primary btn-sm btn-block mt-4">
                                             <span class="btn-text">Place Order</span>
                                             <span class="btn-hover-text">Proceed to Checkout</span>
                                         </button>
@@ -172,6 +172,18 @@
 
                         <%- include('./layouts/footer'); -%>
                             <script>
+                                function selectAddress(selectedElement) {
+                                    // Remove 'active' class from all addresses
+                                    const allAddresses = document.querySelectorAll('.profile-card.address');
+                                    allAddresses.forEach(address => {
+                                        address.classList.remove('active');
+                                    });
+
+                                    // Add 'active' class to the selected address
+                                    selectedElement.classList.add('active');
+                                }
+
+
                                 document.getElementById('couponCheck').addEventListener('click', function() {
                                     const couponCode = document.getElementById('couponcheckid').value;
                                     
@@ -265,62 +277,58 @@
 
                             </script>
                             <script>
-                                function razorpayPayment(order) {
-                                    console.log(order.order.amount)
-                                    var options = {
-                                        "key": "rzp_test_lD5aVhNHRC1GZC", // Enter the Key ID generated from the Dashboard
-                                        "amount": order.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                                        "currency": "INR",
-                                        "name": "Electro",
-                                        "description": "Test Transaction",
-                                        "image": "https://example.com/your_logo",
-                                        "order_id": order.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                                        "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
-                                        "prefill": {
-                                            "name": "Gaurav Kumar",
-                                            "email": "gaurav.kumar@example.com",
-                                            "contact": "9746854699"
-                                        },
-                                        "notes": {
-                                            "address": "Razorpay Corporate Office"
-                                        },
-                                        "theme": {
-                                            "color": "#528FF0"
-                                        },
-                                        "handler": function (response) {
-                                        
-                                            verifyPayment(response, order.order);
-                                        }
+                                async function placeOrder() {
+
+                                    const orderData = {  // Adjust amount as needed
+                                    user: "<%= user._id %>", // Pass user ID dynamically if available // Set address ID dynamically// Set products dynamically
+                                    paymentMethod: "razorpay" // example payment method
                                     };
-                             
-                                    var rzp1 = new Razorpay(options);
-                                    rzp1.open()
-                                    
-                                
-                                   
 
-                                };
+                                    const response = await fetch('/order', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(orderData),
+                                    });
 
+                                    const { order } = await response.json();
+                                    razorpayPayment(order);
+                                }
 
-
+                                function razorpayPayment(order) {
+                                    const options = {
+                                    "key": "<%= process.env.RAZORPAY_KEY_ID %>",
+                                    "amount": order.amount,
+                                    "currency": "INR",
+                                    "name": "COZA STORE",
+                                    "description": "Test Transaction",
+                                    "order_id": order.id,
+                                    "prefill": {
+                                        "name": "Gaurav Kumar",
+                                        "email": "gaurav.kumar@example.com",
+                                        "contact": "9746854699"
+                                    },
+                                    "handler": function (response) {
+                                        verifyPayment(response, order);
+                                    }
+                                    };
+                                    const rzp = new Razorpay(options);
+                                    rzp.open();
+                                }
 
                                 function verifyPayment(payment, order) {
-                                    $.ajax({
-                                        url: '/verify-payment',
-                                        method:'post',
-                                        data: {
-                                            payment,
-                                            order
-                                        },
-                                        success:((response)=>{
-                                            if(status){
-                                                window.location.href = '/ordersuccess'
-                                            }else{
-                                                window.location.href = '/ordersuccess'
-                                            }
-                                           
-                                        })
+                                    fetch('/verifyPayment', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ payment, order })
                                     })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                    if (data.success) {
+                                        window.location.href = '/ordersuccess';
+                                    } else {
+                                        alert('Payment verification failed!');
+                                    }
+                                    });
                                 }
                             </script>
 

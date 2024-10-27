@@ -7,6 +7,17 @@ import moment from "moment";
 import addressModel from "../models/addressSchem.js";
 import getUserCartWishlistData from "../helpers/mainhelper.js";
 import { cart } from "./usercontroller.js";
+import Razorpay from "razorpay";
+
+import 'dotenv/config'; // Load environment variables from .env file
+import products from "razorpay/dist/types/products.js";
+
+
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+
 
 export async function orderGet(req,res) {
 
@@ -20,28 +31,63 @@ export async function orderGet(req,res) {
 }
 
 export async function order(req,res) {
+    const {  user,paymentMethod } = req.body;
+    const address=await addressModel.findOne({user:user}).select(address).address[0];
+    const cart=await cartModel.findOne({user:user}).populate("products.item");
+    const amount=cart.subtotal-
+    const products=cart.prodcuts.item;
+    console.log(products)
+    
+
     try {
-        // const userId=req.user;
-        // // const price=Product.find({productId:req.body.productID}).Price;
-        // // console.log(price)
-       
-        
-        // await orderModel.create({
-        //     'productId':req.body.productID,
-        //     'quantity':req.body.quantity,
-        //     'userId':userId,
-        //     'size':req.body.size,
-        //     // 'subTotal':req.body.quantity*req.body.
-        // });
-        // console.log(req.body.quickView)
-        // if (req.body.quickView){
-        //     res.redirect(`/quickView/${req.body.productID}`);
+      const options = {
+        amount: amount * 100, // Razorpay expects the amount in the smallest currency unit (e.g., paise for INR)
+        currency: 'INR',
+        receipt: `receipt_order_${Date.now()}`,
+      };
+  
+      const order = await razorpay.orders.create(options);
+      res.status(200).json({ success: true, order });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Order creation failed' });
+    }
+    
+}
 
-        // }else{
-        //     res.redirect(`/productDetails/${req.body.productID}`);
 
-        // }
-        
+export async function verifyPayment(req,res) {
+    try {
+        const { payment, order } = req.body;
+
+        const generatedSignature = crypto
+          .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+          .update(`${order.id}|${payment.razorpay_payment_id}`)
+          .digest('hex');
+      
+        if (generatedSignature === payment.razorpay_signature) {
+          // Generate a unique invoice number
+          const invoiceNumber = Math.floor(100000 + Math.random() * 900000);
+      
+          // Save order details to the database
+          const newOrder = new orderModel({
+            user: order.user,
+            address: order.address,
+            payment: payment.razorpay_payment_id,
+            products: order.products,
+            totalamount: order.amount / 100, // Convert back to INR
+            status: 'Completed',
+            paymentMethod: 'Razorpay',
+            invoiceNumber: invoiceNumber,
+            invoiceDate: new Date(),
+            dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
+          });
+      
+          await newOrder.save();
+          res.status(200).json({ success: true });
+        } else {
+          res.status(400).json({ success: false, message: 'Payment verification failed' });
+        }
          
         
     } catch (error) {
@@ -50,7 +96,6 @@ export async function order(req,res) {
     }
     
 }
-
 
 
 async function expiredCouponUpdating(expiredCouponIds){
@@ -102,7 +147,8 @@ export async function checkout(req,res) {
         const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
-        const address=await addressModel.find()
+        const address=await addressModel.findOne({user:userId}).select('address')
+        console.log('the address is '+address)
 
         res.render('user/checkout',{
             coupons:coupon,
@@ -158,8 +204,6 @@ export async function applyCoupon(req, res) {
         const discountAmount = (subtotal * discountPercentage) / 100; // Calculate discount amount
         const newSubTotal = Math.floor(subtotal - discountAmount);
 
-
-        cart.subtotal = newSubTotal;
 
         await cart.save();
 

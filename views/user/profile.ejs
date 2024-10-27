@@ -75,27 +75,34 @@
                                 <div class="col-lg-6">
                                     <div class="card card-dashboard">
                                         <div class="card-body">
-                                            <h3 class="card-title">Shipping Address Default</h3>
-                                            <% function getValue(value, defaultValue) {
-                                                return value ? value : defaultValue;
-                                           } %>
-                                           
-                                           <p>
-                                               <%= getValue(address[0].address[0].name, "default user name") %><br>
-                                               <%= getValue(address[0].address[0].address, "user Address") %><br>
-                                               <%= getValue(address[0].address[0].city, "user city") %><br>
-                                               <%= getValue(address[0].address[0].state, "user state") %><br>
-                                               <%= getValue(address[0].address[0].zip, "user zip") %><br>
-                                               <%= getValue(address[0].address[0].phone, "1234567") %><br>
-                                               <%= getValue(address[0].address[0].email, "add address for shipping") %><br>
-                                               <!-- <a href=">Edit <i class="icon-edit"></i></a> -->
-                                           </p>
+                                            <p>
+                                                <% if (addresses.length > 0 && addresses[0].address.length > 0) { %>
+                                                    <%= addresses[0].address[0].name %><br>
+                                                    <%= addresses[0].address[0].address  %><br>
+                                                    <%= addresses[0].address[0].city  %><br>
+                                                    <%= addresses[0].address[0].state  %><br>
+                                                    <%= addresses[0].address[0].zip  %><br>
+                                                    <%= addresses[0].address[0].phone %><br>
+                                                    <%= addresses[0].address[0].email  %><br>
+                                                <% } else { %>
+                                                    <%= "default user name" %><br>
+                                                    <%= "user Address" %><br>
+                                                    <%= "user city" %><br>
+                                                    <%= "user state" %><br>
+                                                    <%= "user zip" %><br>
+                                                    <%= "1234567" %><br>
+                                                    <%= "add address for shipping" %><br>
+                                                <% } %>
+                                                <a href="/profileAddress">Edit <i class="icon-edit"></i></a>
+                                            </p>
+                                            
+                                            
                                            
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6">
+                                <!-- <div class="col-lg-6">
                                     <div class="card card-dashboard">
                                         <div class="card-body">
                                             <h3 class="card-title">Shipping Address</h3>
@@ -104,7 +111,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 

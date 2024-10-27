@@ -13,9 +13,11 @@ export async function profile(req,res){
         const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
-        const address=await addressModel.find()
+        const addresses=await addressModel.find({user:userId}).select('address')
 
-        res.render('user/profile',{user,alert:false,cart,cartCount,wishListCount,user,address})
+        console.log(addresses)
+
+        res.render('user/profile',{user,alert:false,cart,cartCount,wishListCount,user,addresses})
         
     } catch (error) {
         res.status(500).send(error.message)
@@ -48,7 +50,6 @@ export async function profileAddress(req,res) {
 export async function addAddressPost(req,res) {
     try {
         const userId=req.user;
-        const user=getUser(userId)
 
         const {name,address,city,state,zip,phone,email}=req.body;
 
@@ -62,10 +63,19 @@ export async function addAddressPost(req,res) {
             email: email
         };
 
+      const checkAddress=await addressModel.findOne({user:userId})
+
+      if (checkAddress) {
+     
+        checkAddress.address.push(newAddress);
+        await checkAddress.save();
+      ``} else {
+        
         await addressModel.create({
-            user: userId, 
-            address: [newAddress] 
+            user: userId,
+            address: [newAddress]
         });
+    }
 
 
 

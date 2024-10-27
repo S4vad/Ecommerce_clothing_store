@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,
         aboutPage,contactPage,addContact,wishlist,filter,categoryShop,search,cartDelete,cartSubTotalUpdate ,
         review,wishListDelete,addWishlist} from "../controller/usercontroller.js";
-import {order,orderGet,coupon,checkout,applyCoupon} from "../controller/ordercontroller.js"
+import {order,orderGet,coupon,checkout,applyCoupon, verifyPayment} from "../controller/ordercontroller.js"
 import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress} from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
@@ -51,7 +51,6 @@ routes.post('/cart',userAuthentication,cartAdd)
 routes.post('/contact',userAuthentication,addContact)
 routes.post('/filter',userAuthentication,filter)
 routes.post('/search',userAuthentication,search)
-routes.post('/order',userAuthentication,order)
 routes.post('/cart/update/:id',userAuthentication,cartSubTotalUpdate)
 routes.post('/addAddress',userAuthentication,addAddressPost)
 routes.post('/editAddress',userAuthentication,editAddress)
@@ -59,6 +58,10 @@ routes.post('/deleteAddress',deleteAddress)
 routes.post('/review',userAuthentication,review)
 routes.post('/addWishlist/:id',userAuthentication,addWishlist)
 routes.post('/applyCoupon',userAuthentication,applyCoupon)
+routes.post('/order',userAuthentication,order)
+routes.post('/verifyPayment',userAuthentication,verifyPayment)
+
+
 
 
 
