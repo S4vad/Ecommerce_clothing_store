@@ -347,100 +347,100 @@
                                 }
                             </script>
 
-                            
+
 
                             <script>
-                                                $('#couponCheck').click(function(){
-                                                    const couponcheckid = $('#couponcheckid').val()
-                                                    const discountspan=parseInt($('#discountspan').html())
-                                                    const totalspan=parseInt($('#totalspan').html())
-                                                    console.log(couponcheckid,discountspan,totalspan)
-                                                   
-                                                    
-                                                    $.ajax({
-                                                    url: '/admin/checkCoupon',
-                                                    method:'post',
-                                                     data: {
-                                                        couponcheckid,
-                                                         
-                                                     },
-                                                     success:((response)=>{
-                                                         if(response.status){
-                                                            console.log(response)
-                                                            if(response.coupon.type=='percentage'){
-                                                                const dis = response.coupon.discount*totalspan/100
-                                                            $('#insertcoupon').removeClass('text-danger').addClass('text-success').html('coupon Applied')
-                                                            $('#discountspan').html(dis+discountspan)
-                                                            console.log(dis,response.coupon.discount,totalspan)
-                                                            $('#totalspan').html(totalspan-dis)
-                                                            $('#couponcheckid').attr('readonly','true');
-                                                            $('#couponCheck').addClass('d-none');
-                                                            $('#coupencancel').removeClass('d-none');
-                                                            }else{
-                                                            $('#insertcoupon').removeClass('text-danger').addClass('text-success').html('coupon Applied')
-                                                            $('#discountspan').html(response.coupon.discount+discountspan)
-                                                            $('#totalspan').html(totalspan-response.coupon.discount)
-                                                            $('#couponcheckid').attr('readonly','true');
-                                                            $('#couponCheck').addClass('d-none');
-                                                            $('#coupencancel').removeClass('d-none');
-                                                            }
-                                                        
-
-            
-                                                         }else{
-                                                            $('#insertcoupon').addClass('text-danger').html(response.err)
-                                                         }
-                                                     
-                                                     })
-                                                    })
-                                                })
-
-
-
-                                                $('#coupencancel').click(function(){
-                                                   location.reload()
-                                                   
-                                                    
-                                                    
-                                                })
+                                    $('#couponCheck').click(function(){
+                                        const couponcheckid = $('#couponcheckid').val()
+                                        const discountspan=parseInt($('#discountspan').html())
+                                        const totalspan=parseInt($('#totalspan').html())
+                                        console.log(couponcheckid,discountspan,totalspan)
+                                        
+                                        
+                                        $.ajax({
+                                        url: '/admin/checkCoupon',
+                                        method:'post',
+                                            data: {
+                                            couponcheckid,
                                                 
-                                                </script>
+                                            },
+                                            success:((response)=>{
+                                                if(response.status){
+                                                console.log(response)
+                                                if(response.coupon.type=='percentage'){
+                                                    const dis = response.coupon.discount*totalspan/100
+                                                $('#insertcoupon').removeClass('text-danger').addClass('text-success').html('coupon Applied')
+                                                $('#discountspan').html(dis+discountspan)
+                                                console.log(dis,response.coupon.discount,totalspan)
+                                                $('#totalspan').html(totalspan-dis)
+                                                $('#couponcheckid').attr('readonly','true');
+                                                $('#couponCheck').addClass('d-none');
+                                                $('#coupencancel').removeClass('d-none');
+                                                }else{
+                                                $('#insertcoupon').removeClass('text-danger').addClass('text-success').html('coupon Applied')
+                                                $('#discountspan').html(response.coupon.discount+discountspan)
+                                                $('#totalspan').html(totalspan-response.coupon.discount)
+                                                $('#couponcheckid').attr('readonly','true');
+                                                $('#couponCheck').addClass('d-none');
+                                                $('#coupencancel').removeClass('d-none');
+                                                }
+                                            
 
-                                                <script>
-                                                    function addressDelete(addressId) {
-                                                                Swal.fire({
-                                                                    title: 'Are you sure?',
-                                                                    text: "You won't be able to revert this!",
-                                                                    icon: 'warning',
-                                                                    showCancelButton: true,
-                                                                    confirmButtonColor: '#3085d6',
-                                                                    cancelButtonColor: '#d33',
-                                                                    confirmButtonText: 'Yes, proceed to delete!'
-                                                                }).then((result) => {
-                                                                    if (result.isConfirmed) {
-                                                                        Swal.fire(
-                                                                            'deleted!',
-                                                                            'your address delete.',
-                                                                            'success'
-                                                                        )
-                                                                        $.ajax({
-                                                                            url: '/deleteAddress',
-                                                                            method: 'post',
-                                                                            data: {
-                                                                                address: addressId,
-                                                                            },
-                                                                            success: (response) => {
-                                                                                setTimeout(() => {
 
-                                                                                    window.location.href = '/profileAddress'
+                                                }else{
+                                                $('#insertcoupon').addClass('text-danger').html(response.err)
+                                                }
+                                            
+                                            })
+                                        })
+                                    })
 
-                                                                                }, 1200)
 
-                                                                            }
-                                                                        })
 
-                                                                    }
-                                                                })
+                                    $('#coupencancel').click(function(){
+                                        location.reload()
+                                        
+                                        
+                                        
+                                    })
+                                                
+                            </script>
 
-                                                            }
-                                                </script>
+                            <script>
+                                function addressDelete(addressId) {
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "You won't be able to revert this!",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes, proceed to delete!'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    Swal.fire(
+                                                        'deleted!',
+                                                        'your address delete.',
+                                                        'success'
+                                                    )
+                                                    $.ajax({
+                                                        url: '/deleteAddress',
+                                                        method: 'post',
+                                                        data: {
+                                                            address: addressId,
+                                                        },
+                                                        success: (response) => {
+                                                            setTimeout(() => {
+
+                                                                window.location.href = '/profileAddress'
+
+                                                            }, 1200)
+
+                                                        }
+                                                    })
+
+                                                }
+                                            })
+
+                                        }
+                            </script>

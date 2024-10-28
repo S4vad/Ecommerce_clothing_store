@@ -12,6 +12,7 @@ import orderModel from "../models/orderSchema.js";
 
 
 import 'dotenv/config'; // 
+import usermodel from "../models/userSchema.js";
 
 
 
@@ -56,14 +57,23 @@ export async function order(req,res) {
     console.log("Calculated amount (in paise):", amount * 100); // Log amount in paise
 
     const addresses=await addressModel.findOne({user:user}).select('address');
+    console.log('the address complerte'+addresses)
 
+    
     if (!addresses) {
         return res.status(400).json({ success: false, message: 'No address found for this user.' });
     }
 
-    const address=addresses.address[0]._id;
+    const address=addresses._id;
+    console.log('the address id i s'+address)
+   
 
-    const productIds = cart.products.map(product => product.item._id); 
+    const products = cart.products.map(product => ({ 
+        item: product.item._id, 
+        quantity: product.quantity 
+    })); 
+    
+
 
 
 
@@ -76,8 +86,13 @@ export async function order(req,res) {
   
       const order = await razorpay.orders.create(options);
 
+      console.log('the orders are'+order)
+
+
+      
+
        // Store product IDs and address for later use
-       order.products = productIds;
+       order.products = products;
        order.address = address;
 
        
@@ -126,9 +141,9 @@ export async function verifyPayment(req,res) {
 
       
           await orderModel.create(newOrder)
- 
 
-          
+          await cartModel.deleteMany({user:user})
+
           res.status(200).json({ success: true });
         } else {
       
@@ -274,12 +289,56 @@ export async function applyCoupon(req, res) {
     }
 }
 
-export async function orderSuccess(req,res) {
+export async function orderSuccess(req, res) {
     try {
-        
-        cosn
+        const userId = req.user;
+
+        // Fetch orders and populate relevant fields
+        const orders = await orderModel.find({ user: userId })
+            .populate('products')
+            .populate('user')
+            .populate('address')
+            .populate('address.address')
+            .populate('products.item');
+
+        console.log('Fetched orders:', orders);
+
+        // Fetch user details
+        const userDetails = await usermodel.findOne({ _id: userId });
+
+        // Fetch cart and wishlist counts
+        const { cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+
+        // Structure the orders
+        const structuredOrders = orders.map(order => {
+            return {
+                id: order._id,
+                totalAmount: order.totalamount,
+                createdAt: order.createdAt,
+                products: order.products.map(product => ({
+                    name: product.item.name,
+                    image: product.item.Image && product.item.Image.length > 0 ? product.item.Image[0] : null,
+                    price: product.item.price - product.item.discount,
+                    quantity: product.quantity,
+                    brand: product.item.brand
+                })),
+            };
+        });
+
+        console.log('Structured orders:', structuredOrders);
+
+        // Render the EJS template with structured data
+        res.render('user/orderSuccess', {
+            order: structuredOrders,
+            user: userDetails,
+            wishListCount,
+            cartCount,
+            cart
+        });
     } catch (error) {
-        res.send(error.message)
+        // Handle the error and render an error message if needed
+        console.error('Error fetching order success:', error);
+        res.status(500).send('An error occurred while fetching order details.');
     }
 }
 
