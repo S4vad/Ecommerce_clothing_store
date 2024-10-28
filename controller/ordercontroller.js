@@ -6,10 +6,12 @@ import wishlistModel from "../models/wishlist.js";
 import moment from "moment";
 import addressModel from "../models/addressSchem.js";
 import getUserCartWishlistData from "../helpers/mainhelper.js";
-import { cart } from "./usercontroller.js";
 import Razorpay from "razorpay";
+import crypto from 'crypto'; 
+import orderModel from "../models/orderSchema.js";
 
-import 'dotenv/config'; // Load environment variables from .env file
+
+import 'dotenv/config'; // 
 
 
 
@@ -32,25 +34,36 @@ export async function orderGet(req,res) {
 
 export async function order(req,res) {
 
-    const {  user,paymentMethod,appliedCoupon} = req.body;
-    console.log('the applied coupon'+appliedCoupon)
+    const {  user,appliedCoupon} = req.body;
 
-    const addre=await addressModel.findOne({user:user}).select('address');
-    const address=addre.address[0]
+    let discountPercentage;
+    if(appliedCoupon){
+        const coupon=await couponModel.findOne({code:appliedCoupon});
+
+        discountPercentage = Number(coupon.discount);
+
+    }else{
+        discountPercentage=0;
+    }
 
     const cart=await cartModel.findOne({user:user}).populate("products.item");
-
-    const coupon=await couponModel.find({code:appliedCoupon})
-
-    const discountPercentage = Number(coupon.discount);
-    console.log('the coupon discout is '+discountPercentage)
-    const subtotal=Number(cart.subtotal)
     
+    const subtotal=Number(cart.subtotal)
 
     const discountAmount = (subtotal * discountPercentage) / 100; // Calculate discount amount
     const amount = Math.floor(subtotal - discountAmount) || subtotal;
 
     console.log("Calculated amount (in paise):", amount * 100); // Log amount in paise
+
+    const addresses=await addressModel.findOne({user:user}).select('address');
+
+    if (!addresses) {
+        return res.status(400).json({ success: false, message: 'No address found for this user.' });
+    }
+
+    const address=addresses.address[0]._id;
+
+    const productIds = cart.products.map(product => product.item._id); 
 
 
 
@@ -62,6 +75,12 @@ export async function order(req,res) {
       };
   
       const order = await razorpay.orders.create(options);
+
+       // Store product IDs and address for later use
+       order.products = productIds;
+       order.address = address;
+
+       
       res.status(200).json({ success: true, order });
     } catch (error) {
       console.error(error);
@@ -74,6 +93,13 @@ export async function order(req,res) {
 export async function verifyPayment(req,res) {
     try {
         const { payment, order } = req.body;
+        const user=req.user;
+
+
+        console.log('The payment:', JSON.stringify(payment, null, 2));
+        console.log('The order:', JSON.stringify(order, null, 2));
+
+
 
         const generatedSignature = crypto
           .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
@@ -84,9 +110,8 @@ export async function verifyPayment(req,res) {
           // Generate a unique invoice number
           const invoiceNumber = Math.floor(100000 + Math.random() * 900000);
       
-          // Save order details to the database
-          const newOrder = new orderModel({
-            user: order.user,
+          const newOrder = {
+            user: user,
             address: order.address,
             payment: payment.razorpay_payment_id,
             products: order.products,
@@ -96,16 +121,23 @@ export async function verifyPayment(req,res) {
             invoiceNumber: invoiceNumber,
             invoiceDate: new Date(),
             dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-          });
+          };
+
+
       
-          await newOrder.save();
+          await orderModel.create(newOrder)
+ 
+
+          
           res.status(200).json({ success: true });
         } else {
+      
           res.status(400).json({ success: false, message: 'Payment verification failed' });
         }
          
         
     } catch (error) {
+        console.error('Error verifying payment:', error);
         res.send(error.message)
         
     }
@@ -163,7 +195,7 @@ export async function checkout(req,res) {
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
         const address=await addressModel.findOne({user:userId}).select('address')
-        console.log('the address is '+address)
+ 
 
         res.render('user/checkout',{
             coupons:coupon,
@@ -239,6 +271,15 @@ export async function applyCoupon(req, res) {
 
     } catch (error) {
         res.send(error.message);
+    }
+}
+
+export async function orderSuccess(req,res) {
+    try {
+        
+        cosn
+    } catch (error) {
+        res.send(error.message)
     }
 }
 

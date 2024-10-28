@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,
         aboutPage,contactPage,addContact,wishlist,filter,categoryShop,search,cartDelete,cartSubTotalUpdate ,
         review,wishListDelete,addWishlist} from "../controller/usercontroller.js";
-import {order,orderGet,coupon,checkout,applyCoupon, verifyPayment} from "../controller/ordercontroller.js"
+import {order,orderGet,coupon,checkout,applyCoupon, verifyPayment,orderSuccess} from "../controller/ordercontroller.js"
 import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress} from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
@@ -39,6 +39,7 @@ routes.get('/profileAddress',userAuthentication,profileAddress)
 routes.get('/profileDashboard',userAuthentication,profileDashboard)
 routes.get('/checkout',userAuthentication,checkout)
 routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
+routes.get('/orderSuccess',userAuthentication,orderSuccess)
 
 
 

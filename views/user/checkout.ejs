@@ -286,8 +286,8 @@
                             </script>
                             <script>
                                 async function placeOrder() {
-                                    event.preventDefault()
-                                    appliedCoupon=document.getElementById('appliedCoupon').value;
+                                    
+                                    const appliedCoupon = document.getElementById('appliedCoupon').textContent.trim() ;
                                     
 
                                     const orderData = {  // Adjust amount as needed
@@ -305,6 +305,9 @@
                                     const { order } = await response.json();
                                     razorpayPayment(order);
                                 }
+                                
+ 
+
 
                                 function razorpayPayment(order) {
                                     const options = {
@@ -336,7 +339,7 @@
                                     .then(response => response.json())
                                     .then(data => {
                                     if (data.success) {
-                                        window.location.href = '/ordersuccess';
+                                        window.location.href = '/orderSuccess';
                                     } else {
                                         alert('Payment verification failed!');
                                     }
