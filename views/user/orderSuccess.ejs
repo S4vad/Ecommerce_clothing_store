@@ -1,0 +1,236 @@
+<%- include('./layouts/main'); -%>
+    <link rel="stylesheet" href="user/assets/css/skins/skin-demo-13.css">
+    <link rel="stylesheet" href="user/assets/css/demos/demo-13.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    </head>
+
+    <body>
+        <div class="page-wrapper">
+            <%- include('./layouts/header'); -%>
+                <% if (alert) { %>
+                    <script>alert("your banned")</script>
+                    <% } %>
+                    <% order[0].status %> 
+
+                    <% if (order[0].status !='pending') { %>
+                     
+                   
+                        <section class="h-100 gradient-custom">
+                            <div class="containeclosessdsdsddr py-5 h-100">
+                                <div id="printer"  class="row d-flex justify-content-center align-items-center h-100">
+                                    <div class="col-lg-10 col-xl-8">
+                                        <div class="card" style="border-radius: 10px;">
+                                            <div class="card-header px-4 py-5">
+                                                <h5 class="text-muted mb-0">Thanks for your Order, <span
+                                                        style="color: #1494a9;">
+                                                        <%= user.firstname+' '+user.lastname %></span>!</h5>
+                                            </div>
+                                            <div class="card-body p-4">
+                                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                                    <p class="lead fw-normal mb-0" style="color: #1494a9;">Receipt</p>
+                                                    <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
+                                                </div>
+
+                                             
+                                                 
+                                    
+                                                <% if (order || order!= null) { %>
+                                                     
+                                                 
+                                               
+                                                    <% for( let i = 0; i < order[0].products.length; i++ ) { %>
+
+                                                <div class="card shadow-0 border mb-4">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-2 col-sm-2 ">
+                                                                <img src="data:<%= order[0].products[i].item.product_image[0].contentType %>;base64,<%= order[0].products[i].item.product_image[0].imageBase64 %>"
+                                                                    class="img-fluid" alt="Phone">
+                                                            </div>
+                                                            <div
+                                                                class=" col-md-4 col-sm-3  text-center d-flex justify-content-center align-items-center">
+                                                                <p class=" mb-0"><%= order[0].products[i].item.name.substring(0,70) %>...</p>
+                                                            </div>
+                                                            <div
+                                                                class="col-12 col-md-2 col-sm-3 text-center d-flex justify-content-center align-items-center">
+                                                                <p class="text-muted mb-0 small"><%= order[0].products[i].item.brand %></p>
+                                                            </div>
+                                                       
+                                                            <div
+                                                                class="col-md-2 col-sm-2 text-center d-flex justify-content-center align-items-center">
+                                                                <p class="text-muted mb-0 small">Qty: <%= order[0].products[i].quantity %></p>
+                                                            </div>
+                                                            <div
+                                                                class="col-md-2 col-sm-2 text-center d-flex justify-content-center align-items-center">
+                                                                <p class="text-muted mb-0 small">&#8377;<%= order[0].products[i].item.price-order[0].products[i].item.discount  %> </p>
+                                                            </div>
+                                                        </div>
+                                                        <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                                                          <div>
+                                                            <button onclick="window.location=' /profile_order'"
+                                                            class="btn btn-outline-primary rounded">go to
+                                                            orders</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+                                        <div class="d-flex justify-content-between pt-2">
+                                            <p class="fw-bold mb-0">Order Details</p>
+                                            <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span>
+                                                &#8377;<%= haha=order[0].products.reduce((acc,cur)=>
+                                                    (acc+cur.item.price),0) %></p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between pt-2">
+                                            <p class="text-muted mb-0">Invoice Number : <%=
+                                                    order[0].id.toString().substring(0,3)%>
+                                            </p>
+                                            <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span>
+                                                -&#8377;<%= haha=order[0].products.reduce((acc,cur)=>
+                                                    (acc+cur.item.discount),0) %></p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <p class="text-muted mb-0">Invoice Date : <%= order[0].createdAt%>
+                                            </p>
+                                            <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span>
+                                                123</p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between mb-5">
+                                            <p class="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
+                                            <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery
+                                                    Charges</span> Free</p>
+                                        </div>
+                                </div>
+                                <div id="editor" class="card-footer border-0 px-4 py-5"
+                                    style="background-color: #1494a9; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                    <h5
+                                        class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
+                                        Total
+                                        paid: <span class="h2 mb-0 ms-2 text-white"> &#8377;<%=
+                                                haha=order[0].totalamount %> </span></h5>
+                                </div>
+                            </div>
+        </div>
+        <% } %>
+            <!-- <button id="cmd">to pdf</button> -->
+            </div>
+
+            </div>
+            </section>
+            <% }else {%> 
+ 
+                <div>
+                    <img src="https://miro.medium.com/max/1400/1*OkeqV425CNZUQT2HSkTnJA.webp" style=" display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 50%;"alt="">
+                </div>
+                <div class="text-center"><button onclick="place_order('<%= order[0]._id %>')" class="btn btn-outline-danger">Try again</button></div>
+                
+                
+                <% } %>
+
+
+
+
+
+
+
+
+
+            <%- include('./layouts/footer'); -%>
+            <script>
+                function place_order(orderId){
+                    $.ajax({
+                        url:'/place_failed_order',
+                        method:'post',
+                        data:{
+                            orderId:orderId,
+                        },
+                        success:((response)=>{
+                            if(response.status){
+                                razorpayPayment(response) 
+                            }
+                        })
+                    })
+                }
+            </script>
+
+<script>
+    function razorpayPayment(order) {
+        console.log(order.order.amount)
+        var options = {
+            "key": "rzp_test_lD5aVhNHRC1GZC", // Enter the Key ID generated from the Dashboard
+            "amount": order.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Electro",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9746854699"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#528FF0"
+            },
+            "handler": function (response) {
+                location.reload();
+                verifyPayment(response, order.order);
+            }
+        };
+       
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+
+    };
+
+
+
+
+    function verifyPayment(payment, order) {
+        $.ajax({
+            url: '/verify-payment',
+            method:'post',
+            data: {
+                payment,
+                order
+            },
+            success:((response)=>{
+                if(status){
+                    window.location.href = '/ordersuccess'
+                }else{
+                    window.location.href = '/ordersuccess'
+                }
+               
+            })
+        })
+    }
+</script>
+
+
+                <!-- <script>
+                    var doc = new jsPDF();
+                    var specialElementHandlers = {
+                        '#editor': function (element, renderer) {
+                            return true;
+                        }
+                    };
+
+                    $('#cmd').click(function () {
+                        doc.fromHTML($('#printer').html(), 15, 15, {
+                            'width': 200,
+                            'elementHandlers': specialElementHandlers
+                        });
+                        doc.save('sample-file.pdf');
+                    }); -->
+                <!-- </script> -->
