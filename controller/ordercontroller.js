@@ -330,7 +330,7 @@ export async function orderSuccess(req, res) {
             };
         });
 
-        console.log('Structured orders:', structuredOrders);
+        console.log('Structured orders:', JSON.stringify(structuredOrders, null, 2));
 
         // Render the EJS template with structured data
         res.render('user/orderSuccess', {
@@ -340,6 +340,8 @@ export async function orderSuccess(req, res) {
             cartCount,
             cart
         });
+
+        
     } catch (error) {
         // Handle the error and render an error message if needed
         console.error('Error fetching order success:', error);

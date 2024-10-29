@@ -9,7 +9,7 @@
     <div class="page-wrapper">
         <%- include('./layouts/header'); -%>
 
-        <% if (order) { %>
+        <% if (order && order.length > 0) { %>
             <section class="h-100 gradient-custom">
                 <div class="container py-5 h-100">
                     <div id="printer" class="row d-flex justify-content-center align-items-center h-100">
@@ -25,71 +25,68 @@
                                         <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
                                     </div>
 
-                                    <% if (order && order.length > 0) { %>
-                                        <% for (let i = 0; i < order[0].products.length; i++) { %>
-                                            <div class="card shadow-0 border mb-4">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-12 col-md-2 col-sm-2">
-                                                            <img src="data:<%= order[0].products[i].image ? order[0].products[i].image.contentType : '' %>;base64,<%= order[0].products[i].image ? order[0].products[i].image.imageBase64 : '' %>"
-                                                                class="img-fluid" alt="Product Image">
-                                                        </div>
-                                                        <div class="col-md-4 col-sm-3 text-center d-flex justify-content-center align-items-center">
-                                                            <p class="mb-0"><%= order[0].products[i].name.substring(0, 70) %>...</p>
-                                                        </div>
-                                                        <div class="col-12 col-md-2 col-sm-3 text-center d-flex justify-content-center align-items-center">
-                                                            <p class="text-muted mb-0 small"><%= order[0].products[i].brand %></p>
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-2 text-center d-flex justify-content-center align-items-center">
-                                                            <p class="text-muted mb-0 small">Qty: <%= order[0].products[i].quantity %></p>
-                                                        </div>
-                                                        <div class="col-md-2 col-sm-2 text-center d-flex justify-content-center align-items-center">
-                                                            <p class="text-muted mb-0 small">&#8377;<%= order[0].products[i].price %></p>
-                                                        </div>
+                                    <% order[0].products.forEach((product) => { %>
+                                        <div class="card shadow-0 border mb-4">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12 col-md-2 col-sm-2">
+                                                        <img src="<%= product.image || 'default-image.jpg' %>" class="img-fluid" alt="Product Image">
                                                     </div>
-                                                    <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-                                                    <div>
-                                                        <button onclick="window.location='/profile_order'" class="btn btn-outline-primary rounded">Go to Orders</button>
+                                                    <div class="col-md-4 col-sm-3 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="mb-0"><%= product.name.substring(0, 70) %>...</p>
+                                                    </div>
+                                                    <div class="col-12 col-md-2 col-sm-3 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small"><%= product.brand %></p>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small">Qty: <%= product.quantity || 1 %></p>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small">&#8377;<%= product.price %></p>
                                                     </div>
                                                 </div>
+                                                <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                                                <div>
+                                                    <button onclick="window.location='/profile_order'" class="btn btn-outline-primary rounded">Go to Orders</button>
+                                                </div>
                                             </div>
-                                        <% } %>
-
-                                        <div class="d-flex justify-content-between pt-2">
-                                            <p class="fw-bold mb-0">Order Details</p>
-                                            <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span>
-                                                &#8377;<%= order[0].totalAmount %> </p>
                                         </div>
+                                    <% }) %>
 
-                                        <div class="d-flex justify-content-between pt-2">
-                                            <p class="text-muted mb-0">Invoice Number: <%= order[0].invoiceNumber%></p>
-                                            <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span>
-                                                -&#8377;<%= order[0].discount %></p>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between">
-                                            <p class="text-muted mb-0">Invoice Date: <%= order[0].invoiceDate %></p>
-                                            <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between mb-5">
-                                            <p class="text-muted mb-0">Receipts Voucher: 18KU-62IIK</p>
-                                            <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
-                                        </div>
+                                    <!-- Order Summary Section -->
+                                    <div class="d-flex justify-content-between pt-2">
+                                        <p class="fw-bold mb-0">Order Details</p>
+                                        <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> &#8377;<%= order[0].totalAmount %> </p>
                                     </div>
-                                    <div id="editor" class="card-footer border-0 px-4 py-5" style="background-color: #1494a9; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                                        <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
-                                            Total paid: <span class="h2 mb-0 ms-2 text-white"> &#8377;<%= order[0].totalAmount %> </span>
-                                        </h5>
+
+                                    <div class="d-flex justify-content-between pt-2">
+                                        <p class="text-muted mb-0">Invoice Number: <%= order[0].invoiceNumber %></p>
+                                        <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> -&#8377;<%= order[0].discount %></p>
                                     </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <p class="text-muted mb-0">Invoice Date: <%= order[0].invoiceDate %></p>
+                                        <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between mb-5">
+                                        <p class="text-muted mb-0">Receipts Voucher: 18KU-62IIK</p>
+                                        <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
+                                    </div>
+                                </div>
+                                <div id="editor" class="card-footer border-0 px-4 py-5" style="background-color: #1494a9; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                    <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
+                                        Total paid: <span class="h2 mb-0 ms-2 text-white"> &#8377;<%= order[0].totalAmount %> </span>
+                                    </h5>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
         <% } else { %>
             <div>
-                <img src="https://miro.medium.com/max/1400/1*OkeqV425CNZUQT2HSkTnJA.webp" style="display: block; margin-left: auto; margin-right: auto; width: 50%;" alt="">
+                <img src="https://miro.medium.com/max/1400/1*OkeqV425CNZUQT2HSkTnJA.webp" style="display: block; margin-left: auto; margin-right: auto; width: 50%;" alt="No Orders">
             </div>
             <div class="text-center">
                 <button onclick="place_order('<%= order[0]._id %>')" class="btn btn-outline-danger">Try Again</button>
@@ -97,24 +94,5 @@
         <% } %>
 
         <%- include('./layouts/footer'); -%>
-
-        <!-- <script>
-            function place_order(orderId) {
-                $.ajax({
-                    url: '/place_failed_order',
-                    method: 'post',
-                    data: {
-                        orderId: orderId,
-                    },
-                    success: (response) => {
-                        if (response.status) {
-                            razorpayPayment(response)
-                        }
-                    }
-                })
-            }
-        </script> -->
-
-        
     </div>
 </body>
