@@ -27,6 +27,7 @@ const orderSchema = new mongoose.Schema({
     payment: String,
     products: [productSchema],  // Use productSchema here to structure each product in the array
     totalamount: Number,
+    discount:Number,
     status: String,
     paymentMethod: {
         type: String,

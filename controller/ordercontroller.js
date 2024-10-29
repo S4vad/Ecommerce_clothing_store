@@ -94,6 +94,7 @@ export async function order(req,res) {
        // Store product IDs and address for later use
        order.products = products;
        order.address = address;
+       order.discount=discountAmount;
 
        
       res.status(200).json({ success: true, order });
@@ -130,7 +131,8 @@ export async function verifyPayment(req,res) {
             address: order.address,
             payment: payment.razorpay_payment_id,
             products: order.products,
-            totalamount: order.amount / 100, // Convert back to INR
+            totalamount: order.amount / 100,
+            discount:order.discount || 0, // Convert back to INR
             status: 'Completed',
             paymentMethod: 'Razorpay',
             invoiceNumber: invoiceNumber,
@@ -293,15 +295,15 @@ export async function orderSuccess(req, res) {
     try {
         const userId = req.user;
 
-        // Fetch orders and populate relevant fields
+            // Fetch orders and populate relevant fields
         const orders = await orderModel.find({ user: userId })
-            .populate('products')
-            .populate('user')
-            .populate('address')
-            .populate('address.address')
-            .populate('products.item');
+        .populate({ path:'products.item',
+                    select:'Name Images Brand Price'
 
-        console.log('Fetched orders:', orders);
+                }) // Populate each item in products array
+        .populate('user') // Populate user details
+        .populate('address')        
+        console.log('Fetched orders:', JSON.stringify(orders, null, 2));
 
         // Fetch user details
         const userDetails = await usermodel.findOne({ _id: userId });
@@ -315,12 +317,14 @@ export async function orderSuccess(req, res) {
                 id: order._id,
                 totalAmount: order.totalamount,
                 createdAt: order.createdAt,
+                invoiceNumber:order.invoiceNumber,
+                invoiceDate:order.invoiceDate,
+                discount:order.discount ,
                 products: order.products.map(product => ({
-                    name: product.item.name,
-                    image: product.item.Image && product.item.Image.length > 0 ? product.item.Image[0] : null,
-                    price: product.item.price - product.item.discount,
-                    quantity: product.quantity,
-                    brand: product.item.brand
+                    name: product.item.Name,
+                    image: product.item.Images[0],
+                    price: product.item.Price,
+                    brand: product.item.Brand
                 })),
             };
         });
