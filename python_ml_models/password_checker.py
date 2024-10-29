@@ -1,8 +1,5 @@
 
-
-
 from joblib import dump
-
 
 
 import pandas as pd
@@ -16,8 +13,6 @@ data = pd.read_csv("../pass.csv", on_bad_lines='skip', encoding='latin-1')
 print(data.head())
 
 
-
-
 data = data.dropna()
 data["strength"] = data["strength"].map({0: "Weak", 
                                          1: "Medium",
@@ -26,9 +21,7 @@ print(data.sample(5))
 
 
 
-
 data=data[0:30000]
-
 
 
 
@@ -49,20 +42,17 @@ xtrain, xtest, ytrain, ytest = train_test_split(x, y,
                                                 random_state=42)
 
 
-
-
-
 model = RandomForestClassifier()
 model.fit(xtrain, ytrain)
 print(model.score(xtest, ytest))
 
 
-model_filename = 'python_ml_models/password_strength_model.joblib'
+model_filename = 'python_ml_models/savedModels/password_strength_model.joblib'
 dump(model, model_filename)
 
 
 import getpass
-user = getpass.getpass("Enter Password: ")
+user = input("Enter Password: ")
 data = tdif.transform([user]).toarray()
 output = model.predict(data)
 print(output)
@@ -70,7 +60,7 @@ print(output)
 
 import os
 
-print("Model size:", os.path.getsize('python_ml_models/password_strength_model.joblib'))  # Check the size of the Joblib file
+print("Model size:", os.path.getsize('python_ml_models/password_strength_model.joblib'))  
 
 
 

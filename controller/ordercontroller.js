@@ -262,6 +262,7 @@ export async function applyCoupon(req, res) {
         }
 
         const discountPercentage = Number(appliedCoupon.discount);
+        
         const cart = await cartModel.findOne({ user: userId })
 
         const subtotal = Number(cart.subtotal); 
