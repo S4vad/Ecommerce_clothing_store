@@ -6,6 +6,7 @@ import addressModel from "../models/addressSchem.js";
 import orderModel from "../models/orderSchema.js"
 import exp from "constants";
 import getUserCartWishlistData from "../helpers/mainhelper.js";
+import moment from "moment";
 
 
 
@@ -205,6 +206,7 @@ export async function profileOrder(req,res) {
 
 
         }))
+        app.locals.moment = moment;
 
         console.log('the sturcutredorder',JSON.stringify(structuredOrders,null,2))
 

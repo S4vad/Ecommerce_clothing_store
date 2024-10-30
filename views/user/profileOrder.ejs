@@ -140,11 +140,11 @@
                                                                 </li>
                                                                 <li>
                                                                     <h6>Total Item</h6>
-                                                                    <p><%= cc=order[i].quantity>  Items</p>
+                                                                    <p><%= cc=order[i].quantity %>  Items</p>
                                                                 </li>
                                                                 <li>
                                                                     <h6>Order Time</h6>
-                                                                    <p><%= moment(order[i].createdAt).format('MMMM d, YYYY, h:mm a')  %> </p>
+                                                                    <p><%= order[i].createdAt %> </p>
                                                                 </li>
                                                                 <li>
                                                                     <h6>Delivery Time</h6>
@@ -160,7 +160,7 @@
                                                                 </li>
                                                                 <li>
                                                                     <h6>discount</h6>
-                                                                    <p>&#8377;<%=discount = order[i].discount> </p>
+                                                                    <p>&#8377;<%=discount = order[i].discount %> </p>
                                                                 </li>
                                                                 <li>
                                                                     <h6>delivery fee</h6>
