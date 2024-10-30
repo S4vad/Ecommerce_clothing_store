@@ -15,9 +15,7 @@
 <body>
     <div class="page-wrapper">
         <%- include('./layouts/header'); -%>
-            <% if (alert) { %>
-                <script>alert("your banned")</script>
-                <% } %>
+  
 
 
 
@@ -112,7 +110,7 @@
                                            
                                             <div class="orderlist <%= order[i].status=='canceled'?'text-warning':'' %> ">
                                                 <div class="orderlist-head">
-                                                    <h5 class="<%= order[i].status=='canceled'?'text-warning':'' %>"><%= order[i]._id.toString().substring(16,22) %> </h5><span><%=order[i].createdAt  %> </span>
+                                                    <h5 class="<%= order[i].status=='canceled'?'text-warning':'' %>"><%= order[i]._id %> </h5><span><%=order[i].createdAt  %> </span>
                                                     <% if (order[i].status=='canceled') { %>
                                                         <h5 class="<%= order[i].status=='canceled'?'text-warning':'' %>">order Canceled</h5>
                                                     <% } else{%> 
@@ -138,11 +136,11 @@
                                                             <ul class="orderlist-details">
                                                                 <li>
                                                                     <h6>order id</h6>
-                                                                    <p><%= order[i]._id.toString().substring(16,22) %> </p>
+                                                                    <p><%= order[i]._id %> </p>
                                                                 </li>
                                                                 <li>
                                                                     <h6>Total Item</h6>
-                                                                    <p><%= cc=order[i].products.reduce((acc,cur)=>(acc+cur.quantity),0)  %>  Items</p>
+                                                                    <p><%= cc=order[i].quantity>  Items</p>
                                                                 </li>
                                                                 <li>
                                                                     <h6>Order Time</h6>
@@ -158,11 +156,11 @@
                                                             <ul class="orderlist-details">
                                                                 <li>
                                                                     <h6>Sub Total</h6>
-                                                                    <p>&#8377;<%=price = order[i].products.reduce((acc,cur)=>(acc+cur.item.price),0) %> </p>
+                                                                    <p>&#8377;<%=price = order[i].products.Price%> </p>
                                                                 </li>
                                                                 <li>
                                                                     <h6>discount</h6>
-                                                                    <p>&#8377;<%=discount = order[i].products.reduce((acc,cur)=>(acc+cur.item.discount),0)  %> </p>
+                                                                    <p>&#8377;<%=discount = order[i].discount> </p>
                                                                 </li>
                                                                 <li>
                                                                     <h6>delivery fee</h6>
@@ -170,7 +168,7 @@
                                                                 </li>
                                                                 <li>
                                                                     <h6>Total<small>(Incl. VAT)</small></h6>
-                                                                    <p>&#8377;<%= order[i].totalamount %>.00</p>
+                                                                    <p>&#8377;<%= order[i].totalAmount %>.00</p>
                                                                 </li>
                                                             </ul>
                                                         </div>

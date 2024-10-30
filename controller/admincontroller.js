@@ -102,17 +102,31 @@ export async function adminSignup(req,res){
 
 export async function productAdd(req,res,next){
     try {
-        const files = req.body.images
+        const images = req.body.images
         // const file = req.files
         const { name, description, price,stock, category, brand ,size} = req.body
-        if (!files) {
+        if (!images) {
             const error = new Error('Please choose files')
             error.httpStatusCode = 400;
             return next(error)
         }
 
+        // Extract features for each image (adjust if calling an external Python script or service)
+        const imageFeatures = await Promise.all(
+            images.map(filename => extractFeatures(`./public/uploads/${filename}`))
+        );
+
         //sharp image
-        await productModel.create({ Name:name, Description:description, Brand:brand,Price: price,Categories: category, Stock:stock,Size:size, Images: files })
+        await productModel.create({ 
+            Name:name, 
+            Description:description,
+             Brand:brand,
+             Price: price,
+             Categories: category, 
+             Stock:stock,
+             Size:size, 
+             Images: files,
+             ImageFeatures: imageFeatures  })
             // res.send({"success":data})
             res.redirect('/admin/product_list')
       

@@ -9,6 +9,7 @@ import getUserCartWishlistData from "../helpers/mainhelper.js";
 
 
 
+
 export async function profile(req,res){
     try {
         const userId = req.user; 
@@ -176,9 +177,40 @@ export async function profileOrder(req,res) {
         const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
-        const order=await orderModel.find({user:userId})
+        const orders=await orderModel.find({user:userId})
+                                    .populate('address')
+                                    .populate('user')
+                                    .populate({
+                                        path:'products.item',
+                                        select:'Name Images Brand Price'   
 
-        res.render('user/profileOrder',{order,cart,user,wishListCount,cartCount})
+                                        })
+        console.log('the orders are ',JSON.stringify(orders,null,2))
+
+        const structuredOrders=orders.map(order=>({
+            id:order._id,
+            totalAmount:order.totalamount,
+            createdAt:order.createdAt,
+            invoiceNumber:order.invoiceNumber,
+            invoiceDate:order.invoiceDate,
+            discount:order.discount,
+            status:order.status,
+            products:order.products.map(product =>({
+                name:product.item.Name,
+                image:product.item.Images[0],
+                price:product.item.Price,
+                brand:product.item.Brand,
+                quantity:product.quantity
+            }))
+
+
+        }))
+
+        console.log('the sturcutredorder',JSON.stringify(structuredOrders,null,2))
+
+        res.render('user/profileOrder',{order:structuredOrders,cart,user,wishListCount,cartCount})
+
+
 
 
         
