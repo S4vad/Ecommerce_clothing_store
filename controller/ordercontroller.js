@@ -72,11 +72,7 @@ export async function order(req,res) {
         item: product.item._id, 
         quantity: product.quantity 
     })); 
-    
-
-
-
-
+ 
     try {
       const options = {
         amount: amount * 100, // Razorpay expects the amount in the smallest currency unit (e.g., paise for INR)
@@ -87,9 +83,6 @@ export async function order(req,res) {
       const order = await razorpay.orders.create(options);
 
       console.log('the orders are'+order)
-
-
-      
 
        // Store product IDs and address for later use
        order.products = products;
@@ -140,13 +133,12 @@ export async function verifyPayment(req,res) {
             dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
           };
 
-
       
-          await orderModel.create(newOrder)
+         const savedOrder= await orderModel.create(newOrder)
 
           await cartModel.deleteMany({user:user})
 
-          res.status(200).json({ success: true });
+          res.status(200).json({ success: true , orderId:savedOrder._id });
         } else {
       
           res.status(400).json({ success: false, message: 'Payment verification failed' });
@@ -272,7 +264,7 @@ export async function applyCoupon(req, res) {
 
         await cart.save();
 
-        //pushing used users to coupon schema
+
 
         const user={userId:userId,isUsed:true}
 
@@ -292,43 +284,40 @@ export async function applyCoupon(req, res) {
     }
 }
 
+
 export async function orderSuccess(req, res) {
     try {
         const userId = req.user;
+        const { orderId } = req.query;
 
-            // Fetch orders and populate relevant fields
-        const orders = await orderModel.find({ user: userId })
+        const orders = await orderModel.findOne({ _id: orderId, user: userId })
         .populate({ path:'products.item',
                     select:'Name Images Brand Price'
-
-                }) // Populate each item in products array
-        .populate('user') // Populate user details
+                }) 
+        .populate('user') 
         .populate('address')        
         console.log('Fetched orders:', JSON.stringify(orders, null, 2));
 
-        // Fetch user details
+
         const userDetails = await usermodel.findOne({ _id: userId });
 
-        // Fetch cart and wishlist counts
         const { cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
-        // Structure the orders
-        const structuredOrders = orders.map(order => {
-            return {
-                id: order._id,
-                totalAmount: order.totalamount,
-                createdAt: order.createdAt,
-                invoiceNumber:order.invoiceNumber,
-                invoiceDate:order.invoiceDate,
-                discount:order.discount ,
-                products: order.products.map(product => ({
-                    name: product.item.Name,
-                    image: product.item.Images[0],
-                    price: product.item.Price,
-                    brand: product.item.Brand
-                })),
-            };
-        });
+        const structuredOrders = {
+            id: orders._id,
+            totalAmount: orders.totalamount,
+            createdAt: orders.createdAt,
+            invoiceNumber: orders.invoiceNumber,
+            invoiceDate: orders.invoiceDate,
+            discount: orders.discount,
+            products: orders.products.map(product => ({
+                name: product.item.Name,
+                image: product.item.Images[0],
+                price: product.item.Price,
+                brand: product.item.Brand,
+                quantity: product.quantity
+            }))
+        };
 
         console.log('Structured orders:', JSON.stringify(structuredOrders, null, 2));
 

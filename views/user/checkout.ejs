@@ -334,12 +334,12 @@
                                     fetch('/verifyPayment', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ payment, order })
+                                    body: JSON.stringify({ payment, order})
                                     })
                                     .then(response => response.json())
                                     .then(data => {
                                     if (data.success) {
-                                        window.location.href = '/orderSuccess';
+                                        window.location.href = `/orderSuccess?orderId=${data.orderId}`;
                                     } else {
                                         alert('Payment verification failed!');
                                     }

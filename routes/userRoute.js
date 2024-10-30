@@ -5,7 +5,7 @@ import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,product
         aboutPage,contactPage,addContact,wishlist,filter,categoryShop,search,cartDelete,cartSubTotalUpdate ,
         review,wishListDelete,addWishlist} from "../controller/usercontroller.js";
 import {order,orderGet,coupon,checkout,applyCoupon, verifyPayment,orderSuccess} from "../controller/ordercontroller.js"
-import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress} from "../controller/profilecontroller.js";
+import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress,profileOrder} from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
 
@@ -40,6 +40,7 @@ routes.get('/profileDashboard',userAuthentication,profileDashboard)
 routes.get('/checkout',userAuthentication,checkout)
 routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
 routes.get('/orderSuccess',userAuthentication,orderSuccess)
+routes.get('/profileOrder',userAuthentication,profileOrder)
 
 
 

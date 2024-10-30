@@ -3,6 +3,7 @@ import { getUser } from "../helpers/mainhelper.js";
 import cartModel from "../models/cartSchema.js";
 import wishlistModel from "../models/wishlist.js";
 import addressModel from "../models/addressSchem.js";
+import orderModel from "../models/orderSchema.js"
 import exp from "constants";
 import getUserCartWishlistData from "../helpers/mainhelper.js";
 
@@ -165,4 +166,26 @@ export async function profileDashboard(req,res){
         res.status(500).send(error.message)
         
     }
+}
+
+
+export async function profileOrder(req,res) {
+
+    try {
+
+        const userId = req.user; 
+        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+
+        const order=await orderModel.find({user:userId})
+
+        res.render('user/profileOrder',{order,cart,user,wishListCount,cartCount})
+
+
+        
+    } catch (error) {
+
+        res.send(error.message)
+        
+    }
+    
 }
