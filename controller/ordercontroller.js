@@ -303,6 +303,10 @@ export async function orderSuccess(req, res) {
 
         const { cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
+       
+        
+
+
         const structuredOrders = {
             id: orders._id,
             totalAmount: orders.totalamount,

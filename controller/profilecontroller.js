@@ -178,6 +178,10 @@ export async function profileOrder(req,res) {
         const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
+        const addresses=await addressModel.find({user:userId}).select('address');
+
+        const firstAddress = addresses[0].address[0];
+
         const orders=await orderModel.find({user:userId})
                                     .populate('address')
                                     .populate('user')
@@ -186,7 +190,7 @@ export async function profileOrder(req,res) {
                                         select:'Name Images Brand Price'   
 
                                         })
-        console.log('the orders are ',JSON.stringify(orders,null,2))
+        // console.log('the orders are ',JSON.stringify(orders,null,2))
 
         const structuredOrders=orders.map(order=>({
             id:order._id,
@@ -206,11 +210,11 @@ export async function profileOrder(req,res) {
 
 
         }))
-        app.locals.moment = moment;
+        
 
-        console.log('the sturcutredorder',JSON.stringify(structuredOrders,null,2))
+        // console.log('the sturcutredorder',JSON.stringify(structuredOrders,null,2))
 
-        res.render('user/profileOrder',{order:structuredOrders,cart,user,wishListCount,cartCount})
+        res.render('user/profileOrder',{order:structuredOrders,cart,user,wishListCount,cartCount,address:firstAddress})
 
 
 

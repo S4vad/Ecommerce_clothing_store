@@ -3,10 +3,10 @@
 
 
 <%- include('./layouts/main'); -%>
-<link rel="stylesheet" href="user/assets/css/skins/skin-demo-13.css">
-<link rel="stylesheet" href="user/assets/css/demos/demo-13.css">
-<link rel="stylesheet" href="user/assets/css/orderlist.css">
-<link rel="stylesheet" href="user/assets/fonts/icofont/icofont.min.css">
+<link rel="stylesheet" href="user/css/skins/skin-demo-13.css">
+<link rel="stylesheet" href="user/css/demos/demo-13.css">
+<link rel="stylesheet" href="user/css/orderlist.css">
+<link rel="stylesheet" href="user/fonts/icofont/icofont.min.css">
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
@@ -24,7 +24,7 @@
  <main class="main">
     <div class="page-header text-center" style="background-image: url('user/assets/images/page-header-bg.jpg')">
         <div class="container">
-            <h1 class="page-title">My Account<span>Shop</span></h1>
+            <h1 class="page-title"> ORDERS</h1>
         </div><!-- End .container -->
     </div><!-- End .page-header -->
     <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
@@ -173,10 +173,12 @@
                                                             </ul>
                                                         </div>
                                                         <div class="col-lg-4 ">
+                                                          
                                                             <div class="orderlist-deliver">
                                                                 <h6>Delivery location</h6>
-                                                                <p><%= order[i].address.address %>, <%=order[i].address.name %>, <%= order[i].address.city%>-<%= order[i].address.zip %> . <%=order[i].address.state %> </p>
+                                                                <p><%= address.address %>, <%= address.name %>, <%= address.city %>-<%= address.zip %> . <%=address.state %> <%=address.phone %> </p>
                                                             </div>
+                                                           
                                                         </div>
                                                         <div class="col-lg-12">
                                                             <div class="table-scroll">
@@ -199,18 +201,18 @@
                                                                             <td class="table-serial">
                                                                                 <h6><%=index+1 %>  </h6>
                                                                             </td>
-                                                                            <td class="table-image"><img src="data:<%=element.item.product_image[0].contentType %>;base64,<%=element.item.product_image[0].imageBase64 %> "
+                                                                            <td class="table-image"><img src="data:<%=element.image.contentType %>;base64,<%=element.image.imageBase64 %> "
                                                                                     alt="product"></td>
                                                                             <td class="table-name">
-                                                                                <a href="/product?id=<%= element.item._id%> ">
-                                                                                <h6><%= element.item.name.substring(0,33) %>... </h6>
+                                                                                <a href="/product?id=<%= element._id%> ">
+                                                                                <h6><%= element.name.substring(0,33) %>... </h6>
                                                                                 </a>
                                                                             </td>
                                                                             <td class="table-price">
-                                                                                <h6>&#8377;<%= element.item.price-element.item.discount %></h6>
+                                                                                <h6>&#8377;<%= order[i].totalAmount %></h6>
                                                                             </td>
                                                                             <td class="table-brand">
-                                                                                <h6><%= element.item.brand %> </h6>
+                                                                                <h6><%= element.brand %> </h6>
                                                                             </td>
                                                                             <td class="table-quantity">
                                                                                 <h6><%= element.quantity %> </h6>
