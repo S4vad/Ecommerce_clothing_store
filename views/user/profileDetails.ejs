@@ -405,40 +405,40 @@
                                     })
                                 }
 
-                                function order_cancel(orderId){
-                                    Swal.fire({
-                                    title: 'Are you sure?',
-                                    text: "You won't be able to revert this!",
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Yes, delete it!'
-                                    }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $.ajax({
-                                            url:'/order_cancel',
-                                            method:'post',
-                                            data:{
-                                                orderId:orderId,
-                                            },
-                                            success:((response)=>{
+                                async function orderCancel(orderId) {
+                                    const confirmation = await Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "You won't be able to revert this!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!'
+                                    });
 
+                                    if (confirmation.isConfirmed) {
+                                        $.ajax({
+                                            url: `/orderCancel?orderId=${orderId}`,
+                                            method: 'post',
+                                          
+                                            success: (response) => {
                                                 Swal.fire(
-                                        'Deleted!',
-                                        'Your Order is canceled.',
-                                        'success'
-                                        )
-                                            setTimeout(()=>location.reload(),1200)
-                                        
-                                    })
-                                    })
-                                   
+                                                    'Deleted!',
+                                                    'Your Order is canceled.',
+                                                    'success'
+                                                );
+                                                setTimeout(() => location.reload(), 1200);
+                                            },
+                                            error: (error) => {
+                                                Swal.fire(
+                                                    'Error!',
+                                                    'There was an issue canceling your order. Please try again.',
+                                                    'error'
+                                                );
+                                            }
+                                        });
+                                    }
                                 }
-                            })
-                        }
-                         
-   
 
                                   
                             </script>

@@ -323,7 +323,7 @@ export async function orderSuccess(req, res) {
             }))
         };
 
-        console.log('Structured orders:', JSON.stringify(structuredOrders, null, 2));
+        // console.log('Structured orders:', JSON.stringify(structuredOrders, null, 2));
 
         // Render the EJS template with structured data
         res.render('user/orderSuccess', {
@@ -339,6 +339,25 @@ export async function orderSuccess(req, res) {
         // Handle the error and render an error message if needed
         console.error('Error fetching order success:', error);
         res.status(500).send('An error occurred while fetching order details.');
+    }
+}
+
+
+export async function orderCancel(req,res){
+    try {
+        const orderId=req.query.orderId;
+        console.log('the page is '+orderId)
+        if (orderId){
+            await orderModel.findByIdAndDelete(orderId)
+            res.json({success: true})
+        }else{
+            res.json({success:false})
+        }
+    
+    } catch (error) {
+
+        res.send(error.message)
+        
     }
 }
 

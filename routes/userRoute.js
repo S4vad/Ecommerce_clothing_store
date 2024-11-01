@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,
         aboutPage,contactPage,addContact,wishlist,filter,categoryShop,search,cartDelete,cartSubTotalUpdate ,
         review,wishListDelete,addWishlist} from "../controller/usercontroller.js";
-import {order,orderGet,coupon,checkout,applyCoupon, verifyPayment,orderSuccess} from "../controller/ordercontroller.js"
+import {order,orderGet,coupon,checkout,applyCoupon, verifyPayment,orderSuccess,orderCancel} from "../controller/ordercontroller.js"
 import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress,profileOrder} from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
@@ -19,7 +19,6 @@ routes.use(express.static(publicUserDirectoryPath));
 
 
 routes.get('/',userAuthentication,userHome)
-
 routes.get('/signup',signup)
 routes.get('/login',login)
 routes.get('/shop',userAuthentication,shop)//req,res,next we get both controller and middleware
@@ -32,19 +31,21 @@ routes.get('/about',userAuthentication,aboutPage)
 routes.get('/contact',userAuthentication,contactPage)
 routes.get('/categoryShop',userAuthentication,categoryShop)
 routes.get('/order',userAuthentication,orderGet)
-routes.delete('/cart/remove/:id',userAuthentication, cartDelete); // Temporarily without middleware
 routes.get('/coupon',userAuthentication,coupon)
 routes.get('/profile',userAuthentication,profile)
 routes.get('/profileAddress',userAuthentication,profileAddress)
 routes.get('/profileDashboard',userAuthentication,profileDashboard)
 routes.get('/checkout',userAuthentication,checkout)
-routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
 routes.get('/orderSuccess',userAuthentication,orderSuccess)
 routes.get('/profileOrder',userAuthentication,profileOrder)
 
 
-
-
+routes.delete('/cart/remove/:id',userAuthentication, cartDelete); // Temporarily without middleware
+routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
+routes.post('orderCancel',userAuthentication, (req, res, next) => {
+        console.log('Route /orderCancel accessed'); // Log when route is accessed
+        next();},
+        orderCancel)
 
 
 routes.post('/signin',userSignup)
