@@ -4,6 +4,8 @@ import wishlistModel from "../models/wishlist.js";
 
 
 
+
+
 export async function getUser(userId){
     
     if (!userId) 
@@ -22,7 +24,6 @@ export async function getUser(userId){
 
 
 };
-
 
 
 export default async function getUserCartWishlistData(userId) {

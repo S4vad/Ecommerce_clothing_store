@@ -16,6 +16,7 @@ import reviewModel from "../models/reviewSchema.js";
 
 
 
+
 export async function userHome(req,res){
     try {
         const userId = req.user; 
@@ -182,6 +183,8 @@ export async function productDetails(req, res) {
 
         const id = req.params.id;
         const product = await Product.findById(id);
+
+        // const recommendations = recommend_products(product.ImageFeatures, Product);
 
         const currentStock=product.Stock<=0;
         let stockStatus;
