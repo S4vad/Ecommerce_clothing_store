@@ -25,7 +25,7 @@ connectToDatabase();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(morgan("dev"))
+// app.use(morgan("short"))
 
 const __dirname=path.dirname(fileURLToPath(import.meta.url))
 
@@ -34,8 +34,6 @@ app.use(express.static("public"));
 
 
 app.use(cookieParser());//routente top l vilikkanam
-
-
 
 
 // view engin setup

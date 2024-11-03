@@ -57,7 +57,7 @@ export async function order(req,res) {
     console.log("Calculated amount (in paise):", amount * 100); // Log amount in paise
 
     const addresses=await addressModel.findOne({user:user}).select('address');
-    console.log('the address complerte'+addresses)
+ 
 
     
     if (!addresses) {
@@ -65,7 +65,7 @@ export async function order(req,res) {
     }
 
     const address=addresses._id;
-    console.log('the address id i s'+address)
+
    
 
     const products = cart.products.map(product => ({ 
@@ -82,7 +82,7 @@ export async function order(req,res) {
   
       const order = await razorpay.orders.create(options);
 
-      console.log('the orders are'+order)
+
 
        // Store product IDs and address for later use
        order.products = products;
@@ -149,6 +149,72 @@ export async function verifyPayment(req,res) {
         console.error('Error verifying payment:', error);
         res.send(error.message)
         
+    }
+    
+}
+
+
+export async function orderCod(req,res) {
+
+    const {  user,appliedCoupon} = req.body;
+
+    let discountPercentage;
+    if(appliedCoupon){
+        const coupon=await couponModel.findOne({code:appliedCoupon});
+
+        discountPercentage = Number(coupon.discount);
+
+    }else{
+        discountPercentage=0;
+    }
+
+    const cart=await cartModel.findOne({user:user}).populate("products.item");
+    
+    const subtotal=Number(cart.subtotal)
+
+    const discountAmount = (subtotal * discountPercentage) / 100; // Calculate discount amount
+    const amount = Math.floor(subtotal - discountAmount) || subtotal;
+
+    console.log("Calculated amount (in paise):", amount * 100); // Log amount in paise
+
+    const addresses=await addressModel.findOne({user:user}).select('address');
+ 
+
+    
+    if (!addresses) {
+        return res.status(400).json({ success: false, message: 'No address found for this user.' });
+    }
+
+    const address=addresses._id;
+
+   
+
+    const products = cart.products.map(product => ({ 
+        item: product.item._id, 
+        quantity: product.quantity 
+    })); 
+ 
+    try {
+    //   const options = {
+    //     amount: amount * 100, // Razorpay expects the amount in the smallest currency unit (e.g., paise for INR)
+    //     currency: 'INR',
+    //     receipt: `receipt_order_${Date.now()}`,
+    //   };
+  
+    //   const order = await razorpay.orders.create(options);
+
+
+
+       // Store product IDs and address for later use
+    //    order.products = products;
+    //    order.address = address;
+    //    order.discount=discountAmount;
+
+       
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Order creation failed' });
     }
     
 }

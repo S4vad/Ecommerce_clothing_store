@@ -37,13 +37,13 @@
                                             <a href="/profileAddress" class="btn btn-outline-primary btn-sm">Add Address</a>
                                         </div>
                                         <div class="account-content">
-                                            <div class="row">
+                                            <div class="row" id="addressData">
                                                 <% if (address != '') { %>
 
 
                                                     <% address.address.forEach((addr, i) => { %>
                                                         <div class="col-md-6 col-lg-4 alert fade show">
-                                                            <div class="profile-card address slctaddress " data-address="<%= i %>" onclick="selectAddress(this)">
+                                                            <div class="profile-card address slctaddress "  data-id="<%= addr._id %>" onclick="selectAddress(this)">
                                                                 <h6><%= addr.name || 'Home' %></h6>
                                                                 <p>
                                                                     <%= addr.address %>, <%= addr.name %>, 
@@ -146,11 +146,11 @@
                                                         <input name="payment" type="radio" value="online" class="form-check-input" id="payment-online" style="width: 20px; height: 20px;">
                                                     </h2>
                                                 </div>
-                                                <div class="collapseTwo panel-collapse collapse">
+                                                <!-- <div class="collapseTwo panel-collapse collapse">
                                                     <div class="panel-body" style="padding: 0.5rem;">
                                                         <p style="font-size: 12px;">Proceed with online payment options.</p>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
 
@@ -174,9 +174,11 @@
                             </div>
                         <% } %>
                     </main>
+                    <%- include('./layouts/footer'); -%>
                     
 
-                        <%- include('./layouts/footer'); -%>
+
+
                             <script>
                                 function selectAddress(selectedElement) {
                                     // Remove 'active' class from all addresses
@@ -286,26 +288,73 @@
                             </script>
                             <script>
                                 async function placeOrder() {
+                                    console.log('the place order function triggerd')
+
+                                    // Select the active (checked) radio button
+                                    const activePaymentMethod = document.querySelector('input[name="payment"]:checked');
+
+                                    // Check if an active payment method is found and get its value
+                                    if (activePaymentMethod) {
+                                    const paymentValue = activePaymentMethod.value;
+                                    console.log('Selected payment method:', paymentValue);
+                                    } else {
+                                    console.log('No payment method selected.');
+                                    }
+
                                     
                                     const appliedCoupon = document.getElementById('appliedCoupon').textContent.trim() ;
-                                    
+                                    const addressData=document.getElementById('addressData')
 
-                                    const orderData = {  // Adjust amount as needed
-                                    user: "<%= user._id %>", // Pass user ID dynamically if available // Set address ID dynamically// Set products dynamically
-                                    paymentMethod: "razorpay",// example payment method
-                                    appliedCoupon:appliedCoupon
+                                    const activeElement = addressData.querySelector('.active');
+
+                                    // if (activeElement) {
+                                    // // Do something with the active element
+                                    // console.log(activeElement);
+                        
+                        
+            // } else {
+                                    // console.log('No active element found.');
+                                    // }
+                                    
+                                    // return ;
+                                
+                                    // Create order data object
+                                    const orderData = {
+                                        user: "<%= user._id %>", // Dynamically pass user ID if available
+                                        paymentMethod: paymentValue === 'online' ? "razorpay" : "cod",
+                                        appliedCoupon: appliedCoupon,
+                                        // address: activeElement ? activeElement.dataset.addressId : null, // Adjust for selected address
                                     };
 
-                                    const response = await fetch('/order', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify(orderData),
-                                    });
+                                    if (paymentValue === "cod") {
+    
+                                            const response = await fetch('/order/cod', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify(orderData),
+                                            });
+                                            
+                                            const result = await response.json();
+                                            if (result.success) {
+                                                window.location.href = '/orderSuccess'; // Redirect to success page for COD
+                                            } else {
+                                                alert('Error processing COD order.');
+                                            }
+                                        } else if (paymentValue === "online") {
+                                            // Online payment route
+                                            const response = await fetch('/order', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify(orderData),
+                                            });
+                                            
+                                            const { order } = await response.json();
+                                            razorpayPayment(order); // Initiate Razorpay for online payment
+                                        }
+                                    }
+                                    
 
-                                    const { order } = await response.json();
-                                    razorpayPayment(order);
-                                }
-                                
+        
  
 
 
@@ -405,6 +454,7 @@
                                     })
                                                 
                             </script>
+                            <script src="path/to/your/script.js"></script>
 
                             <script>
                                 function addressDelete(addressId) {
@@ -444,3 +494,6 @@
 
                                         }
                             </script>
+
+
+<%- include('./layouts/additional'); -%>

@@ -194,11 +194,11 @@ export async function productDetails(req, res) {
     
         const message= stockStatus || req.query.message;
 
-        console.log('the cart product are'+cart)        
+      
         res.render('user/productDetails', { user, product, cart, cartCount, wishListCount ,quantityAvailableOrNot:message});
         
     } catch (error) {
-        console.error('Error in productDetails:', error); 
+
         res.send(error.message);
     }
 }

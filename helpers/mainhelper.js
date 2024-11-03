@@ -12,7 +12,7 @@ export async function getUser(userId){
         return false;
     try {
         const userDetails=await usermodel.findById(userId);
-        console.log(userDetails,"ooooooo")
+     
         return userDetails;
         
     } catch (error) {
