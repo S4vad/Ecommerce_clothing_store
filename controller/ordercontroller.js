@@ -154,70 +154,69 @@ export async function verifyPayment(req,res) {
 }
 
 
-export async function orderCod(req,res) {
+export async function orderCod(req, res) {
+    const { user, appliedCoupon } = req.body;
 
-    const {  user,appliedCoupon} = req.body;
-
-    let discountPercentage;
-    if(appliedCoupon){
-        const coupon=await couponModel.findOne({code:appliedCoupon});
-
+    let discountPercentage = 0; // Initialize discount percentage
+    if (appliedCoupon) {
+        const coupon = await couponModel.findOne({ code: appliedCoupon });
+        if (!coupon) {
+            return res.status(400).json({ success: false, message: 'Invalid coupon code.' });
+        }
         discountPercentage = Number(coupon.discount);
 
-    }else{
-        discountPercentage=0;
     }
 
-    const cart=await cartModel.findOne({user:user}).populate("products.item");
+    const cart = await cartModel.findOne({ user: user }).populate("products.item");
+    if (!cart) {
+        return res.status(400).json({ success: false, message: 'Cart not found.' });
+    }
     
-    const subtotal=Number(cart.subtotal)
+    const subtotal = Number(cart.subtotal);
+    const discountAmount = (subtotal * discountPercentage) / 100; 
 
-    const discountAmount = (subtotal * discountPercentage) / 100; // Calculate discount amount
+
     const amount = Math.floor(subtotal - discountAmount) || subtotal;
 
-    console.log("Calculated amount (in paise):", amount * 100); // Log amount in paise
 
-    const addresses=await addressModel.findOne({user:user}).select('address');
- 
-
-    
+    const addresses = await addressModel.findOne({ user: user }).select('address');
     if (!addresses) {
         return res.status(400).json({ success: false, message: 'No address found for this user.' });
     }
 
-    const address=addresses._id;
+    const address = addresses._id;
+    const products = cart.products.map(product => ({
+        item: product.item._id,
+        quantity: product.quantity
+    }));
 
-   
-
-    const products = cart.products.map(product => ({ 
-        item: product.item._id, 
-        quantity: product.quantity 
-    })); 
- 
     try {
-    //   const options = {
-    //     amount: amount * 100, // Razorpay expects the amount in the smallest currency unit (e.g., paise for INR)
-    //     currency: 'INR',
-    //     receipt: `receipt_order_${Date.now()}`,
-    //   };
-  
-    //   const order = await razorpay.orders.create(options);
+        const invoiceNumber = Math.floor(100000 + Math.random() * 900000); 
+        const newOrder = {
+            user: user,
+            address: address,
+            payment: 'COD',
+            products: products,
+            totalamount: amount / 100, 
+            discount: discountAmount,
+            status: 'Completed',
+            paymentMethod: 'COD',
+            invoiceNumber: invoiceNumber,
+            invoiceDate: new Date(),
+            dueDate: new Date(new Date().setDate(new Date().getDate() + 7)), 
+        };
 
-
-
-       // Store product IDs and address for later use
-    //    order.products = products;
-    //    order.address = address;
-    //    order.discount=discountAmount;
-
-       
-      res.status(200).json({ success: true });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Order creation failed' });
-    }
+        const savedOrder = await orderModel.create(newOrder);
     
+
+        await cartModel.deleteMany({ user: user }); 
+        res.status(200).json({ success: true, orderId: savedOrder._id }); 
+    } catch (error) {
+        console.error('Error creating order:', error.stack); 
+        res.status(500).json({ success: false, message: 'Order creation failed' }); 
+    }
 }
+
 
 
 async function expiredCouponUpdating(expiredCouponIds){
@@ -339,7 +338,6 @@ export async function applyCoupon(req, res) {
         await appliedCoupon.save()
 
 
-        console.log('the nerw'+newSubTotal)
 
         res.json({ success: true, message: `Applied ${discountPercentage}% discount`, newSubTotal: newSubTotal ,couponCode:userCouponCode});
 
@@ -354,7 +352,8 @@ export async function applyCoupon(req, res) {
 export async function orderSuccess(req, res) {
     try {
         const userId = req.user;
-        const { orderId } = req.query;
+        const  orderId = req.query.orderId;
+        console.log("the userId "+userId,orderId)
 
         const orders = await orderModel.findOne({ _id: orderId, user: userId })
         .populate({ path:'products.item',
@@ -411,7 +410,8 @@ export async function orderSuccess(req, res) {
 
 export async function orderCancel(req,res){
     try {
-        const orderId=req.query.orderId;
+        const { orderId } = req.body; 
+        console.log('the get order id is '+orderId)
         console.log('the page is '+orderId)
         if (orderId){
             await orderModel.findByIdAndDelete(orderId)

@@ -42,10 +42,7 @@ routes.get('/profileOrder',userAuthentication,profileOrder)
 
 routes.delete('/cart/remove/:id',userAuthentication, cartDelete); // Temporarily without middleware
 routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
-routes.post('orderCancel',userAuthentication, (req, res, next) => {
-        console.log('Route /orderCancel accessed'); // Log when route is accessed
-        next();},
-        orderCancel)
+
 
 
 routes.post('/signin',userSignup)
@@ -64,7 +61,7 @@ routes.post('/applyCoupon',userAuthentication,applyCoupon)
 routes.post('/order',userAuthentication,order)
 routes.post('/order/cod',userAuthentication,orderCod)
 routes.post('/verifyPayment',userAuthentication,verifyPayment)
-
+routes.post('/orderCancel',userAuthentication, orderCancel)
 
 
 

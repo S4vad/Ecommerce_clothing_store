@@ -407,7 +407,10 @@
                                     })
                                 }
 
+                                
+
                                 async function orderCancel(orderId) {
+                                    
                                     const confirmation = await Swal.fire({
                                         title: 'Are you sure?',
                                         text: "You won't be able to revert this!",
@@ -420,8 +423,10 @@
 
                                     if (confirmation.isConfirmed) {
                                         $.ajax({
-                                            url: `/orderCancel?orderId=${orderId}`,
-                                            method: 'post',
+                                            url: "/orderCancel",
+                                            data: JSON.stringify({ orderId: orderId }),
+                                            contentType: 'application/json',
+                                            method: 'POST',
                                           
                                             success: (response) => {
                                                 Swal.fire(
@@ -450,7 +455,7 @@
                 
                 <script>
                     function razorpayPayment(order) {
-                        console.log(order.order.amount)
+                  
                         var options = {
                             "key": "rzp_test_lD5aVhNHRC1GZC", // Enter the Key ID generated from the Dashboard
                             "amount": order.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise

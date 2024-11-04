@@ -21,7 +21,7 @@ export async function userHome(req,res){
     try {
         const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
-        console.log("the anser" +user,cart,cartCount)
+        
 
         const banner=await bannerModel.find()
 

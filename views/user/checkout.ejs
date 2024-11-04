@@ -2,7 +2,6 @@
     <link rel="stylesheet" href="user/css/skins/skin-demo-13.css">
     <link rel="stylesheet" href="user/css/demos/demo-13.css">
     <link rel="stylesheet" href="user/css/checkout.css">
-    <link rel="stylesheet" href="user/fonts/icofont/icofont.min.css">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     </head>
 
@@ -146,21 +145,17 @@
                                                         <input name="payment" type="radio" value="online" class="form-check-input" id="payment-online" style="width: 20px; height: 20px;">
                                                     </h2>
                                                 </div>
-                                                <!-- <div class="collapseTwo panel-collapse collapse">
-                                                    <div class="panel-body" style="padding: 0.5rem;">
-                                                        <p style="font-size: 12px;">Proceed with online payment options.</p>
-                                                    </div>
-                                                </div> -->
+
                                             </div>
+                                                                                      
+                                            <button type="button" onclick="placeOrder()"  class="btn btn-outline-primary btn-sm btn-block mt-4">
+                                                Place Order Proceed to Checkout
+                                            </button>
                                         </div>
 
 
                     
-                                        <!-- Place Order Button -->
-                                        <button type="button" onclick="placeOrder()"  class="btn btn-outline-primary btn-sm btn-block mt-4">
-                                            <span class="btn-text">Place Order</span>
-                                            <span class="btn-hover-text">Proceed to Checkout</span>
-                                        </button>
+
                                     </div>
                                 </aside>
                             </div>
@@ -228,7 +223,12 @@
                                     .catch(error => console.error('Error:', error));
                                 });
                             </script>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        
+                            
                             <script>
+
+                                
                                 $("#checkout-form").submit((e) => {
                                     e.preventDefault()
                                     const address = $(".address.active").data('address')
@@ -288,17 +288,18 @@
                             </script>
                             <script>
                                 async function placeOrder() {
-                                    console.log('the place order function triggerd')
 
+                                    let paymentValue;
                                     // Select the active (checked) radio button
                                     const activePaymentMethod = document.querySelector('input[name="payment"]:checked');
 
                                     // Check if an active payment method is found and get its value
                                     if (activePaymentMethod) {
-                                    const paymentValue = activePaymentMethod.value;
+                                     paymentValue = activePaymentMethod.value;
                                     console.log('Selected payment method:', paymentValue);
                                     } else {
                                     console.log('No payment method selected.');
+                                    return;
                                     }
 
                                     
@@ -336,7 +337,7 @@
                                             
                                             const result = await response.json();
                                             if (result.success) {
-                                                window.location.href = '/orderSuccess'; // Redirect to success page for COD
+                                                window.location.href = `/orderSuccess?orderId=${result.orderId}`; // Redirect to success page for COD
                                             } else {
                                                 alert('Error processing COD order.');
                                             }
@@ -454,7 +455,7 @@
                                     })
                                                 
                             </script>
-                            <script src="path/to/your/script.js"></script>
+                            
 
                             <script>
                                 function addressDelete(addressId) {
