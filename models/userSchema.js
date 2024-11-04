@@ -4,20 +4,24 @@ import mongoose from "mongoose"
 // const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
+  fname:{
+    type:String,
+    require:true,
+  },
+  lname:{
+    type:String,
+    require:true,
+  },
   email:{
-    type:String,
-    require:true,
+      type:String,
+      require:true,
+  },
+  password:{
+      type:String,
+      require:true,
 
-
-},
-password:{
-    type:String,
-    require:true,
-//for removing white space
-
-}
-}
-);
+  }
+  });
 
 
 const usermodel = mongoose.model("user",userSchema )

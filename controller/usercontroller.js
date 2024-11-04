@@ -83,16 +83,23 @@ export async function signup(req,res){
 
 export async function userSignup(req,res){
     
-    const {email,password}=req.body;
+    const {fname,lname,email,password}=req.body;
+
     try {
         const hashedpassword=await bcrypt.hash(password,10);
-        await usermodel.create({email:email,password:hashedpassword})
+        await usermodel.create({fname:fname,lname:lname,email:email,password:hashedpassword})
+
+        const user = await usermodel.findOne({email});
+
+        const token = jwt.sign({userId: user._id},"jwtid",{expiresIn:"5d"});  //jwt id its a secret id , amd we can use any name instead of jwtid
+        res.cookie("userjwt", token, { httpOnly: true });
         res.redirect('/')
 
         
     } catch (error) {
         console.log(error.message)
-        res.send("<script>alert('product not created successfully')</script>");
+        res.send("<script>alert('Signup failed. Please try again.')</script>");
+        res.render('user/userSignup')
         
     }
 } 

@@ -7,6 +7,7 @@ import orderModel from "../models/orderSchema.js"
 import exp from "constants";
 import getUserCartWishlistData from "../helpers/mainhelper.js";
 import moment from "moment";
+import usermodel from "../models/userSchema.js";
 
 
 
@@ -226,4 +227,43 @@ export async function profileOrder(req,res) {
         
     }
     
+}
+
+export async function userDetailsUpdate(req, res) {
+    try {
+        const user = req.user;
+        const { fname, lname, email, currentPassword, newPassword1, newPassword2 } = req.body;
+
+        const errors = {};
+
+        const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+        if (!isPasswordCorrect) {
+            errors.currentPassword = "Incorrect current password";
+        }
+
+
+        if (newPassword1 !== newPassword2) {
+            errors.newPassword2 = "New passwords do not match";
+        }
+
+
+        if (Object.keys(errors).length > 0) {
+            return res.json({ success: false, errors });
+        }
+        
+        const updatedData = { fname, lname, email };
+
+        if (newPassword1) {
+            const hashedPassword = await bcrypt.hash(newPassword1, 10);
+            updatedData.password = hashedPassword;
+        }
+
+        await usermodel.findByIdAndUpdate(user._id, updatedData);
+
+        res.json({ success: true, message: "User details updated successfully" });
+
+    } catch (error) {
+        console.error("Error updating user details:", error);
+        res.json({ success: false, message: "Failed to update user details" });
+    }
 }

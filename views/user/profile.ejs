@@ -35,9 +35,6 @@
                             <a class="nav-link text-dark" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Addresses</a>
                         </li>
                         <li class="nav-item">
@@ -117,36 +114,31 @@
 
                         <!-- Account Details tab pane -->
                         <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-                            <form action="#">
+                            <form action="#" >
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label>First Name *</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control" required id="fname">
                                     </div>
 
                                     <div class="col-sm-6">
                                         <label>Last Name *</label>
-                                        <input type="text" class="form-control" required>
+                                        <input type="text" class="form-control" required id="lname">
                                     </div>
                                 </div>
-
-                                <label>Display Name *</label>
-                                <input type="text" class="form-control" required>
-                                <small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
-
                                 <label>Email address *</label>
-                                <input type="email" class="form-control" required>
+                                <input type="email" class="form-control" required id="email">
 
                                 <label>Current password (leave blank to leave unchanged)</label>
-                                <input type="password" class="form-control">
+                                <input type="password" class="form-control" id="currentPassword">
 
                                 <label>New password (leave blank to leave unchanged)</label>
-                                <input type="password" class="form-control">
+                                <input type="password" class="form-control" id="newPassword1">
 
                                 <label>Confirm new password</label>
-                                <input type="password" class="form-control mb-2">
+                                <input type="password" class="form-control mb-2" id="newPassword2">
 
-                                <button type="submit" class="btn btn-outline-primary-2">
+                                <button type="button" onclick="updateDetails()" class="btn btn-outline-primary-2">
                                     <span>SAVE CHANGES</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </button>
@@ -160,4 +152,59 @@
 </div>
 
 <%- include("./layouts/footer"); -%>
+<script>
+    function updateDetails(){
+        // Clear previous error messages
+        document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+        const fname=document.getElementById('fname').value;
+        const lname=document.getElementById('lname').value;
+        const email=document.getElementById('email').value;
+        const currentPassword=document.getElementById('currentPassword').value;
+        const newPassword1=document.getElementById('newPassword1').value;
+        const newPassword2=document.getElementById('newPassword2').value;
+        $.ajax({
+            url:'/userDetailsUpdate',
+                method:'POST',
+                data: JSON.stringify({
+                fname: fname,
+                lname: lname,
+                email: email,
+                currentPassword: currentPassword,
+                newPassword1: newPassword1,
+                newPassword2: newPassword2
+            }),
+            contentType: 'application/json',
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message);
+                } else {
+                    // Display errors below each input field
+                    const errors = response.errors;
+                    if (errors) {
+                        if (errors.currentPassword) {
+                            showError('currentPassword', errors.currentPassword);
+                        }
+                        if (errors.newPassword2) {
+                            showError('newPassword2', errors.newPassword2);
+                        }
+                    }
+                }
+            },
+            error: function() {
+                alert("An error occurred while updating details.");
+            }
+        });
+
+        
+    }
+
+    function showError(inputId, message) {
+        const inputField = document.getElementById(inputId);
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message text-danger';
+        errorDiv.innerText = message;
+        inputField.parentNode.insertBefore(errorDiv, inputField.nextSibling);
+    }
+</script>
 <%- include("./layouts/additional"); -%>
