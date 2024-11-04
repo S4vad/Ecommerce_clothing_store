@@ -1,3 +1,4 @@
+import { PythonShell } from 'python-shell';
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -103,6 +104,20 @@ export async function userSignup(req,res){
         
     }
 } 
+
+export async function checkPasswordStrength(req, res) {
+    
+    const { password } = req.body;
+
+    PythonShell.run('predict_password.py', { args: [JSON.stringify({ password })] }, (err, results) => {
+        if (err) {
+            return res.status(500).json({ strength: 'Error' });
+        }
+
+        const strength = JSON.parse(results[0]).strength;
+        res.json({ strength });
+    });
+};
 
 export async function login(req,res){
     res.render('user/userLogin',{message:""})

@@ -18,26 +18,49 @@
                 <form action="/signin" method="post">
                     <div class="mb-2">
                         <label for="fname" class="form-label">First name</label>
-                        <input type="fname" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name">
+                        <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name" required>
                     </div>
                     <div class="mb-2">
                         <label for="lname" class="form-label">Last name</label>
-                        <input type="lname" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name">
+                        <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name" required>
                     </div>
                     <div class="mb-2">
                         <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Eamil">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email" required>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter Your Password">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter Your Password" required oninput="checkPasswordStrength()">
+                    </div>
+                    <div class="mb-3">
+                        <span id="password-strength" class="text-muted"></span>
                     </div>
                     <div class="d-grid mb-3">
-                        <button type="submit" class="btn btn-warning">SignUp</button>
+                        <button type="submit" class="btn btn-warning">Sign Up</button>
                     </div>
                 </form>
+  
             </div>
         </div>
     </div>
+    <script>
+        async function checkPasswordStrength() {
+            const password = document.getElementById("password").value;
+            const response = await fetch('/checkPasswordStrength', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password }),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("password-strength").innerText = `Strength: ${data.strength}`;
+            } else {
+                document.getElementById("password-strength").innerText = 'Error checking strength';
+            }
+        }
+    </script>
 </body>
 </html>
