@@ -108,14 +108,28 @@ export async function userSignup(req,res){
 export async function checkPasswordStrength(req, res) {
     
     const { password } = req.body;
+    console.log('The password is: ' + password);
 
-    PythonShell.run('predict_password.py', { args: [JSON.stringify({ password })] }, (err, results) => {
+    const options = {
+        scriptPath: 'C:/Users/savad/Desktop/main_project/python_ml_models/modelLoading',  // Correct path to your Python script
+        args: [password]  
+    };
+    console.log('Python script options:', options);
+
+
+    PythonShell.run('passwordChecker.py', options, (err, results) => {
         if (err) {
+            console.error("Error:", err);
             return res.status(500).json({ strength: 'Error' });
         }
 
-        const strength = JSON.parse(results[0]).strength;
-        res.json({ strength });
+        try {
+            const strength = JSON.parse(results[0]).strength;
+            res.json({ strength });
+        } catch (parseError) {
+            console.error("Parsing error:", parseError);
+            res.status(500).json({ strength: 'Error parsing result' });
+        }
     });
 };
 
