@@ -603,13 +603,32 @@ export async function deleteCoupon(req,res){
 
 export async function customersList(req,res){
     try {
-        const user=usermodel.find()
-        res.render('admin/customersList',user)
+        const user=await usermodel.find()
+
+
+        res.render('admin/customersList',{user:user})
 
     } catch (error) {
         res.send(error.message)
     }
 }
+
+
+export async function editIsActive(req, res) {
+    try {
+        const id = req.query.id;
+        const status = req.query.status === "Active"; 
+        
+        await usermodel.findByIdAndUpdate(id, { isActive: status });
+
+        const user = await usermodel.find();
+        res.render('admin/customersList', { user });
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+
 
 
 

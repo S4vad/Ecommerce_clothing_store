@@ -156,30 +156,25 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
 
-                                                    <div><a href="/admin/edit_product?id=<%= products[i]._id %> " class="text-reset"><%= user[i].fname %> </a>
+                                                    <div><a href=""  class="text-reset"><%= user[i].fname %> </a>
                                                         <div class="sa-meta mt-0">
-                                                            <ul class="sa-meta__list">
-                                                                <!-- <li class="sa-meta__item">Discount: <span
-                                                                        title="Click to copy product ID"
-                                                                        class="st-copy"><%= products[i].discount %> </span></li> -->
-                                                                <!-- <li class="sa-meta__item">Brand: <span
-                                                                        title="Click to copy product SKU"
-                                                                        class="st-copy"><%= products[i].Brand %></span></li> -->
-                                                            </ul>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td><a href="#" class="text-reset"><%= user[i].lname %> </a></td>
+                                            <td><a href="#" class="text-reset"><%= user[i].email %> </a></td>
+                                            
 
                                            
-                                            <td>
-                                                <% if (products[i].Stock <= 10) { %>
-                                                  <div class="badge badge-sa-danger"><%= products[i].Stock %> In Stock</div>
+                                             <td>
+                                                <% if (user[i].isActive == false) { %>
+                                                  <div class="badge badge-sa-danger">Deactive</div>
                                                 <% } else { %>
-                                                  <div class="badge badge-sa-success"><%= products[i].Stock %> In Stock</div>
+                                                  <div class="badge badge-sa-success">Active</div>
                                                 <% } %>
-                                              </td>
+                                              </td> 
            
                                             <td>
                                                 <div class="dropdown"><button class="btn btn-sa-muted btn-sm"
@@ -193,12 +188,17 @@
                                                         </svg></button>
                                                     <ul class="dropdown-menu dropdown-menu-end"
                                                         aria-labelledby="product-context-menu-0">
-                                                        <li><a class="dropdown-item" href="/admin/edit_product?id=<%= products[i]._id %> ">Edit</a></li>
-                                                        <li>
-                                                            <hr class="dropdown-divider" />
-                                                        </li>
-                                                        <li><a class="dropdown-item text-danger" href="/admin/delete_product?id=<%= products[i]._id %> ">Delete</a>
-                                                        </li>
+                                                        <% if (user[i].isActive) { %>
+                                                            <li>
+                                                                <a class="dropdown-item" href="/admin/editIsActive?id=<%= user[i]._id %>&status=Deactive">Deactivate</a>
+                                                            </li>
+                                                       
+                                                        <% } else { %>
+                                                            <li>
+                                                                <a class="dropdown-item text-danger" href="/admin/editIsActive?id=<%= user[i]._id %>&status=Active">Activate</a>
+                                                            </li>
+                                                        <% } %>
+                                                        
                                                     </ul>
                                                 </div>
                                             </td>
