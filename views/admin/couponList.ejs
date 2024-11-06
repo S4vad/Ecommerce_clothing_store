@@ -72,9 +72,9 @@
                                         aria-labelledby="coupon-context-menu-0">
                                         <li><a class="dropdown-item" href="/admin/edit_coupon?id=<%= coupon[i]._id %> ">Edit</a></li>
                                          <% if (coupon[i].status=='enabled') { %>
-                                           <li><a class="dropdown-item" href="/admin/update_coupon_status?id=<%= coupon[i]._id %>&status=disable">disable</a></li>
+                                           <li><a class="dropdown-item" href="/admin/updateCouponStatus?id=<%= coupon[i]._id %>&status=disabled">disabled</a></li>
                                          <% } else{%> 
-                                            <li><a class="dropdown-item" href="/admin/update_coupon_status?id=<%= coupon[i]._id %>&status=enable">enable</a></li>
+                                            <li><a class="dropdown-item" href="/admin/updateCouponStatus?id=<%= coupon[i]._id %>&status=enabled">enabled</a></li>
                                             <% } %>
                                        
                                         <li>

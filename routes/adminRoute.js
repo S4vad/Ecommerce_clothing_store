@@ -3,7 +3,7 @@ import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     addProduct,productAdd ,product_list,category_list,add_category,edit_product,
     delete_product,users,user_details,edit_single_product,delete_category,edit_category,
     addBanner,banner,bannerList,editBanner,deleteBanner,addSubBanner,subBanner,subBannerList,
-    deleteSubBanner,editSubBanner,coupon,addCoupon,
+    deleteSubBanner,editSubBanner,coupon,addCoupon,updateCouponStatus,
     couponList,editCoupon,deleteCoupon,editCouponPost,customersList,editIsActive} from "../controller/admincontroller.js";
 
 import { uploadImages,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
@@ -39,6 +39,8 @@ routes.get('/edit_coupon',editCoupon)
 routes.get('/delete_coupon',deleteCoupon)
 routes.get('/customersList',customersList)
 routes.get('/editIsActive',editIsActive)
+routes.get('/updateCouponStatus',updateCouponStatus)
+
 
 
 

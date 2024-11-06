@@ -567,6 +567,23 @@ export async function editCoupon(req,res){
     }
 }
 
+export async function updateCouponStatus(req, res) {
+    try {
+        const id = req.query.id;
+        const status = req.query.status ;
+        
+        await couponModel.findByIdAndUpdate(id, { status: status });
+
+        const coupon = await couponModel.find();
+        res.locals.moment = moment
+
+
+        res.render('admin/couponList', { coupon });
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
 export async function editCouponPost(req, res) {
     try {
         const id = req.query.id;
@@ -627,6 +644,8 @@ export async function editIsActive(req, res) {
         res.send(error.message);
     }
 }
+
+
 
 
 
