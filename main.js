@@ -9,7 +9,7 @@ import adminRoute from "./routes/adminRoute.js"
 import userRoute from "./routes/userRoute.js"
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-// import multer from "multer";
+
 
 
 
@@ -25,7 +25,7 @@ connectToDatabase();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use(morgan("short"))
+app.use(morgan("common"))
 
 const __dirname=path.dirname(fileURLToPath(import.meta.url))
 
@@ -40,7 +40,6 @@ app.use(cookieParser());//routente top l vilikkanam
 app.set("views",path.join(__dirname,"views"))
 app.set('view engine','ejs')
 
-// app.engine('hbs',hbs(extname)
 
 app.use("/admin",adminRoute);
 app.use('/',userRoute);

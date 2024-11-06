@@ -601,6 +601,17 @@ export async function deleteCoupon(req,res){
 }
 
 
+export async function customersList(req,res){
+    try {
+        const user=usermodel.find()
+        res.render('admin/customersList',user)
+
+    } catch (error) {
+        res.send(error.message)
+    }
+}
+
+
 
 
 
