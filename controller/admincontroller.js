@@ -3,20 +3,29 @@ import adminModel from "../models/adminSchema.js"
 import productModel from "../models/productSchema.js"
 import usermodel from "../models/userSchema.js";
 import bcrypt from "bcrypt";
-import path from "path";
-import { fileURLToPath } from "url";
-import exp from "constants";
 import categorymodel from "../models/categorySchema.js";
 import bannerModel from "../models/bannerSchema.js";
 import fs from "fs";
 import subBannerModel from "../models/subBanners.js";
 import couponModel from "../models/couponSchema.js"
+import orderModel from "../models/orderSchema.js";
 import moment from "moment";
 
 
 
 export async function adminHome(req,res){
-        res.render('admin/index')
+    
+        const orders = await orderModel.find();
+
+        const totalUsers = await usermodel.countDocuments();
+
+        const { totalAmount, totalOrders } = orders.reduce((acc, order) => {
+            acc.totalAmount += (order.totalamount || 0); 
+            acc.totalOrders += 1; 
+            return acc;
+        }, { totalAmount: 0, totalOrders: 0 });
+        const averageOrderValue=Math.floor(totalAmount/totalOrders)
+        res.render('admin/index',{totalAmount:Math.floor(totalAmount),totalOrders,averageOrderValue,totalUsers})
 }
     
 

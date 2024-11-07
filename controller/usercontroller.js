@@ -42,7 +42,7 @@ export async function userHome(req,res){
 
 export async function aboutPage(req,res) {
     try {
-        const userId = req.user._id; 
+        const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
         res.render('user/about',{user:user,cartCount:cartCount,wishListCount:wishListCount})
@@ -56,7 +56,7 @@ export async function aboutPage(req,res) {
 
 export async function contactPage(req,res) {
     try {
-        const userId = req.user._id; 
+        const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
         const message = req.query.message || " ";
@@ -178,7 +178,7 @@ export async function shop(req,res){
     
         const product=await Product.find().populate('Categories')
 
-        const userId = req.user._id; 
+        const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
         const category=await categorymodel.find();
@@ -277,7 +277,7 @@ export async function cartAdd(req, res) {
     try {
         const userId = req.user; 
         const quantity = Number(req.body.quantity) || 1;
-        const productId = req.body.productID || req.query.productId;
+        const productId =  req.query.productId || req.body.productID ;
         
         const current_product_specific = await Product.findById(productId); 
         if (!current_product_specific) {

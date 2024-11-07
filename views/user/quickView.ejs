@@ -155,7 +155,7 @@
 	<!-- Product Detail -->
 	<section class="sec-product-detail bg0 p-t-65 p-b-60">
 		<div class="container">
-			<form id="productForm" action="/wishlist/<%= product._id %>" method="post">
+			<form id="productForm" action="/cart?productId=<%= product._id %>" method="post">
 				<div class="row">
 					<div class="col-md-6 col-lg-7 p-b-30">
 						<div class="p-l-25 p-r-30 p-lr-0-lg">
@@ -312,9 +312,6 @@
 			<i class="zmdi zmdi-chevron-up"></i>
 		</span>
 	</div>
-
-	<!-- Modal1 -->
-	
 
 <!--===============================================================================================-->	
 	<script src="/user/vendor/jquery/jquery-3.2.1.min.js"></script>
