@@ -1,0 +1,205 @@
+<%- include('./layouts/main'); -%>
+<%- include('./layouts/header'); -%>
+
+
+<div id="top" class="sa-app__body">
+                <div class="mx-xxl-3 px-4 px-sm-5">
+                    <div class="py-5">
+                        <div class="row g-4 align-items-center">
+                            <div class="col">
+                                <nav class="mb-2" aria-label="breadcrumb">
+                                    <ol class="breadcrumb breadcrumb-sa-simple">
+                                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Products</li>
+                                    </ol>
+                                </nav>
+                                <h1 class="h3 m-0">Products</h1>
+                            </div>
+                            <div class="col-auto d-flex"><a href="#" class="btn btn-secondary me-3">Import</a><a
+                                    href="/admin/addProduct" class="btn btn-primary">New product</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mx-xxl-3 px-4 px-sm-5 pb-6">
+                    <div class="sa-layout">
+                        <div class="sa-layout__backdrop" data-sa-layout-sidebar-close=""></div>
+                        <div class="sa-layout__sidebar">
+                            <div class="sa-layout__sidebar-header">
+                                <div class="sa-layout__sidebar-title">Filters</div><button type="button"
+                                    class="sa-close sa-layout__sidebar-close" aria-label="Close"
+                                    data-sa-layout-sidebar-close=""></button>
+                            </div>
+                            <div class="sa-layout__sidebar-body sa-filters">
+                                <ul class="sa-filters__list">
+                                    <li class="sa-filters__item">
+                                        <div class="sa-filters__item-title">Price </div>
+                                        <div class="sa-filters__item-body">
+                                            <div class="sa-filter-range" data-min="0" data-max="2000" data-from="0"
+                                                data-to="2000">
+                                                <div class="sa-filter-range__slider"></div><input type="hidden"
+                                                    value="0" class="sa-filter-range__input-from" /><input type="hidden"
+                                                    value="2000" class="sa-filter-range__input-to" />
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="sa-filters__item">
+                                        <div class="sa-filters__item-title">Categories</div>
+                                        <div class="sa-filters__item-body">
+                                            <ul class="list-unstyled m-0 mt-n2">
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16"
+                                                            checked="" />Power tools</label></li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16" />Hand
+                                                        tools</label></li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16"
+                                                            checked="" />Machine tools</label></li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16" />Power
+                                                        machinery</label></li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16" />Measurement</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="sa-filters__item">
+                                        <div class="sa-filters__item-title">Product type</div>
+                                        <div class="sa-filters__item-body">
+                                            <ul class="list-unstyled m-0 mt-n2">
+                                                <li><label class="d-flex align-items-center pt-2"><input type="radio"
+                                                            class="form-check-input m-0 me-3 fs-exact-16"
+                                                            name="filter-product_type" checked="" />Simple</label></li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="radio"
+                                                            class="form-check-input m-0 me-3 fs-exact-16"
+                                                            name="filter-product_type" />Variable</label></li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="radio"
+                                                            class="form-check-input m-0 me-3 fs-exact-16"
+                                                            name="filter-product_type" />Digital</label></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="sa-filters__item">
+                                        <div class="sa-filters__item-title">Brands</div>
+                                        <div class="sa-filters__item-body">
+                                            <ul class="list-unstyled m-0 mt-n2">
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16" />Brandix</label>
+                                                </li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16"
+                                                            checked="" />FastWheels</label></li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16"
+                                                            checked="" />FuelCorp</label></li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16" />RedGate</label>
+                                                </li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16" />Specter</label>
+                                                </li>
+                                                <li><label class="d-flex align-items-center pt-2"><input type="checkbox"
+                                                            class="form-check-input m-0 me-3 fs-exact-16" />TurboElectric</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="sa-layout__content">
+                            <div class="card">
+                                <div class="p-4">
+                                    <div class="row g-4">
+                                        <div class="col-auto sa-layout__filters-button"><button
+                                                class="btn btn-sa-muted btn-sa-icon fs-exact-16"
+                                                data-sa-layout-sidebar-open=""><svg xmlns="http://www.w3.org/2000/svg"
+                                                    width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+                                                    <path
+                                                        d="M7,14v-2h9v2H7z M14,7h2v2h-2V7z M12.5,6C12.8,6,13,6.2,13,6.5v3c0,0.3-0.2,0.5-0.5,0.5h-2 C10.2,10,10,9.8,10,9.5v-3C10,6.2,10.2,6,10.5,6H12.5z M7,2h9v2H7V2z M5.5,5h-2C3.2,5,3,4.8,3,4.5v-3C3,1.2,3.2,1,3.5,1h2 C5.8,1,6,1.2,6,1.5v3C6,4.8,5.8,5,5.5,5z M0,2h2v2H0V2z M9,9H0V7h9V9z M2,14H0v-2h2V14z M3.5,11h2C5.8,11,6,11.2,6,11.5v3 C6,14.8,5.8,15,5.5,15h-2C3.2,15,3,14.8,3,14.5v-3C3,11.2,3.2,11,3.5,11z">
+                                                    </path>
+                                                </svg></button></div>
+                                        <div class="col"><input type="text"
+                                                placeholder="Start typing to search for products"
+                                                class="form-control form-control--search mx-auto" id="table-search" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sa-divider"></div>
+                                <table class="sa-datatables-init" data-order="[[ 1, &quot;asc&quot; ]]"
+                                    data-sa-search-input="#table-search">
+                                    <thead>
+
+
+
+                                        
+                                        
+                                     
+                                        <tr>
+                                            <th class="w-min" data-orderable="false"><input type="checkbox"
+                                                    class="form-check-input m-0 fs-exact-16 d-block" aria-label="..." />
+                                            </th>
+                                            <th class="min-w-20x">Image</th>
+                                            <th>Product Name</th>
+                                            <th>User Name</th>
+                                            <th>Rating</th>
+                                            <th>Review</th>
+                                            <th>Posted On</th>
+
+                                            <th class="w-min" data-orderable="false"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (reviews.length > 0) { %>
+                                            <% reviews.forEach(review => { %>
+                                        <tr>
+                                            <td><input type="checkbox" class="form-check-input m-0 fs-exact-16 d-block"
+                                                    aria-label="..." /></td>
+                                            <td>
+                                                <div class="d-flex align-items-center"><a href="app-product.html"
+                                                        class="me-4">
+                                                        <div
+                                                            class="sa-symbol sa-symbol--shape--rounded sa-symbol--size--lg">
+                                                            <img src="uploads/<%= review.product.Images[0] %>" width="40"
+                                                                height="40" alt="" /></div>
+                                                    </a>
+                                                    <div><a href="" class="text-reset"><%= review.product.Name %> </a>
+                                                        <div class="sa-meta mt-0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><a href="#" class="text-reset"><%= review.user.fname %> <%= review.user.lname %></a></td>
+
+                                            
+                                            <td>
+                                                <span class="" style=" color: #f5c003">
+                                                  <% for (let i = 1; i <= 5; i++) { %>
+                                                    <%= (i <= review.rating) ? '★' : '☆' %>
+                                                  <% } %> 
+                                                  ( <%= review.rating %> / 5 )
+                                                </span>
+                                              </td>
+                                              <td><%= review.review %></td>
+                                              
+                                              <td><%= review.createdAt.toLocaleString() %></td>
+                                        </tr>
+
+                                        <% }) %>
+                                        <% } else { %>
+                                          <tr>
+                                            <td colspan="6">No reviews found.</td>
+                                          </tr>
+                                        <% } %>
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- sa-app__body / end -->
+
+          
+<%- include('./layouts/footer'); -%>

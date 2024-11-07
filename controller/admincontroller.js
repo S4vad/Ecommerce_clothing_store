@@ -9,6 +9,7 @@ import fs from "fs";
 import subBannerModel from "../models/subBanners.js";
 import couponModel from "../models/couponSchema.js"
 import orderModel from "../models/orderSchema.js";
+import reviewModel from "../models/reviewSchema.js";
 import moment from "moment";
 
 
@@ -652,6 +653,28 @@ export async function editIsActive(req, res) {
         res.send(error.message);
     }
 }
+
+export async function reviewList(req, res) {
+    try {
+     
+        const reviews = await reviewModel.find()
+            .sort({ createdAt: -1 })  
+            .populate('user', 'fname lname email profilePic') 
+            .populate('product', 'Name Images')  
+            .select('rating review user createdAt product');  
+
+        if (!reviews || reviews.length === 0) {
+            return res.render('admin/reviewList', { reviews: [] });  
+        }
+
+        // Render the review list page, passing reviews
+        res.render('admin/reviewList', { reviews });
+    } catch (error) {
+        console.error("Error in fetching reviews:", error);
+        res.status(500).send('Server error: ' + error.message);  
+    }
+};
+
 
 
 

@@ -4,7 +4,7 @@ import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     delete_product,users,user_details,edit_single_product,delete_category,edit_category,
     addBanner,banner,bannerList,editBanner,deleteBanner,addSubBanner,subBanner,subBannerList,
     deleteSubBanner,editSubBanner,coupon,addCoupon,updateCouponStatus,
-    couponList,editCoupon,deleteCoupon,editCouponPost,customersList,editIsActive} from "../controller/admincontroller.js";
+    couponList,editCoupon,deleteCoupon,editCouponPost,customersList,editIsActive,reviewList} from "../controller/admincontroller.js";
 
 import { uploadImages,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
 import uploadfile from "../middlewares/fileUploadMiddleware.js"
@@ -40,12 +40,7 @@ routes.get('/delete_coupon',deleteCoupon)
 routes.get('/customersList',customersList)
 routes.get('/editIsActive',editIsActive)
 routes.get('/updateCouponStatus',updateCouponStatus)
-
-
-
-
-
-
+routes.get('/reviewList',reviewList)
 
 
 routes.post('/signin',adminLogin)
