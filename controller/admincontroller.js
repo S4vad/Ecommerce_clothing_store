@@ -37,7 +37,6 @@ export async function addProduct(req,res){
         
     } catch (error) {
         res.send(error.message)
-        
     }
 
 }

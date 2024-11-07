@@ -200,12 +200,22 @@ export async function quickView(req, res) {
         
         
         if (!product) {
-            return res.status(404).send('Product not found'); // Handle case where product does not exist
+            return res.status(404).send('Product not found');
         }
+
+        const currentStock=product.Stock<=0;
+        let stockStatus;
+        if (currentStock){
+            stockStatus="The product is Unavailable Now !!"
+        }
+    
+        const message= stockStatus || req.query.message;
+
+      
     
 
         
-        res.render('user/quickView', { product ,user,cartCount,wishListCount,cart});
+        res.render('user/quickView', { product ,user,cartCount,wishListCount,cart,quantityAvailableOrNot:message});
     } catch (error) {
         res.status(500).send(error.message); // Use appropriate status code
     }
