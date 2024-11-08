@@ -16,7 +16,7 @@ import moment from "moment";
 
 export async function adminHome(req,res){
     
-        const orders = await orderModel.find();
+        const orders = await orderModel.find().populate('products.item');
 
         const totalUsers = await usermodel.countDocuments();
 
@@ -26,7 +26,44 @@ export async function adminHome(req,res){
             return acc;
         }, { totalAmount: 0, totalOrders: 0 });
         const averageOrderValue=Math.floor(totalAmount/totalOrders)
-        res.render('admin/index',{totalAmount:Math.floor(totalAmount),totalOrders,averageOrderValue,totalUsers})
+
+
+
+        const productQuantities = {};
+
+        orders.forEach(order => {
+            order.products.forEach(product => {
+                const productId = product.item._id.toString();
+                if (!productQuantities[productId]) {
+                    productQuantities[productId] = {
+                        productId: productId,
+                        name: product.item.Name,
+                        price: product.item.Price,
+                        totalQuantity: 0,
+                        totalRevenue: 0
+                    };
+                }
+
+                productQuantities[productId].totalQuantity += product.quantity;
+                productQuantities[productId].totalRevenue += product.quantity * product.item.Price;
+            });
+        });
+
+        const topProducts = Object.values(productQuantities)
+            .sort((a, b) => b.totalQuantity - a.totalQuantity)
+            .slice(0, 5); 
+
+
+        console.log('the top 5 products are',topProducts)
+
+
+        res.render('admin/index',{
+            totalAmount:Math.floor(totalAmount),
+            totalOrders,
+            averageOrderValue,
+            totalUsers,
+            topProducts,
+        })
 }
     
 
