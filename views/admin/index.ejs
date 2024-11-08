@@ -635,5 +635,44 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
- 
+        <script>
+            // Get topProducts data from the server-side variable
+            const topProducts = <%- JSON.stringify(topProducts) %>;
+
+            // Prepare data for the chart
+            const productNames = topProducts.map(product => product.name);
+            const productQuantities = topProducts.map(product => product.totalQuantity);
+
+            // Initialize the pie chart
+            const ctx = document.getElementById('topProductsChart').getContext('2d');
+            const topProductsChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: productNames,
+                    datasets: [{
+                        label: 'Top 5 Products',
+                        data: productQuantities,
+                        backgroundColor: [
+                            '#ffd333', '#e62e2e', '#3377ff', '#29cccc', '#5dc728' // Customize these colors
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw; // Show product name and quantity
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
         <%- include('./layouts/footer');-%>
