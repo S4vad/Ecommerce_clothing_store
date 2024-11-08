@@ -96,37 +96,27 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <div style="max-width: 200px; overflow: hidden; display: flex; align-items: center; flex-wrap: nowrap;">
-                                            <p class="review-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;">
-                                                <%= review.review %>
-                                            </p>
+                                        <div style="max-width: 200px; overflow: hidden;">
                                             <% if (review.review.length > 100) { %>
-                                                <a href="#" data-bs-toggle="collapse" data-bs-target="#review-<%= review._id %>" style="text-decoration: none; color: blue; margin-left: 5px;" id="see-more-<%= review._id %>">
-                                                    See More
-                                                </a>
-                                                <div id="review-<%= review._id %>" class="collapse">
-                                                    <p style="white-space: normal; word-wrap: break-word;">
+                                                <div class="d-flex align-items-center">
+                                                    <p class="review-text mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">
                                                         <%= review.review %>
                                                     </p>
+                                                    <a class="ms-2 toggle-review" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#review-<%= review._id %>">See More</a>
                                                 </div>
-                                                
-                                                <script>
-                                                    // Add a click event listener to toggle the text between "See More" and "See Less"
-                                                    document.getElementById('see-more-<%= review._id %>').addEventListener('click', function() {
-                                                        var reviewContent = document.getElementById('review-<%= review._id %>');
-                                                        var linkText = this;
-
-                                                        if (reviewContent.classList.contains('show')) {
-                                                            linkText.textContent = "See More";
-                                                        } else {
-                                                            linkText.textContent = "See Less";
-                                                        }
-                                                    });
-                                                </script>
-                                            <% } %>
+                                                <div id="review-<%= review._id %>" class="collapse">
+                                                    <p><%= review.review %></p>
+                                                    <a class="ms-2 toggle-review" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#review-<%= review._id %>">See Less</a>
+                                                </div>
+                                            <% } else { %>
+                                                <p class="review-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                    <%= review.review %>
+                                                </p>
+                                            <% } %>                                            
+                                            
+                                            
+                                            
                                         </div>
-                                        
-                                        
                                     </td>
                                     <td><%= review.createdAt.toLocaleString() %></td>
                                 </tr>
@@ -143,6 +133,14 @@
         </div>
     </div>
 </div><!-- sa-app__body / end -->
+<script>
+    document.querySelectorAll('.toggle-review').forEach(function(link) {
+        link.addEventListener('click', function() {
+            const isSeeMore = link.textContent.trim() === "See More";
+            link.textContent = isSeeMore ? "See Less" : "See More";
+        });
+    });
+</script>
 
 
 <%- include('./layouts/footer'); -%>
