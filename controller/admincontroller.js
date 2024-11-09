@@ -57,12 +57,28 @@ export async function adminHome(req,res){
         console.log('the top 5 products are',topProducts)
 
 
+        const monthlyIncome = Array(12).fill(0); // Initialize array for 12 months
+        orders.forEach(order => {
+            const monthIndex = new Date(order.invoiceDate).getMonth(); // Get month as 0-11
+            monthlyIncome[monthIndex] += order.totalamount || 0; // Sum the totalamount for each month
+        });
+
+        // format monthly data
+        const incomeData = monthlyIncome.map((income, index) => ({
+            label: new Date(0, index).toLocaleString("default", { month: "short" }),
+            value: income
+        }));
+
+        console.log('incodme data',incomeData)
+
+
         res.render('admin/index',{
             totalAmount:Math.floor(totalAmount),
             totalOrders,
             averageOrderValue,
             totalUsers,
             topProducts,
+            incomeData
         })
 }
     

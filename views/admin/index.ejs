@@ -174,35 +174,33 @@
                     </div>
                     <div class="col-12 col-lg-8 col-xxl-9 d-flex">
                         <div class="card flex-grow-1 saw-chart"
-                            data-sa-data="[{&quot;label&quot;:&quot;Jan&quot;,&quot;value&quot;:50},{&quot;label&quot;:&quot;Feb&quot;,&quot;value&quot;:130},{&quot;label&quot;:&quot;Mar&quot;,&quot;value&quot;:525},{&quot;label&quot;:&quot;Apr&quot;,&quot;value&quot;:285},{&quot;label&quot;:&quot;May&quot;,&quot;value&quot;:470},{&quot;label&quot;:&quot;Jun&quot;,&quot;value&quot;:130},{&quot;label&quot;:&quot;Jul&quot;,&quot;value&quot;:285},{&quot;label&quot;:&quot;Aug&quot;,&quot;value&quot;:240},{&quot;label&quot;:&quot;Sep&quot;,&quot;value&quot;:710},{&quot;label&quot;:&quot;Oct&quot;,&quot;value&quot;:470},{&quot;label&quot;:&quot;Nov&quot;,&quot;value&quot;:640},{&quot;label&quot;:&quot;Dec&quot;,&quot;value&quot;:1110}]">
+                             data-sa-data="<%= JSON.stringify(incomeData) %>">
                             <div class="sa-widget-header saw-chart__header">
-                                <h2 class="sa-widget-header__title">Income statistics</h2>
+                                <h2 class="sa-widget-header__title">Income Statistics</h2>
                                 <div class="sa-widget-header__actions">
-                                    <div class="dropdown"><button type="button" class="btn btn-sm btn-sa-muted d-block"
-                                            id="widget-context-menu-5" data-bs-toggle="dropdown" aria-expanded="false"
-                                            aria-label="More"><svg xmlns="http://www.w3.org/2000/svg" width="3"
-                                                height="13" fill="currentColor">
-                                                <path
-                                                    d="M1.5,8C0.7,8,0,7.3,0,6.5S0.7,5,1.5,5S3,5.7,3,6.5S2.3,8,1.5,8z M1.5,3C0.7,3,0,2.3,0,1.5S0.7,0,1.5,0 S3,0.7,3,1.5S2.3,3,1.5,3z M1.5,10C2.3,10,3,10.7,3,11.5S2.3,13,1.5,13S0,12.3,0,11.5S0.7,10,1.5,10z">
+                                    <div class="dropdown">
+                                        <button type="button" class="btn btn-sm btn-sa-muted d-block" id="widget-context-menu-5"
+                                                data-bs-toggle="dropdown" aria-expanded="false" aria-label="More">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="3" height="13" fill="currentColor">
+                                                <path d="M1.5,8C0.7,8,0,7.3,0,6.5S0.7,5,1.5,5S3,5.7,3,6.5S2.3,8,1.5,8z M1.5,3C0.7,3,0,2.3,0,1.5S0.7,0,1.5,0
+                                                        S3,0.7,3,1.5S2.3,3,1.5,3z M1.5,10C2.3,10,3,10.7,3,11.5S2.3,13,1.5,13S0,12.3,0,11.5S0.7,10,1.5,10z">
                                                 </path>
-                                            </svg></button>
-                                        <ul class="dropdown-menu dropdown-menu-end"
-                                            aria-labelledby="widget-context-menu-5">
+                                            </svg>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="widget-context-menu-5">
                                             <li><a class="dropdown-item" href="#">Settings</a></li>
                                             <li><a class="dropdown-item" href="#">Move</a></li>
-                                            <li>
-                                                <hr class="dropdown-divider" />
-                                            </li>
+                                            <li><hr class="dropdown-divider" /></li>
                                             <li><a class="dropdown-item text-danger" href="#">Remove</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                            <div class="saw-chart__body">
-                                <div class="saw-chart__container"><canvas></canvas></div>
-                            </div>
+                            <!-- Placeholder for the income chart -->
+                            <canvas id="incomeChart" </canvas>
                         </div>
                     </div>
+                    
                     <div class="col-12 col-xxl-9 d-flex">
                         <div class="card flex-grow-1 saw-table">
                             <div class="sa-widget-header saw-table__header">
@@ -445,7 +443,7 @@
                                                 <td class="text-center"><%= product.totalQuantity %></td>
                                                 <td class="text-end">
                                                     <div class="sa-price">
-                                                        <span class="sa-price__symbol">$</span>
+                                                        <span class="sa-price__symbol">&#8377;</span>
                                                         <span class="sa-price__integer"><%= product.totalRevenue.toLocaleString() %></span>
                                                         <span class="sa-price__decimal">.00</span>
                                                     </div>
@@ -637,7 +635,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             // Get topProducts data from the server-side variable
-            const topProducts = <%- JSON.stringify(topProducts) %>;
+            const topProducts = JSON.parse('<%- JSON.stringify(topProducts || []) %>');
 
             // Prepare data for the chart
             const productNames = topProducts.map(product => product.name);
@@ -670,6 +668,34 @@
                                     return context.label + ': ' + context.raw; // Show product name and quantity
                                 }
                             }
+                        }
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            // Fetch and parse chart data from the data attribute
+            const incomeData = JSON.parse(document.querySelector('.saw-chart').dataset.saData);
+
+            // Render bar chart using Chart.js or another library (example for Chart.js)
+            const chartx = document.getElementById('incomeChart').getContext('2d');
+            const incomeChart = new Chart(chartx, {
+                type: 'bar',
+                data: {
+                    labels: incomeData.map(data => data.label),
+                    datasets: [{
+                        label: 'Monthly Income',
+                        data: incomeData.map(data => data.value),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
                 }
