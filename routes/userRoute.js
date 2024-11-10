@@ -40,6 +40,7 @@ routes.get('/orderSuccess',userAuthentication,orderSuccess)
 routes.get('/profileOrder',userAuthentication,profileOrder)
 
 
+
 routes.delete('/cart/remove/:id',userAuthentication, cartDelete); // Temporarily without middleware
 routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
 
