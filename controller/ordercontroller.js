@@ -197,7 +197,7 @@ export async function orderCod(req, res) {
             address: address,
             payment: 'COD',
             products: products,
-            totalamount: amount / 100, 
+            totalamount: amount , 
             discount: discountAmount,
             status: 'Completed',
             paymentMethod: 'COD',

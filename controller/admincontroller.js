@@ -589,8 +589,7 @@ export  async function addCoupon(req,res){
         const data={...req.body}
 
 
-        await couponModel.create(data
-        )
+        await couponModel.create(data)
         res.redirect('/admin/couponList')
         
     } catch (error) {
@@ -727,6 +726,20 @@ export async function reviewList(req, res) {
         res.status(500).send('Server error: ' + error.message);  
     }
 };
+
+export async function orderList(req,res) {
+    try {
+        const order = await orderModel.find().populate('user')
+        console.log('the order is',order)
+        res.locals.moment=moment;
+        res.render('admin/orderList',{order})
+
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
 
 
 
