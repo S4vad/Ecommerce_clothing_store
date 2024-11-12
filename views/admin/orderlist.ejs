@@ -70,7 +70,7 @@
                             </td>
                             <td>
                                 <div class="d-flex fs-6">
-                                    <div id="orderstatus<%= i %>" data-orderstatus="<%= i %>" class="badge badge-sa-danger"><%= order[i].status %> </div>
+                                    <div id="orderstatus<%= i %>" data-orderstatus="<%= i %>" class="badge badge-sa-success"><%= order[i].status %> </div>
                                 </div>
                             </td>
                             <td><%= qty = order[i].products.reduce((acc,cur)=>(acc+cur.quantity),0) %> items</td>
@@ -129,7 +129,7 @@
                                 
                                 if (result.isConfirmed) {
                                     $.ajax({
-                                        url: '/admin/change_status',
+                                        url: '/admin/changeStatus',
                                         method: 'post',
                                         data: {
                                             orderId,
@@ -142,8 +142,8 @@
                                                 'Order has been changed to' + status,
                                                 'success'
                                             )
-                                            // const index = $('#orderstatus').data('orderstatus')
-                                            window.location.href ='/admin/order_list'
+                                        
+                                            window.location.href ='/admin/orderList'
                                         })
                                     })
                                    

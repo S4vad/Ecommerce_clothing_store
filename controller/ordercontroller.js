@@ -126,7 +126,7 @@ export async function verifyPayment(req,res) {
             products: order.products,
             totalamount: order.amount / 100,
             discount:order.discount || 0, // Convert back to INR
-            status: 'Completed',
+            status: 'Placed',
             paymentMethod: 'Razorpay',
             invoiceNumber: invoiceNumber,
             invoiceDate: new Date(),
@@ -199,7 +199,7 @@ export async function orderCod(req, res) {
             products: products,
             totalamount: amount , 
             discount: discountAmount,
-            status: 'Completed',
+            status: 'Placed',
             paymentMethod: 'COD',
             invoiceNumber: invoiceNumber,
             invoiceDate: new Date(),
@@ -422,6 +422,19 @@ export async function orderCancel(req,res){
     
     } catch (error) {
 
+        res.send(error.message)
+        
+    }
+}
+
+export async function changeStatus(req,res){
+    try {
+        const { orderId,status} = req.body; 
+
+        await orderModel.findByIdAndUpdate(orderId,{status:status})
+        res.json({success:true})
+    } catch (error) {
+        res.json({success:false})
         res.send(error.message)
         
     }

@@ -5,6 +5,7 @@ import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     addBanner,banner,bannerList,editBanner,deleteBanner,addSubBanner,subBanner,subBannerList,
     deleteSubBanner,editSubBanner,coupon,addCoupon,updateCouponStatus,
     couponList,editCoupon,deleteCoupon,editCouponPost,customersList,editIsActive,reviewList,orderList} from "../controller/admincontroller.js";
+import {changeStatus} from "../controller/ordercontroller.js"
 
 import { uploadImages,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
 import uploadfile from "../middlewares/fileUploadMiddleware.js"
@@ -55,6 +56,8 @@ routes.post('/banner',uploadfile.single('bannerImage'),banner)
 routes.post('/subBanner',uploadfile.single('bannerImage'),subBanner)
 routes.post('/addCoupon',addCoupon)
 routes.post('/editCoupon',editCouponPost)
+routes.post('/changeStatus',changeStatus)
+
 
 
 
