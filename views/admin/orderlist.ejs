@@ -70,7 +70,16 @@
                             </td>
                             <td>
                                 <div class="d-flex fs-6">
-                                    <div id="orderstatus<%= i %>" data-orderstatus="<%= i %>" class="badge badge-sa-success"><%= order[i].status %> </div>
+                                    <div id="orderstatus<%= i %>" 
+                                        class="badge              
+                                            <%= order[i].status === 'canceled' ? 'badge-sa-danger' : '' %>
+                                            <%= order[i].status === 'delivered' ? 'badge-sa-success' : '' %>
+                                            <%= order[i].status === 'processed' ? 'badge-sa-primary' : '' %>
+                                            <%= order[i].status === 'shipped' ? 'badge-sa-warning' : '' %>
+                                            <%= order[i].status === 'Placed' ? 'badge-sa-secondary' : '' %>">
+                                        <%= order[i].status %> 
+                                    </div>
+
                                 </div>
                             </td>
                             <td><%= qty = order[i].products.reduce((acc,cur)=>(acc+cur.quantity),0) %> items</td>
@@ -109,7 +118,7 @@
                                                             <li><a class="dropdown-item text-danger" href="#">Delete</a>
                                                             </li>
                                                             </ul>
-                    </div>
+                     </div>
                     </td>
                     </tr>
                     <script>
