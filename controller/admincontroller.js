@@ -16,7 +16,7 @@ import moment from "moment";
 
 export async function adminHome(req,res){
     
-        const orders = await orderModel.find().populate('products.item');
+        const orders = await orderModel.find().populate('products.item').populate('user');
 
         const totalUsers = await usermodel.countDocuments();
 
@@ -71,14 +71,16 @@ export async function adminHome(req,res){
 
         console.log('incodme data',incomeData)
 
-
+        res.locals.moment = moment; 
+        
         res.render('admin/index',{
             totalAmount:Math.floor(totalAmount),
             totalOrders,
             averageOrderValue,
             totalUsers,
             topProducts,
-            incomeData
+            incomeData,
+            orders
         })
 }
     
