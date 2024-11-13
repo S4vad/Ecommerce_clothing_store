@@ -268,7 +268,7 @@ export async function checkout(req,res) {
         const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
-        const address=await addressModel.findOne({user:userId}).select('address')
+        const address=await addressModel.findOne({user:userId}).select('address') ;
  
 
         res.render('user/checkout',{

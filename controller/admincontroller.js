@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { adminAuthentication } from "../middlewares/adminAuthentication.js";
 import adminModel from "../models/adminSchema.js"
 import productModel from "../models/productSchema.js"
 import usermodel from "../models/userSchema.js";
@@ -15,9 +16,12 @@ import moment from "moment";
 
 
 export async function adminHome(req,res){
-    
-        const orders = await orderModel.find().populate('products.item').populate('user');
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
 
+       
+
+        const orders = await orderModel.find().populate('products.item').populate('user');
         const reviews = await reviewModel.find().populate('user').populate('product');
 
         const totalUsers = await usermodel.countDocuments();
@@ -56,8 +60,6 @@ export async function adminHome(req,res){
             .slice(0, 5); 
 
 
-        console.log('the top 5 products are',topProducts)
-
 
         const monthlyIncome = Array(12).fill(0); // Initialize array for 12 months
         orders.forEach(order => {
@@ -71,8 +73,6 @@ export async function adminHome(req,res){
             value: income
         }));
 
-        console.log('incodme data',incomeData)
-
         res.locals.moment = moment; 
 
         res.render('admin/index',{
@@ -83,7 +83,8 @@ export async function adminHome(req,res){
             topProducts,
             incomeData,
             orders,
-            reviews
+            reviews,
+            admin
         })
 }
     
@@ -93,8 +94,13 @@ export function adminLoginPage(req,res){
     res.render('admin/adminLogin',{message:""})
 }
 
-export function adminSignupPage(req,res){
+export async function adminSignupPage(req,res){
     res.render('admin/adminRegister')
+}
+
+export function logout(req,res){
+    res.clearCookie('adminjwt')
+    res.render('admin/adminLogin',{message:""})
 }
 
 export async function addProduct(req,res){
@@ -110,16 +116,11 @@ export async function addProduct(req,res){
 }
 
 
-
-
-
-
 export async function adminSignup(req,res){
     console.log(req.body)
     const {userName,password}=req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        // console.log(hashedPassword)
         await adminModel.create({userName:userName,password:hashedPassword})
         
         res.redirect('/admin')
@@ -137,21 +138,21 @@ export async function adminSignup(req,res){
     console.log(req.body)
     const {userName,password}=req.body;
     try {
-        const emailExist=await adminModel.findOne({userName})
-        console.log(emailExist)
-        if(!emailExist){
+        const admin=await adminModel.findOne({userName})
+
+        if(!admin){
             
             return res.render('admin/adminLogin',{message:"email is not registerd "})
             
         }
-        const istrue= bcrypt.compare(password, emailExist.password);
+        const istrue= bcrypt.compare(password, admin.password);
         if(!istrue){
             return res.render('admin/adminLogin',{message:"your password is wrong"})
 
 
         }
-        const token=jwt.sign({adminID:emailExist._id},"sunoos",{expiresIn:"5d"})
-        res.cookie("jwts",token,{httpOnly:true})
+        const token=jwt.sign({adminId:admin._id},"adminjwtid",{expiresIn:"5d"})
+        res.cookie("adminjwt",token,{httpOnly:true})
         return res.redirect('/admin')
 
 
@@ -734,10 +735,13 @@ export async function reviewList(req, res) {
 
 export async function orderList(req,res) {
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
         const order = await orderModel.find().populate('user')
         console.log('the order is',order)
         res.locals.moment=moment;
-        res.render('admin/orderList',{order})
+        res.render('admin/orderList',{order,admin})
 
     } catch (error) {
         res.send(error.message)

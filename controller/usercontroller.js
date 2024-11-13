@@ -167,7 +167,7 @@ export async function userLogin(req,res){
 
 export async function logout(req, res) {
     res.clearCookie('userjwt'); // Clear the 'token' cookie
-    res.redirect('/login');   // Redirect to the login page
+    res.redirect('/');   // Redirect to the login page
 }
 
 

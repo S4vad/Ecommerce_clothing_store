@@ -222,28 +222,7 @@
                                     d="M16.243 14.828C16.243 14.828 16.047 15.308 15.701 15.654C15.34 16.015 14.828 16.242 14.828 16.242L10.321 11.736C9.247 12.522 7.933 13 6.5 13C2.91 13 0 10.09 0 6.5C0 2.91 2.91 0 6.5 0C10.09 0 13 2.91 13 6.5C13 7.933 12.522 9.247 11.736 10.321L16.243 14.828ZM6.5 2C4.015 2 2 4.015 2 6.5C2 8.985 4.015 11 6.5 11C8.985 11 11 8.985 11 6.5C11 4.015 8.985 2 6.5 2Z">
                                 </path>
                             </svg></button></div>
-                    <div class="sa-toolbar__item dropdown"><button class="sa-toolbar__button" type="button"
-                            id="dropdownMenuButton3" data-bs-toggle="dropdown" data-bs-reference="parent"
-                            data-bs-offset="0,1" aria-expanded="false"><img src="vendor/flag-icons/24/DE.png"
-                                class="sa-language-icon" alt="" /></button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton3">
-                            <li><a class="dropdown-item d-flex align-items-center" href="#"><img
-                                        src="vendor/flag-icons/24/DE.png" class="sa-language-icon me-3" alt="" /><span
-                                        class="ps-2">German</span></a></li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#"><img
-                                        src="vendor/flag-icons/24/FR.png" class="sa-language-icon me-3" alt="" /><span
-                                        class="ps-2">French</span></a></li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#"><img
-                                        src="vendor/flag-icons/24/GB.png" class="sa-language-icon me-3" alt="" /><span
-                                        class="ps-2">English</span></a></li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#"><img
-                                        src="vendor/flag-icons/24/RU.png" class="sa-language-icon me-3" alt="" /><span
-                                        class="ps-2">Russian</span></a></li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#"><img
-                                        src="vendor/flag-icons/24/IT.png" class="sa-language-icon me-3" alt="" /><span
-                                        class="ps-2">Italian</span></a></li>
-                        </ul>
-                    </div>
+                  
                     <div class="sa-toolbar__item dropdown"><button class="sa-toolbar__button" type="button"
                             id="dropdownMenuButton2" data-bs-toggle="dropdown" data-bs-reference="parent"
                             data-bs-offset="0,1" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg"
@@ -358,20 +337,15 @@
                     </div>
                     <div class="dropdown sa-toolbar__item"><button class="sa-toolbar-user" type="button"
                             id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-offset="0,1"
-                            aria-expanded="false"><span
-                                class="sa-toolbar-user__avatar sa-symbol sa-symbol--shape--rounded"><img
-                                    src="images/customers/customer-4-64x64.jpg" width="64" height="64"
-                                    alt="" /></span><span class="sa-toolbar-user__info"><span
-                                    class="sa-toolbar-user__title">MUHAMMED SAVAD K</span><span
-                                    class="sa-toolbar-user__subtitle">savad123@gmail.com</span></span></button>
+                            aria-expanded="false"><span class="sa-toolbar-user__info"><span
+                                    class="sa-toolbar-user__subtitle"><%= admin[0].userName %></span></span></button>
                         <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li><a class="dropdown-item" href="app-inbox-list.html">Inbox</a></li>
-                            <li><a class="dropdown-item" href="app-settings-toc.html">Settings</a></li>
-                            <li>
+                    
                                 <hr class="dropdown-divider" />
                             </li>
-                            <li><a class="dropdown-item" href="auth-sign-in.html">Sign Out</a></li>
+                            <li><a class="dropdown-item" href="/admin/logout">Sign Out</a></li>
                         </ul>
                     </div>
                 </div>

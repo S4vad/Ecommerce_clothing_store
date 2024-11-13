@@ -1,10 +1,11 @@
 import express, { Router } from "express";
+import { adminAuthentication } from "../middlewares/adminAuthentication.js";
 import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     addProduct,productAdd ,product_list,category_list,add_category,edit_product,
     delete_product,users,user_details,edit_single_product,delete_category,edit_category,
     addBanner,banner,bannerList,editBanner,deleteBanner,addSubBanner,subBanner,subBannerList,
     deleteSubBanner,editSubBanner,coupon,addCoupon,updateCouponStatus,
-    couponList,editCoupon,deleteCoupon,editCouponPost,customersList,editIsActive,reviewList,orderList} from "../controller/admincontroller.js";
+    couponList,editCoupon,deleteCoupon,editCouponPost,customersList,editIsActive,reviewList,orderList,logout} from "../controller/admincontroller.js";
 import {changeStatus} from "../controller/ordercontroller.js"
 
 import { uploadImages,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
@@ -15,7 +16,7 @@ const routes=express.Router();
 routes.use(express.static("public"))
 
 
-routes.get('/',adminHome)
+routes.get('/',adminAuthentication,adminHome)
 routes.get('/login',adminLoginPage)
 routes.get('/signup',adminSignupPage)
 routes.get('/addProduct',addProduct)
@@ -42,7 +43,9 @@ routes.get('/customersList',customersList)
 routes.get('/editIsActive',editIsActive)
 routes.get('/updateCouponStatus',updateCouponStatus)
 routes.get('/reviewList',reviewList)
-routes.get('/orderList',orderList)
+routes.get('/orderList',adminAuthentication,orderList)
+routes.get('/logout',logout)
+
 
 
 

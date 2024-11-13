@@ -36,7 +36,7 @@ export async function profileAddress(req,res) {
         const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
-        const address=await addressModel.find()
+        const address=await addressModel.find({userId})
 
         res.render('user/profileAddress',{address,cart,user,wishListCount,cartCount})
 
