@@ -18,6 +18,8 @@ export async function adminHome(req,res){
     
         const orders = await orderModel.find().populate('products.item').populate('user');
 
+        const reviews = await reviewModel.find().populate('user').populate('product');
+
         const totalUsers = await usermodel.countDocuments();
 
         const { totalAmount, totalOrders } = orders.reduce((acc, order) => {
@@ -72,7 +74,7 @@ export async function adminHome(req,res){
         console.log('incodme data',incomeData)
 
         res.locals.moment = moment; 
-        
+
         res.render('admin/index',{
             totalAmount:Math.floor(totalAmount),
             totalOrders,
@@ -80,7 +82,8 @@ export async function adminHome(req,res){
             totalUsers,
             topProducts,
             incomeData,
-            orders
+            orders,
+            reviews
         })
 }
     
