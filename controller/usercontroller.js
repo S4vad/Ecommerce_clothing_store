@@ -28,7 +28,7 @@ export async function userHome(req,res){
 
         const category=await categorymodel.find()
 
-        const product=await Product.find().populate('Categories');
+        const product=await Product.find().populate('Categories').limit(5);
 
         const subBanner=await subBannerModel.find().populate('Categories')
 
@@ -38,6 +38,26 @@ export async function userHome(req,res){
         res.send(error.message)
         
     }
+}
+
+export async function loadMore(req,res) {
+    try {
+        const { page } = req.query;
+        const productsPerPage = 5; 
+        const skip = (page - 1) * productsPerPage;
+    
+
+        const products = await Product.find()
+          .skip(skip)
+          .limit(productsPerPage)
+          .populate('Categories');
+    
+        res.json({ success: true, products });
+      } catch (error) {
+        console.error('Error loading more products:', error);
+        res.json({ success: false, message: 'Failed to load more products' });
+      }
+    
 }
 
 export async function aboutPage(req,res) {
