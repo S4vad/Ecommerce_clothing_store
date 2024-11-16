@@ -240,10 +240,9 @@
 
 			<!-- shop PRODUCT images starting -->
 
-			<div class="row isotope-grid" id="loadMoreId">
+			<div class="row isotope-grid">
 				<% product.forEach(function(item) { %>
-				
-				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%= item.Categories.category_name %>">
+				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%= item.Categories.category_name %>" >
 					<!-- Block2 -->
 					<div class="block2">
 							<div class="block2-pic hov-img0">
@@ -289,6 +288,12 @@
 				<% }); %>
 				
 			</div>
+			
+			<div id="productContainer" class="row flex-grow-1"  >
+
+
+			</div>
+
 		
 				
 			
@@ -323,70 +328,128 @@
 					}
 				})
 			}
-			
-			let currentPage = 1;
-			function loadMore() {
-				currentPage++;
-
-				$.ajax({
-					url: `/loadMore?page=${currentPage}`,
-					method: 'GET',
-					success: function(response) {
-					if (response.success) {
-						const newProducts = response.products;
-		
-						
-						// Generate HTML for each new product and append to the product grid
-						newProducts.forEach(product => {
-						const productHtml = `
-							<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item ${product.Categories.category_name}">
-							<div class="block2">
-								<div class="block2-pic hov-img0">
-								<img src="/uploads/${product.Images[0]}" alt="IMG-PRODUCT">
-								<a href="quickView/${product._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
-									Quick View
-								</a>
-								</div>
-								<div class="block2-txt flex-w flex-t p-t-14">
-								<div class="block2-txt-child1 flex-col-l">
-									<a href="productDetails/${product._id}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									${product.Name}
-									</a>
-									<span class="stext-105 cl3">
-									₹${product.Price}
-									</span>
-								</div>
-								<div class="block2-txt-child2 flex-r p-t-3">
-									<div class="d-flex">
-									<span id="message-${product._id}" class="small text-bold text-truncate" style="max-width: 150px; display: inline-block;"></span>
-									</div>
-									<button onclick="addWishlist('${product._id}')" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="user/images/icons/icon-heart-02.png" alt="ICON">
-									</button>
-								</div>
-								</div>
-							</div>
-							</div>
-						`;
-						console.log(productHtml)
-
-						// Append the new product HTML to the product 
-						$('#loadMoreId').append(productHtml);
-						});
-
-					} else {
-						$('#loadMoreButton').hide(); 
-					}
-					},
-					error: function() {
-					alert('Error loading more products');
-					}
-			});
-			}
 
 
 	</script>
+	<script>
+		// Check for stored currentPage in session storage on page load
+		let currentPage = sessionStorage.getItem('currentPage') ? parseInt(sessionStorage.getItem('currentPage')) : 1;
+	
+
+		function loadMore() {
+			currentPage++;
+			sessionStorage.setItem('currentPage', currentPage); // Update the session storage value
+	
+			$.ajax({
+				url: `/loadMore?page=${currentPage}`,
+				method: 'GET',
+				success: function(response) {
+					if (response.success) {
+						const newProducts = response.products;
+	
+
+						newProducts.forEach(product => {
+							const productHtml = `
+								<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item ${product.Categories.category_name}">
+									<div class="block2">
+										<div class="block2-pic hov-img0">
+											<img src="/uploads/${product.Images[0]}" alt="IMG-PRODUCT">
+											<a href="quickView/${product._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+												Quick View
+											</a>
+										</div>
+										<div class="block2-txt flex-w flex-t p-t-14">
+											<div class="block2-txt-child1 flex-col-l">
+												<a href="productDetails/${product._id}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+													${product.Name}
+												</a>
+												<span class="stext-105 cl3">
+													₹${product.Price}
+												</span>
+											</div>
+											<div class="block2-txt-child2 flex-r p-t-3">
+												<div class="d-flex">
+													<span id="message-${product._id}" class="small text-bold text-truncate" style="max-width: 150px; display: inline-block;"></span>
+												</div>
+												<button onclick="addWishlist('${product._id}')" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+													<img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png" alt="ICON">
+													<img class="icon-heart2 dis-block trans-04 ab-t-l" src="user/images/icons/icon-heart-02.png" alt="ICON">
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							`;
+	
+							$('#productContainer').append(productHtml);
+						});
+					} else {
+						$('#loadMoreButton').hide(); 
+					}
+				},
+				error: function() {
+					alert('Error loading more products');
+				}
+			});
+		}
+	
+		// Reload products based on session storage on page load
+		$(document).ready(function() {
+			if (currentPage > 1) {
+				for (let page = 2; page <= currentPage; page++) {
+					$.ajax({
+						url: `/loadMore?page=${page}`,
+						method: 'GET',
+						success: function(response) {
+							if (response.success) {
+								const newProducts = response.products;
+	
+								newProducts.forEach(product => {
+									const productHtml = `
+										<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item ${product.Categories.category_name}">
+											<div class="block2">
+												<div class="block2-pic hov-img0">
+													<img src="/uploads/${product.Images[0]}" alt="IMG-PRODUCT">
+													<a href="quickView/${product._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+														Quick View
+													</a>
+												</div>
+												<div class="block2-txt flex-w flex-t p-t-14">
+													<div class="block2-txt-child1 flex-col-l">
+														<a href="productDetails/${product._id}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+															${product.Name}
+														</a>
+														<span class="stext-105 cl3">
+															₹${product.Price}
+														</span>
+													</div>
+													<div class="block2-txt-child2 flex-r p-t-3">
+														<div class="d-flex">
+															<span id="message-${product._id}" class="small text-bold text-truncate" style="max-width: 150px; display: inline-block;"></span>
+														</div>
+														<button onclick="addWishlist('${product._id}')" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+															<img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png" alt="ICON">
+															<img class="icon-heart2 dis-block trans-04 ab-t-l" src="user/images/icons/icon-heart-02.png" alt="ICON">
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									`;
+	
+									$('#productContainer').append(productHtml);
+								});
+							}
+						},
+						error: function() {
+							alert('Error loading products from session.');
+						}
+					});
+				}
+			}
+		});
+	</script>
+	
 	
 	
 

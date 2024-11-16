@@ -28,7 +28,7 @@ export async function userHome(req,res){
 
         const category=await categorymodel.find()
 
-        const product=await Product.find().populate('Categories').limit(5);
+        const product=await Product.find().populate('Categories').limit(12);
 
         const subBanner=await subBannerModel.find().populate('Categories')
 
@@ -43,7 +43,7 @@ export async function userHome(req,res){
 export async function loadMore(req,res) {
     try {
         const { page } = req.query;
-        const productsPerPage = 5; 
+        const productsPerPage = 12; 
         const skip = (page - 1) * productsPerPage;
     
 
