@@ -135,7 +135,7 @@
                                         <li class="sa-nav__menu-item"><a href="/admin/coupon"
                                                 class="sa-nav__link"><span
                                                     class="sa-nav__menu-item-padding"></span><span
-                                                    class="sa-nav__title">Coupon</span></a></li>
+                                                    class="sa-nav__title">Add Coupon</span></a></li>
                                     </ul>
                                 </li>
                                 <li class="sa-nav__menu-item sa-nav__menu-item--has-icon"
@@ -335,19 +335,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="dropdown sa-toolbar__item"><button class="sa-toolbar-user" type="button"
-                            id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-offset="0,1"
-                            aria-expanded="false"><span class="sa-toolbar-user__info"><span
-                                    class="sa-toolbar-user__subtitle"><%= admin[0].userName %></span></span></button>
-                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="app-inbox-list.html">Inbox</a></li>
+                    <% if(admin.length > 0){ %>
+
+                        <div class="dropdown sa-toolbar__item"><button class="sa-toolbar-user" type="button"
+                                id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-offset="0,1"
+                                aria-expanded="false"><span class="sa-toolbar-user__info"><span
+                                        class="sa-toolbar-user__subtitle"><%= admin[0].userName %></span></span></button>
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="app-inbox-list.html">Inbox</a></li>
+                        
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li><a class="dropdown-item" href="/admin/logout">Sign Out</a></li>
+                            </ul>
+                        </div>
+                    <% }else{ %> 
+                        <div class=" sa-toolbar-user"><a href="/admin/login"
+                                        class="sa-toolbar-user__subtitle">Login</a>
+       
+                        </div>
+                    <% } %>
                     
-                                <hr class="dropdown-divider" />
-                            </li>
-                            <li><a class="dropdown-item" href="/admin/logout">Sign Out</a></li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="sa-toolbar__shadow"></div>
             </div>

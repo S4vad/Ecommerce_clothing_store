@@ -1,5 +1,8 @@
 <%- include('./layouts/main');-%>
 <%- include('./layouts/header');-%>
+    <% if(admin.length <= 0){ %>
+        <div style="margin-left: 650px; margin-top: 300px; font-size: 30px;"><a href="/admin/login">YOU NEED TO LOGIN</a></div>
+    <% }else { %>
         <div id="top" class="sa-app__body px-2 px-lg-4">
             <div class="container pb-6">
                 <div class="py-5">
@@ -290,6 +293,9 @@
                 </div>
             </div>
         </div>
+    <% } %>
+    
+    
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             // Get topProducts data from the server-side variable

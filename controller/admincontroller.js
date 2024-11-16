@@ -19,7 +19,6 @@ export async function adminHome(req,res){
         const adminId =req.admin;
         const admin=await adminModel.find({_id:adminId});
 
-       
 
         const orders = await orderModel.find().populate('products.item').populate('user');
         const reviews = await reviewModel.find().populate('user').populate('product');
@@ -84,7 +83,7 @@ export async function adminHome(req,res){
             incomeData,
             orders,
             reviews,
-            admin
+            admin,
         })
 }
     
@@ -105,9 +104,12 @@ export function logout(req,res){
 
 export async function addProduct(req,res){
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
         const category=await categorymodel.find()
 
-        res.render('admin/addProduct',{category})
+        res.render('admin/addProduct',{category,admin})
         
     } catch (error) {
         res.send(error.message)
@@ -208,11 +210,14 @@ export async function productAdd(req,res,next){
 
 export async function product_list(req,res){
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
         const products= await productModel.find()
         const Category = await productModel.find().populate('Categories');
         // const products = await productmodel.find().populate('category') 
         // console.log(category)
-        res.render('admin/product_list',{products,Category})
+        res.render('admin/product_list',{products,Category,admin})
         
     } catch (error) {
         res.render(error)
@@ -276,9 +281,12 @@ export async function delete_product(req,res){
 
 export async function category_list(req,res){
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
         const category=await categorymodel.find()
         
-        res.render('admin/category_list',{category})
+        res.render('admin/category_list',{category,admin})
         
     } catch (error) {
         res.render(error)
@@ -375,8 +383,11 @@ export async function edit_category(req, res) {
 
 export async function users(req,res){
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
         const user=await usermodel.find()
-        res.render('admin/users',{user})
+        res.render('admin/users',{user,admin})
         
     } catch (error) {
         next(error)
@@ -439,9 +450,12 @@ export async function banner(req,res) {
 export async function bannerList(req,res) {
 
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
 
         const banner=await bannerModel.find()
-        res.render('admin/bannerList',{banner:banner})
+        res.render('admin/bannerList',{banner:banner,admin})
     } catch (error) {
         res.send(error.message)
         
@@ -530,10 +544,12 @@ export async function subBanner(req,res) {
 export async function subBannerList(req,res) {
 
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
 
         const banner=await subBannerModel.find().populate('Categories')
         console.log(banner)
-        res.render('admin/subBannerList',{banner:banner})
+        res.render('admin/subBannerList',{banner:banner,admin})
     } catch (error) {
     res.send(error.message)
         
@@ -575,10 +591,13 @@ export async function deleteSubBanner(req,res) {
 }
 
 
-export function coupon(req,res){
+export async function coupon(req,res){
 
     try {
-        res.render('admin/coupon')
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
+        res.render('admin/coupon',{admin})
         
     } catch (error) {
         res.send(error.message)
@@ -607,12 +626,14 @@ export  async function addCoupon(req,res){
 
 export async function couponList(req,res){
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
 
         const coupon=await couponModel.find()
         res.locals.coupon = coupon || null //sharing localy
         res.locals.moment = moment
 
-        res.render('admin/couponList')
+        res.render('admin/couponList',{admin})
         
     } catch (error) {
         res.send(error.message)
@@ -687,10 +708,12 @@ export async function deleteCoupon(req,res){
 
 export async function customersList(req,res){
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
         const user=await usermodel.find()
 
-
-        res.render('admin/customersList',{user:user})
+        res.render('admin/customersList',{user:user,admin})
 
     } catch (error) {
         res.send(error.message)
@@ -714,6 +737,8 @@ export async function editIsActive(req, res) {
 
 export async function reviewList(req, res) {
     try {
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
      
         const reviews = await reviewModel.find()
             .sort({ createdAt: -1 })  
@@ -726,7 +751,7 @@ export async function reviewList(req, res) {
         }
 
         // Render the review list page, passing reviews
-        res.render('admin/reviewList', { reviews });
+        res.render('admin/reviewList', { reviews,admin });
     } catch (error) {
         console.error("Error in fetching reviews:", error);
         res.status(500).send('Server error: ' + error.message);  
