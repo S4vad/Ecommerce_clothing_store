@@ -172,8 +172,10 @@ export async function adminSignup(req,res){
 
 export async function productAdd(req,res,next){
     try {
+        const files = req.body.images
         const images = req.body.images
         // const file = req.files
+
         const { name, description, price,stock, category, brand ,size} = req.body
         if (!images) {
             const error = new Error('Please choose files')
@@ -182,9 +184,9 @@ export async function productAdd(req,res,next){
         }
 
         // Extract features for each image (adjust if calling an external Python script or service)
-        const imageFeatures = await Promise.all(
-            images.map(filename => extractFeatures(`./public/uploads/${filename}`))
-        );
+        // const imageFeatures = await Promise.all(
+        //     images.map(filename => extractFeatures(`./public/uploads/${filename}`))
+        // );
 
         //sharp image
         await productModel.create({ 
@@ -196,7 +198,8 @@ export async function productAdd(req,res,next){
              Stock:stock,
              Size:size, 
              Images: files,
-             ImageFeatures: imageFeatures  })
+            //  ImageFeatures: imageFeatures  
+            })
             // res.send({"success":data})
             res.redirect('/admin/product_list')
       
@@ -213,11 +216,9 @@ export async function product_list(req,res){
         const adminId =req.admin;
         const admin=await adminModel.find({_id:adminId});
 
-        const products= await productModel.find()
-        const Category = await productModel.find().populate('Categories');
-        // const products = await productmodel.find().populate('category') 
-        // console.log(category)
-        res.render('admin/product_list',{products,Category,admin})
+        const products= await productModel.find().populate('Categories')
+
+        res.render('admin/product_list',{products,admin})
         
     } catch (error) {
         res.render(error)
@@ -228,16 +229,18 @@ export async function product_list(req,res){
 export async function edit_product(req,res){
     try {
         const {id}=req.query;
-        // console.log(req.query)
+
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+   
         const Category=await categorymodel.find();
         const product= await productModel.findById(id).populate("Categories");
-        product.Images=product.Images || []     // product.product_image=product.product_image || []
-    
-        res.render('admin/edit_product',{product,Category})//   C capital aan
+  
+        res.render('admin/edit_product',{product,Category,admin})//   C capital aan
         
     } catch (error) {
-        // res.render(error)
-        console.log(error)
+        res.send(error.message)
+      
         
     }
 }
@@ -246,19 +249,33 @@ export async function edit_product(req,res){
 export async function edit_single_product(req, res) {
     try {
         const { id } = req.body;
+        const image = req.body.images;
+        let files;
+        if(image.length>0){
+            files= image;
+        }else{
+            const product= await productModel.findById(id);
+            files = product.Images;
+        }
+        console.log('the files are',files)
+
         const updatedProductData = {
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            stock: req.body.stock,
-            category: req.body.category,
-            // Handle images separately if needed
+            Name: req.body.name,
+            Description: req.body.description,
+            Price: req.body.price,
+            Stock: req.body.stock,
+            Categories: req.body.category,
+            Brand:req.body.brand,
+            Images:files
+
         };
+        console.log('the id is ',id)
+        console.log('the products are is ',updatedProductData)
 
-        // Handle images upload logic here if needed
 
-        await productModel.findByIdAndUpdate(id, updatedProductData);
-        res.redirect('/admin/product_list'); // Redirect to product list or desired page
+        const result = await productModel.findByIdAndUpdate(id, updatedProductData);
+        console.log('the result is j',result)
+        res.redirect('/admin/product_list'); 
     } catch (error) {
         console.log(error);
         res.status(500).send('Server error');

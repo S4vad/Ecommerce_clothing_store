@@ -1,6 +1,5 @@
 import { mongoose } from 'mongoose';
-// import { isEmail } from 'validator';
-// import bcrypt from bcrypt;
+
 
 const categorySchema = new mongoose.Schema({
     category_name:{type: String, required: true, trim:true},

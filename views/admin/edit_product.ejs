@@ -22,7 +22,7 @@
                                         <li class="breadcrumb-item active" aria-current="page">Add Product</li>
                                     </ol>
                                 </nav>
-                                <h1 class="h3 m-0">Add Product</h1>
+                                <h1 class="h3 m-0">Edit Product</h1>
                             </div>
 
 
@@ -106,8 +106,8 @@
                                             <div class="choose-imagefile-wrap mb-5">
                                                 <div>
                                                     <% for( let i=0; i < product.Images.length; i++ ) { %>
-                                                        <img src="data:<%= product.Images[i].contentType %>;base64,<%= product.Images[i].imageBase64 %>"
-                                                            height="215px" width="215px" alt="">
+                                                        <img src="/uploads/<%= product.Images[i] %>"
+                                                            height="200px" width="200px" alt="">
                                                         <% } %>
 
                                                 </div>
@@ -136,11 +136,11 @@
                                             <h2 class="mb-0 fs-exact-18">Categories</h2>
                                         </div>
                                         <select name="category" class="sa-select2 form-select" required>
-                                            <option value="<%= Category.category_name %>" selected>
-                                                <%= Category.category_name %>
+                                            <option value="<%= product.Categories._id %>" selected>
+                                                <%= product.Categories.category_name %>
                                             </option>
                                             <% for( let i=0; i < Category.length; i++ ) { %>
-                                                <option value="<%= Category[i].category_name %>">
+                                                <option value="<%= Category[i]._id %>">
                                                     <%= Category[i].category_name %>
                                                 </option>
                                                 <% } %>
@@ -158,7 +158,7 @@
                                             <h2 class="mb-0 fs-exact-18">Brand</h2>
                                             <div class="mb-4"><label for="form-product/brand"
                                                     class="form-label"></label><input type="text" class="form-control"
-                                                    name="name" value="<%= product.Brand %> " id="form-product/brand"
+                                                    name="brand" value="<%= product.Brand %> " id="form-product/brand"
                                                     required></div>
                                         </div>
                                         </form>
