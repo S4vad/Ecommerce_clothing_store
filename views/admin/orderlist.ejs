@@ -59,7 +59,7 @@
                                             <td>
                                                 <%= moment(order[i].createdAt).format('YYYY MMMM DD') %>
                                             </td>
-                                            <td><a href="/admin/order_details?id=<%= order[i]._id %>"
+                                            <td><a href="/admin/userDetails?id=<%= order[i].user._id %>"
                                                     class="text-reset">
                                                     <%= order[i].user.fname+' '+order[i].user.lname  %> </a></td>
                             <td>

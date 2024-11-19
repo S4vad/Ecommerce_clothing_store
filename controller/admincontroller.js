@@ -12,6 +12,8 @@ import couponModel from "../models/couponSchema.js"
 import orderModel from "../models/orderSchema.js";
 import reviewModel from "../models/reviewSchema.js";
 import moment from "moment";
+import addressModel from "../models/addressSchem.js";
+import mongoose from "mongoose";
 
 
 
@@ -677,13 +679,16 @@ export async function updateCouponStatus(req, res) {
         const id = req.query.id;
         const status = req.query.status ;
         
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+        
         await couponModel.findByIdAndUpdate(id, { status: status });
 
         const coupon = await couponModel.find();
         res.locals.moment = moment
 
 
-        res.render('admin/couponList', { coupon });
+        res.render('admin/couponList', { coupon,admin});
     } catch (error) {
         res.send(error.message);
     }
@@ -737,6 +742,47 @@ export async function customersList(req,res){
     }
 }
 
+export async function userDetails(req,res){
+    try {
+        const id = req.query.id;
+
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
+        const user=await usermodel.findById(id)
+
+
+
+        const order=await orderModel.find({ user:new mongoose.Types.ObjectId(id) })
+        .populate('products.item')
+        .populate('address')
+        .populate('user')
+        .sort({ createdAt: -1 })
+
+        console.log('the ordre are',JSON.stringify(order,null,2))
+
+        res.locals.moment=moment;
+        res.render('admin/userDetails',{user,admin,order})
+
+    } catch (error) {
+        res.send(error.message)
+    }
+}
+
+export async function userDetailsIsActive(req, res) {
+    try {
+        const id = req.query.id;
+        const status = req.query.status === "Active"; 
+
+        await usermodel.findByIdAndUpdate(id, { isActive: status });
+
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+
 
 
 
@@ -746,14 +792,19 @@ export async function editIsActive(req, res) {
         const id = req.query.id;
         const status = req.query.status === "Active"; 
         
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+        
         await usermodel.findByIdAndUpdate(id, { isActive: status });
 
         const user = await usermodel.find();
-        res.render('admin/customersList', { user });
+        res.render('admin/customersList', { user,admin});
     } catch (error) {
         res.send(error.message);
     }
 }
+
+
 
 export async function reviewList(req, res) {
     try {
@@ -805,8 +856,6 @@ export async function orderDetails(req,res){
         .populate('user')
         .populate('address')
         .populate('products.item')
-        
-        console.log('the order i s',JSON.stringify(order,null,2))
 
         res.locals.moment=moment
         res.render('admin/orderDetails',{order,admin})

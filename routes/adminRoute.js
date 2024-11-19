@@ -2,11 +2,11 @@ import express, { Router } from "express";
 import { adminAuthentication } from "../middlewares/adminAuthentication.js";
 import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     addProduct,productAdd ,product_list,category_list,add_category,edit_product,
-    delete_product,users,user_details,edit_single_product,delete_category,edit_category,
+    delete_product,users,userDetails,edit_single_product,delete_category,edit_category,
     addBanner,banner,bannerList,editBanner,deleteBanner,addSubBanner,subBanner,subBannerList,
     deleteSubBanner,editSubBanner,coupon,addCoupon,updateCouponStatus,couponList,editCoupon,
     deleteCoupon,editCouponPost,customersList,editIsActive,reviewList,orderList,logout,
-    orderDetails} from "../controller/admincontroller.js";
+    orderDetails,userDetailsIsActive} from "../controller/admincontroller.js";
 import {changeStatus} from "../controller/ordercontroller.js"
 
 import { uploadImages,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
@@ -26,7 +26,6 @@ routes.get('/category_list',adminAuthentication,category_list)
 routes.get('/edit_product',adminAuthentication,edit_product)
 routes.get('/delete_product',delete_product)
 routes.get('/user_list',adminAuthentication,users)
-routes.get('/user_details',user_details)
 routes.get('/delete_category',delete_category)
 routes.get('/addBanner',addBanner)
 routes.get('/bannerList',adminAuthentication,bannerList)
@@ -41,12 +40,16 @@ routes.get('/couponList',adminAuthentication,couponList)
 routes.get('/edit_coupon',editCoupon)
 routes.get('/delete_coupon',deleteCoupon)
 routes.get('/customersList',adminAuthentication,customersList)
-routes.get('/editIsActive',editIsActive)
-routes.get('/updateCouponStatus',updateCouponStatus)
+routes.get('/editIsActive',adminAuthentication,editIsActive)
+routes.get('/updateCouponStatus',adminAuthentication,updateCouponStatus)
 routes.get('/reviewList',adminAuthentication,reviewList)
 routes.get('/orderList',adminAuthentication,orderList)
 routes.get('/logout',logout)
 routes.get('/orderDetails',adminAuthentication,orderDetails)
+routes.get('/userDetails',adminAuthentication,userDetails)
+routes.get('/userDetailsIsActive',adminAuthentication,userDetailsIsActive)
+
+
 
 
 
