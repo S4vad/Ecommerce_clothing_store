@@ -745,19 +745,19 @@ export async function customersList(req,res){
 export async function userDetails(req,res){
     try {
         const id = req.query.id;
-
         const adminId =req.admin;
+
         const admin=await adminModel.find({_id:adminId});
 
         const user=await usermodel.findById(id)
 
 
-
-        const order=await orderModel.find({ user:new mongoose.Types.ObjectId(id) })
-        .populate('products.item')
+        const order = await orderModel.find({ user: new mongoose.Types.ObjectId(id) })
+        .populate('products.item') 
         .populate('address')
         .populate('user')
-        .sort({ createdAt: -1 })
+        .sort({createdAt:-1});  
+        
 
         console.log('the ordre are',JSON.stringify(order,null,2))
 

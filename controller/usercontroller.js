@@ -690,6 +690,16 @@ export async function wishListDelete(req, res) {
     }
 }
 
+export async function userBanned(req, res) {
+    try {
+        res.render('errors/userBanned')
+        
+    } catch (error) {
+        res.send(error.message);
+    }
+}
+
+
 
 
 

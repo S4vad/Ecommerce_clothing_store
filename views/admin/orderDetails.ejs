@@ -226,7 +226,7 @@
                                             <li class="breadcrumb-item active" aria-current="page">Order #<%= order._id %></li>
                                         </ol>
                                     </nav>
-                                    <h1 class="h3 m-0">Order #<%= order._id %></h1>
+                                    <h1 class="h3 m-0">Order Details</h1>
                                 </div>
                         
                         </div>
@@ -237,7 +237,7 @@
                                     <div class="sa-page-meta__item"><%= qty = order.products.reduce((acc,cur)=>(acc+cur.quantity),0) %> Items</div>
                                     <div class="sa-page-meta__item">Total &#8377; <%= order.totalamount %></div>
                                     <div class="sa-page-meta__item d-flex align-items-center fs-6">
-                                        <% if (order.paymentMethod == 'online'){ %> 
+                                        <% if (order.paymentMethod == 'Razorpay'){ %> 
                                             <span
                                                 class="badge badge-sa-success me-2">Paid
                                             </span>
@@ -345,11 +345,11 @@
                                         <div class="table-responsive">
                                             <table class="sa-table text-nowrap">
                                                 <tbody>
-                                                    <% if (order.paymentMethod == 'online'){ %> 
+                                                    <% if (order.paymentMethod == 'Razopay'){ %> 
                                                     <tr>
                                                         <td>Payment<div class="text-muted fs-exact-13">via Online</div>
                                                         </td>
-                                                        <td><%=  moment(order.createAt).formate('YYYY MMMM DD') %></td>
+                                                        <td><%=  moment(order.createAt).format('YYYY MMMM DD') %></td>
                                                         <td class="text-end">
                                                             <div class="sa-price"><span
                                                                     class="sa-price__symbol">&#8377;</span><span
@@ -413,7 +413,7 @@
                                                 </tr>
                                             </tbody>
                                             <tbody class="sa-table__group">
-                                                <% if (order.paymentMethod == 'online'){ %> 
+                                                <% if (order.paymentMethod == 'Razorpay'){ %> 
 
                                                 <tr>
                                                     <td>Paid by customer</td>

@@ -73,7 +73,7 @@
                        
                        
                         <div class="card mt-5">
-                            <% for (let i = 0 ; i < order.length ; i++){ %> 
+                            
                             <div
                                 class="card-body px-5 py-4 d-flex align-items-center justify-content-between">
                                 <h2 class="mb-0 fs-exact-18 me-4">Orders</h2>
@@ -84,20 +84,27 @@
                             <div class="table-responsive">
                                 <table class="sa-table text-nowrap">
                                     <tbody>
+                                        <% if (order.length > 0) { %>
+                                            <% for (let i = 0; i < order.length; i++) { %> 
+                                                <tr>
+                                                    <td><a href="/admin/orderDetails?id=<%= order[i]._id %>"><%= order[i]._id %></a></td>
+                                                    <td><%= moment(order[i].createdAt).utcOffset('+05:30').format('YYYY MMMM DD, h:mm A') %></td>
+                                                    <td><%= order[i].status %></td>
+                                                    <td><%= order[i].products.reduce((acc, cur) => acc + cur.quantity, 0) %></td>
+                                                    <td>&#8377; <%= order[i].totalamount %></td>
+                                                </tr>
+                                            <% } %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="5">No orders found for this user.</td>
+                                            </tr>
+                                        <% } %>
                                         
-                                        <tr>
-                                            <td><a href="/admin/orderDetails?id=<%=order[i]._id %>"><%= order[i]._id %></a></td>
-                                            <td><%= moment(order.createdAt).utcOffset('+05:30').format('YYYY MMMM DD, h:mm A') %></td>
-                                            <td><%= order[i].status %></td>
-                                            <td><%= order[i].products.reduce((acc,cur)=>(acc+cur.quantity),0) %></td>
-                                            <td>&#8377; <%= order[i].totalamount %></td>
-                                        </tr>
-                                       
-                                      
+                                         
                                     </tbody>
+                                    
                                 </table>
                             </div>
-                            <% } %>
                             <div class="sa-divider"></div>
                             <div class="px-5 py-4 text-center"><a href="app-orders-list.html">View all <%= order.length %>
                                     orders</a></div>

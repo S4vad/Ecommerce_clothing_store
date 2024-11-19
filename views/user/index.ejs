@@ -5,6 +5,12 @@
 		
 
 	<!-- Slider -->
+	 <% if (user.isActive== false) { %>
+		<script>
+			window.location.href="/userBanned"
+		</script>
+		<% } %>
+
 	<section class="section-slide">
 		<div class="wrap-slick1">
 			<div class="slick1">
