@@ -138,8 +138,8 @@
                                             <th class="w-min" data-orderable="false"><input type="checkbox"
                                                     class="form-check-input m-0 fs-exact-16 d-block" aria-label="..." />
                                             </th>
-                                            <th class="min-w-20x">First name</th>
-                                            <th>Last name</th>
+                                            <th class="min-w-20x">Full name</th>
+
                                             <th>Email</th>
                                             <th>Active or not</th>
 
@@ -154,14 +154,11 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
 
-                                                    <div><a href=""  class="text-reset"><%= user[i].fname %> </a>
-                                                        <div class="sa-meta mt-0">
-
-                                                        </div>
+                                                    <div><a href="/admin/customerDetails?id=user[i]._id"  class="text-reset"><%= user[i].fname %> </a>
+                                                        <a href="/admin/customerDetails?id=user[i]._id" class="text-reset"><%= user[i].lname %> </a>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><a href="#" class="text-reset"><%= user[i].lname %> </a></td>
                                             <td><a href="#" class="text-reset"><%= user[i].email %> </a></td>
                                             
 

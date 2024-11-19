@@ -738,6 +738,9 @@ export async function customersList(req,res){
 }
 
 
+
+
+
 export async function editIsActive(req, res) {
     try {
         const id = req.query.id;
@@ -781,7 +784,6 @@ export async function orderList(req,res) {
         const admin=await adminModel.find({_id:adminId});
 
         const order = await orderModel.find().populate('user')
-        console.log('the order is',order)
         res.locals.moment=moment;
         res.render('admin/orderList',{order,admin})
 
@@ -792,6 +794,27 @@ export async function orderList(req,res) {
     
 }
 
+export async function orderDetails(req,res){
+    try {
+        const id = req.query.id;
+
+        const adminId =req.admin;
+        const admin=await adminModel.find({_id:adminId});
+
+        const order=await orderModel.findById(id)
+        .populate('user')
+        .populate('address')
+        .populate('products.item')
+        
+        console.log('the order i s',JSON.stringify(order,null,2))
+
+        res.locals.moment=moment
+        res.render('admin/orderDetails',{order,admin})
+
+    } catch (error) {
+        res.send(error.message)
+    }
+}
 
 
 

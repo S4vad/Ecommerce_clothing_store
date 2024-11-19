@@ -4,8 +4,9 @@ import { adminHome,adminLoginPage,adminLogin,adminSignup, adminSignupPage,
     addProduct,productAdd ,product_list,category_list,add_category,edit_product,
     delete_product,users,user_details,edit_single_product,delete_category,edit_category,
     addBanner,banner,bannerList,editBanner,deleteBanner,addSubBanner,subBanner,subBannerList,
-    deleteSubBanner,editSubBanner,coupon,addCoupon,updateCouponStatus,
-    couponList,editCoupon,deleteCoupon,editCouponPost,customersList,editIsActive,reviewList,orderList,logout} from "../controller/admincontroller.js";
+    deleteSubBanner,editSubBanner,coupon,addCoupon,updateCouponStatus,couponList,editCoupon,
+    deleteCoupon,editCouponPost,customersList,editIsActive,reviewList,orderList,logout,
+    orderDetails} from "../controller/admincontroller.js";
 import {changeStatus} from "../controller/ordercontroller.js"
 
 import { uploadImages,resizeImages } from "../middlewares/uploadResizeMiddeware.js";
@@ -45,6 +46,8 @@ routes.get('/updateCouponStatus',updateCouponStatus)
 routes.get('/reviewList',adminAuthentication,reviewList)
 routes.get('/orderList',adminAuthentication,orderList)
 routes.get('/logout',logout)
+routes.get('/orderDetails',adminAuthentication,orderDetails)
+
 
 
 
