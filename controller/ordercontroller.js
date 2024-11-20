@@ -10,6 +10,7 @@ import Razorpay from "razorpay";
 import crypto from 'crypto'; 
 import orderModel from "../models/orderSchema.js";
 import walletModel from "../models/walletSchema.js";
+import productModel from "../models/productSchema.js"
 
 
 import 'dotenv/config'; // 
@@ -412,26 +413,40 @@ export async function orderSuccess(req, res) {
 export async function orderCancel(req, res) {
     try {
         const { orderId } = req.body;
-        console.log('The received order ID is: ' + orderId);
 
         if (!orderId) {
             return res.json({ success: false, message: "Order ID not provided" });
         }
 
-        const order = await orderModel.findById(orderId);
+        const order = await orderModel.findById(orderId).populate('products.item');
         if (!order) {
             return res.json({ success: false, message: "Order not found" });
         }
-        console.log('the order is ',order)
+
+        const products=order.products.map((product)=>({
+            productId:product.item,
+            quantity:product.quantity
+
+        }))
+        for (const product of products){
+            const update = await productModel.findById(product.productId);
+            if (update) {
+                update.Stock += product.quantity;
+
+                await update.save();
+              } else {
+                res.json({ success: false, message: `Product with ID ${product.productId} not found.`});
+              }
+        }
+
 
         const userId = order.user;
         let refundAmount = 0;
-        console.log('the user id is ',userId)
+
 
         if (order.paymentMethod === 'Razorpay') {
             refundAmount = order.totalamount;
         }
-        console.log('the refundAmount of online is ',refundAmount)
 
         const updatedOrder = await orderModel.findByIdAndUpdate(
             orderId,
@@ -451,14 +466,15 @@ export async function orderCancel(req, res) {
                     balance: refundAmount
                 });
             }
+            
+            res.json({ success: true, message: 'Order canceled and wallet updated.', refundAmount: refundAmount });
 
-            res.json({ success: true, message: 'Order canceled and wallet updated.' });
         } else {
             res.json({ success: false, message: "Failed to update order status" });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: error.message});
     }
 }
 
