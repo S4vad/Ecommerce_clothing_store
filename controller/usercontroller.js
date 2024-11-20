@@ -70,11 +70,13 @@ export async function loadMore(req,res) {
 export async function aboutPage(req,res) {
     try {
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
 
         res.render('user/about',{user:user,
             cartCount:cartCount,
-            wishListCount:wishListCount})
+            wishListCount:wishListCount,
+            wallet,
+            cart})
         
     } catch (error) {
         res.send(error.message)
@@ -86,14 +88,16 @@ export async function aboutPage(req,res) {
 export async function contactPage(req,res) {
     try {
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
 
         const message = req.query.message || " ";
 
         res.render('user/contact',{user:user,
             cartCount:cartCount,
             message:message,
-            wishListCount:wishListCount})
+            wishListCount:wishListCount,
+            wallet,
+            cart})
         
     } catch (error) {
         res.send(error.message)
@@ -214,11 +218,17 @@ export async function shop(req,res){
         const product=await Product.find().populate('Categories')
 
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
 
         const category=await categorymodel.find();
 
-        res.render('user/shop',{product:product,user:user,cartCount:cartCount,category:category,wishListCount:wishListCount,cart:cart});
+        res.render('user/shop',{product:product,
+            user:user,
+            cartCount:cartCount,
+            category:category,
+            wishListCount:wishListCount,
+            cart:cart,
+            wallet});
         
     } catch (error) {
         res.send(error.message)
@@ -229,7 +239,7 @@ export async function shop(req,res){
 export async function quickView(req, res) {
     try {
         const userId = req.user._id; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        
         const id = req.params.id;
         const product = await Product.findById(id); 
         
@@ -250,7 +260,10 @@ export async function quickView(req, res) {
     
 
         
-        res.render('user/quickView', { product ,user,cartCount,wishListCount,cart,quantityAvailableOrNot:message});
+        res.render('user/quickView', { 
+            product ,
+
+            quantityAvailableOrNot:message});
     } catch (error) {
         res.status(500).send(error.message); // Use appropriate status code
     }
@@ -260,7 +273,7 @@ export async function quickView(req, res) {
 export async function productDetails(req, res) {
     try {
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
 
         const id = req.params.id;
         const product = await Product.findById(id);
@@ -276,7 +289,14 @@ export async function productDetails(req, res) {
         const message= stockStatus || req.query.message;
 
       
-        res.render('user/productDetails', { user, product, cart, cartCount, wishListCount ,quantityAvailableOrNot:message});
+        res.render('user/productDetails', { 
+            user,
+            product,
+            cart,
+            cartCount, 
+            wishListCount,
+            wallet,
+            quantityAvailableOrNot:message});
         
     } catch (error) {
 
@@ -291,14 +311,15 @@ export async function productDetails(req, res) {
 export async function cart(req,res) {
     try {
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
 
         res.render('user/cart',{
             user:user,
             cart:cart,
             cartCount:cartCount,
             wishListCount:wishListCount,
-            userId:userId})
+            userId:userId,
+            wallet})
 
         
     } catch (error) {

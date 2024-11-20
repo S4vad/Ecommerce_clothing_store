@@ -15,13 +15,21 @@ import usermodel from "../models/userSchema.js";
 export async function profile(req,res){
     try {
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
 
         const addresses=await addressModel.find({user:userId}).select('address')
 
         console.log(addresses)
 
-        res.render('user/profile',{user,alert:false,cart,cartCount,wishListCount,user,addresses})
+        res.render('user/profile',{
+            user,
+            alert:false,
+            cart,
+            cartCount,
+             wishListCount,
+             user,
+             addresses,
+             wallet})
         
     } catch (error) {
         res.status(500).send(error.message)
@@ -34,11 +42,17 @@ export async function profileAddress(req,res) {
     try {
 
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount ,wallet} = await getUserCartWishlistData(userId);
 
         const address=await addressModel.find({userId})
 
-        res.render('user/profileAddress',{address,cart,user,wishListCount,cartCount})
+        res.render('user/profileAddress',{
+            address,
+            cart,
+            user,
+            wishListCount,
+            cartCount,
+            wallet})
 
 
         
@@ -177,7 +191,7 @@ export async function profileOrder(req,res) {
     try {
 
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount ,wallet} = await getUserCartWishlistData(userId);
 
         const addresses=await addressModel.find({user:userId}).select('address');
 
@@ -215,7 +229,14 @@ export async function profileOrder(req,res) {
 
         // console.log('the sturcutredorder',JSON.stringify(structuredOrders,null,2))
 
-        res.render('user/profileOrder',{order:structuredOrders,cart,user,wishListCount,cartCount,address:firstAddress})
+        res.render('user/profileOrder',{
+            order:structuredOrders,
+            cart,
+            user,
+            wishListCount,
+            cartCount,
+            address:firstAddress,
+            wallet})
 
 
 
