@@ -9,6 +9,7 @@ import getUserCartWishlistData from "../helpers/mainhelper.js";
 import Razorpay from "razorpay";
 import crypto from 'crypto'; 
 import orderModel from "../models/orderSchema.js";
+import walletModel from "../models/walletSchema.js";
 
 
 import 'dotenv/config'; // 
@@ -408,24 +409,60 @@ export async function orderSuccess(req, res) {
 }
 
 
-export async function orderCancel(req,res){
+export async function orderCancel(req, res) {
     try {
-        const { orderId } = req.body; 
-        console.log('the get order id is '+orderId)
-        console.log('the page is '+orderId)
-        if (orderId){
-            await orderModel.findByIdAndDelete(orderId)
-            res.json({success: true})
-        }else{
-            res.json({success:false})
-        }
-    
-    } catch (error) {
+        const { orderId } = req.body;
+        console.log('The received order ID is: ' + orderId);
 
-        res.send(error.message)
-        
+        if (!orderId) {
+            return res.json({ success: false, message: "Order ID not provided" });
+        }
+
+        const order = await orderModel.findById(orderId);
+        if (!order) {
+            return res.json({ success: false, message: "Order not found" });
+        }
+        console.log('the order is ',order)
+
+        const userId = order.user;
+        let refundAmount = 0;
+        console.log('the user id is ',userId)
+
+        if (order.paymentMethod === 'Razorpay') {
+            refundAmount = order.totalamount;
+        }
+        console.log('the refundAmount of online is ',refundAmount)
+
+        const updatedOrder = await orderModel.findByIdAndUpdate(
+            orderId,
+            { status: "canceled" },
+            { new: true } // Return the updated document
+        );
+
+        if (updatedOrder) {
+            const existingWallet = await walletModel.findOne({ user: userId });
+
+            if (existingWallet) {
+                existingWallet.balance += refundAmount;
+                await existingWallet.save();
+            } else {
+                await walletModel.create({
+                    user: userId,
+                    balance: refundAmount
+                });
+            }
+
+            res.json({ success: true, message: 'Order canceled and wallet updated.' });
+        } else {
+            res.json({ success: false, message: "Failed to update order status" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: error.message });
     }
 }
+
+
 
 export async function changeStatus(req,res){
     try {

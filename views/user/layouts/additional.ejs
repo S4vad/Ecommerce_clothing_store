@@ -114,15 +114,23 @@ $('.js-addwish-b2').each(function() {
 	
 	</script>
 	<script>
-		$(document).ready(function() {
-			// Open wallet modal
-			$('.js-show-wallet').on('click', function() {
+		$(document).ready(function () {
+
+			$('.js-show-wallet').on('click', function () {
 				$('.js-panel-wallet').css('display', 'block');
 			});
 
-			// Close wallet modal
-			$('.js-hide-wallet').on('click', function() {
+			$('.js-hide-wallet').on('click', function () {
 				$('.js-panel-wallet').css('display', 'none');
+			});
+
+			// Close wallet modal when clicking outside the wallet container
+			$(document).on('click', function (event) {
+				// Check if the click is outside the wallet content
+				if (!$(event.target).closest('.header-wallet').length && 
+					!$(event.target).closest('.js-show-wallet').length) {
+					$('.js-panel-wallet').css('display', 'none');
+				}
 			});
 		});
 
