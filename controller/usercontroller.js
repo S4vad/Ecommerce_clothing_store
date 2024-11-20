@@ -21,8 +21,7 @@ import reviewModel from "../models/reviewSchema.js";
 export async function userHome(req,res){
     try {
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
-        
+        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
 
         const banner=await bannerModel.find()
 
@@ -32,7 +31,15 @@ export async function userHome(req,res){
 
         const subBanner=await subBannerModel.find().populate('Categories')
 
-       res.render('user/index',{user:user,product:product,cart:cart,cartCount:cartCount,banner:banner,category:category,wishListCount:wishListCount,subBanner:subBanner})
+       res.render('user/index',{user:user,
+        product:product,
+        cart:cart,
+        cartCount:cartCount,
+        banner:banner,
+        category:category,
+        wishListCount:wishListCount,
+        subBanner:subBanner,
+        wallet:wallet})
         
     } catch (error) {
         res.send(error.message)
@@ -65,7 +72,9 @@ export async function aboutPage(req,res) {
         const userId = req.user; 
         const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
 
-        res.render('user/about',{user:user,cartCount:cartCount,wishListCount:wishListCount})
+        res.render('user/about',{user:user,
+            cartCount:cartCount,
+            wishListCount:wishListCount})
         
     } catch (error) {
         res.send(error.message)
@@ -81,7 +90,10 @@ export async function contactPage(req,res) {
 
         const message = req.query.message || " ";
 
-        res.render('user/contact',{user:user,cartCount:cartCount,message:message,wishListCount:wishListCount})
+        res.render('user/contact',{user:user,
+            cartCount:cartCount,
+            message:message,
+            wishListCount:wishListCount})
         
     } catch (error) {
         res.send(error.message)
@@ -108,7 +120,10 @@ export async function userSignup(req,res){
 
     try {
         const hashedpassword=await bcrypt.hash(password,10);
-        await usermodel.create({fname:fname,lname:lname,email:email,password:hashedpassword})
+        await usermodel.create({fname:fname,
+            lname:lname,
+            email:email,
+            password:hashedpassword})
 
         const user = await usermodel.findOne({email});
 

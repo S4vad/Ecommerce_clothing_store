@@ -1,6 +1,7 @@
 import usermodel from "../models/userSchema.js";
 import cartModel from "../models/cartSchema.js";
 import wishlistModel from "../models/wishlist.js";
+import walletModel from "../models/walletSchema.js";
 
 
 
@@ -29,11 +30,13 @@ export default async function getUserCartWishlistData(userId) {
     const cartCount = cart ? cart.products.length : 0; 
     const wisListItems = await wishlistModel.findOne({ user: userId }).populate("products.item");
     const wishListCount = wisListItems ? wisListItems.products.length : 0;
+    const wallet = await  walletModel.findOne({user:userId})
 
     return {
         user,
         cart,
         cartCount,
-        wishListCount
+        wishListCount,
+        wallet
     };
 }

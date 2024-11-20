@@ -113,6 +113,20 @@ $('.js-addwish-b2').each(function() {
 		
 	
 	</script>
+	<script>
+		$(document).ready(function() {
+			// Open wallet modal
+			$('.js-show-wallet').on('click', function() {
+				$('.js-panel-wallet').css('display', 'block');
+			});
+
+			// Close wallet modal
+			$('.js-hide-wallet').on('click', function() {
+				$('.js-panel-wallet').css('display', 'none');
+			});
+		});
+
+	</script>
 <!--===============================================================================================-->
 	<script src="user/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script>
