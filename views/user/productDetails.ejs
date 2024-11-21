@@ -81,7 +81,7 @@
 							</h4>
 
 							<span class="mtext-106 cl2">
-								<%= product.Price %>
+								₹<%= product.Price %>
 							</span>
 
 							<p class="stext-102 cl3 p-t-23">
@@ -131,7 +131,7 @@
 									<button id="addToCart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
 										ADD TO CART
 									</button>
-									<button id="buyNow" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
+									<button id="buyNow" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 " type="submit">
 										BUY NOW
 									</button>
 								</div>
@@ -539,9 +539,7 @@
 				</div>
 
 				<p class="stext-107 cl6 txt-center">
-					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a> &amp; distributed by <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+					
 
 				</p>
 			</div>
@@ -683,7 +681,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 									<button id="addToCart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
 										ADD TO CART
 									</button>
-									<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail  " type="submit">
+									<button id="buyNow" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04   " type="submit">
 										BUY NOW
 									</button>
 								</div>	
@@ -728,19 +726,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 	<script>
 
-		$(document).ready(function(){
-			$("#addToCart").click(function(event){
-				$("#productForm").attr('action','/cart')
+			$(document).ready(function () {
+				$("#addToCart").click(function (event) {
+					
+					$("#productForm").attr('action', '/cart?productId=<%= product._id %>');
+				});
 
-			})
-			$("#buyNow").click(function(event){
-				$("#productForm").attr('action','/order')
+				$("#buyNow").click(function (event) {
+					
+					$("#productForm").attr('action', '/buyNow?productId=<%= product._id %>');
+				});
+			});
 
-			})
-			// $('#whishList').click(function(event){
-			// 	$("productForm").attr('action','/wishlist/<%= product._id %>')
-			// })
-		})
 	</script>
 	<script>
 		$(".js-select2").each(function(){
@@ -780,34 +777,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <!--===============================================================================================-->
 	<script src="/user/vendor/sweetalert/sweetalert.min.js"></script>
 	<script>
-		$(document).ready(function() {
-			// Initially set button text based on a flag
-			let hasClicked = false; // Flag to check if the button has been clicked
-
-			$('#addToCart').click(function() {
-				// Change the button text to "Go To Cart" and set the flag
-				$(this).text('Go To Cart');
-				hasClicked = true; // Set the flag to true
-
-				// Redirect to another page after clicking the button
-				setTimeout(function() {
-					window.location.href = '/cart'; // Replace with your desired path
-				}, 9000); // Optional delay for feedback
-			});
-
-			// Check if navigating back to this page, reset button text based on the flag
-			if (hasClicked) {
-				$('#addToCart').text('Go To Cart');
-			} else {
-				$('#addToCart').text('Add to Cart'); // Reset to initial text
-			}
-		});
-
-
-
-
-
-
 
 
 		$('.js-addwish-b2, .js-addwish-detail').on('click', function(e){

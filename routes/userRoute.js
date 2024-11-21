@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import {userHome,signup,userSignup,login,userLogin,shop,logout,quickView,productDetails,cart,cartAdd,
         aboutPage,contactPage,addContact,wishlist,filter,categoryShop,search,cartDelete,cartSubTotalUpdate ,
         review,wishListDelete,addWishlist,checkPasswordStrength,loadMore,userBanned} from "../controller/usercontroller.js";
-import {order,orderGet,coupon,checkout,applyCoupon, verifyPayment,orderSuccess,orderCancel,orderCod} from "../controller/ordercontroller.js"
+import {order,orderGet,coupon,checkout,applyCoupon, verifyPayment,orderSuccess,orderCancel,orderCod,addBuyNow} from "../controller/ordercontroller.js"
 import { profile,profileAddress,addAddressPost,editAddress,profileDashboard,deleteAddress,profileOrder,userDetailsUpdate} from "../controller/profilecontroller.js";
 import { userAuthentication } from "../middlewares/userauthentication.js";
 
@@ -45,6 +45,7 @@ routes.get('/userBanned',userBanned)
 
 
 
+
 routes.delete('/cart/remove/:id',userAuthentication, cartDelete); // Temporarily without middleware
 routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
 
@@ -53,6 +54,7 @@ routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
 routes.post('/signin',userSignup)
 routes.post('/userlog',userLogin)
 routes.post('/cart',userAuthentication,cartAdd)
+routes.post('/buyNow',userAuthentication,addBuyNow)
 routes.post('/contact',userAuthentication,addContact)
 routes.post('/filter',userAuthentication,filter)
 routes.post('/search',userAuthentication,search)

@@ -493,3 +493,42 @@ export async function changeStatus(req,res){
     }
 }
 
+
+
+
+export async function addBuyNow(req,res) {
+    try {
+        const productId=req.query.productId;
+        const quantity = req.body.quantity || 1;
+
+        const userId = req.user; 
+        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+
+        const product=await productModel.findById(productId)
+        const coupon=await couponModel.find()
+        const address=await addressModel.findOne({user:userId}).select('address') ;
+
+        const subTotal =2000;
+ 
+
+        res.render('user/buyNow',{
+            coupons:coupon,
+            user,
+            cartCount,
+            wishListCount,
+            moment,
+            product,
+            address,
+            quantity,
+            subTotal,
+            discount:345,
+            totalDiscount:345})
+
+        
+    } catch (error) {
+        res.send(error.message)
+        
+    }
+    
+}
+

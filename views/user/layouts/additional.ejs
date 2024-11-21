@@ -53,39 +53,40 @@
 <!--===============================================================================================-->
 	<script src="user/vendor/sweetalert/sweetalert.min.js"></script>
 	<script>
-$('.js-addwish-b2').each(function() {
-    var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
-    var $this = $(this); // Cache the reference to this element
+			$('.js-addwish-b2').each(function () {
+				var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+				var $this = $(this); // Cache the reference to this element
 
-    // Click event
-    $this.on('click', function(e) {
-        e.preventDefault();
+				$this.on('click', function (e) {
+					e.preventDefault();
 
-        // Extract product ID from href attribute
-        var productId = $this.attr('href').split('/').pop(); // Extracts the ID from the href
+					var productId = $this.attr('href').split('/').pop();
 
-        // Make an AJAX call to update the wishlist on the server
-        $.ajax({
-            url: '/wishlist/' + productId, // Your route for adding to the wishlist
-            method: 'POST',
-            success: function(response) {
-                swal(nameProduct, "is added to wishlist!", "success");
 
-                // Toggle the wish button
-                $this.addClass('js-addedwish-b2'); // Mark as added to wishlist
-                $this.off('click'); // Prevent multiple clicks
+					$.ajax({
+						url: '/wishlist/' + productId, 
+						method: 'POST',
+						success: function (response) {
 
-                // Toggle heart icons
-                $this.find('.icon-heart1').removeClass('dis-block').addClass('dis-none'); // Hide unfilled heart
-                $this.find('.icon-heart2').removeClass('dis-none').addClass('dis-block'); // Show filled heart
-            },
-            error: function(error) {
-                console.error('Error adding to wishlist:', error);
-                swal(nameProduct, "could not be added to wishlist.", "error");
-            }
-        });
-    });
-});
+							swal(nameProduct, response.message, response.message === "product Added succesfully" ? "success" : "info");
+
+							if (response.message === "product Added succesfully") {
+								// Update the wishlist count dynamically
+								var notifyIcon = $('.icon-header-noti'); // Wishlist notification icon
+								notifyIcon.attr('data-notify', response.newWishlistCount); // Update the data-notify attribute
+								notifyIcon.text(response.newWishlistCount); // Update the visible count
+							}
+						},
+						error: function (error) {
+							console.error('Error adding to wishlist:', error);
+							swal(nameProduct, "could not be added to wishlist.", "error");
+						}
+					});
+				});
+			});
+
+
+
 
 
 

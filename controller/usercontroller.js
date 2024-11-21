@@ -256,13 +256,8 @@ export async function quickView(req, res) {
     
         const message= stockStatus || req.query.message;
 
-      
-    
-
-        
         res.render('user/quickView', { 
             product ,
-
             quantityAvailableOrNot:message});
     } catch (error) {
         res.status(500).send(error.message); // Use appropriate status code
@@ -335,12 +330,22 @@ export async function cartAdd(req, res) {
         const quantity = Number(req.body.quantity) || 1;
         const productId =  req.query.productId || req.body.productID ;
         
+        
         const current_product_specific = await Product.findById(productId); 
         if (!current_product_specific) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
         const stock = current_product_specific.Stock;
+
+        const updatedStock = stock - quantity;
+        let quantityAvailableOrNot = "";
+        if (updatedStock >= 0) {
+            await Product.findByIdAndUpdate(productId, { $set: { Stock: updatedStock } });
+        } else {
+            quantityAvailableOrNot = `${quantity} units requested; only ${stock} available.`;
+        }
+
         const current_price = Number(current_product_specific.Price);
         const current_Total = quantity * current_price;
 
@@ -352,7 +357,7 @@ export async function cartAdd(req, res) {
         
         const cart = await cartModel.findOne({ user: userId });
 
-        if (cart) {
+        if (updatedStock>=0 && cart) {
             const productIndex = cart.products.findIndex(p => p.item.toString() === productId);
 
             if (productIndex !== -1) {
@@ -374,13 +379,7 @@ export async function cartAdd(req, res) {
             });
         }
 
-        const updatedStock = stock - quantity;
-        let quantityAvailableOrNot = "";
-        if (updatedStock >= 0) {
-            await Product.findByIdAndUpdate(productId, { $set: { Stock: updatedStock } });
-        } else {
-            quantityAvailableOrNot = `${quantity} units requested; only ${stock} available.`;
-        }
+
 
         if (req.xhr) {
             // Return JSON if it is an AJAX request
@@ -403,11 +402,17 @@ export async function wishlist(req,res) {
     try {
 
         const userId = req.user; 
-        const { user, cartCount, wishListCount,cart } = await getUserCartWishlistData(userId);
+        const { user, cartCount, wishListCount,cart,wallet} = await getUserCartWishlistData(userId);
 
         const wishList = await wishlistModel.findOne({ user: userId }).populate('products.item');
 
-        res.render('user/wishList',{user:user,wishList:wishList,cartCount:cartCount,wishListCount:wishListCount,cart})
+        res.render('user/wishList',{
+            user:user,
+            wishList:wishList,
+            cartCount:cartCount,
+            wishListCount:wishListCount,
+            cart,
+            wallet})
         
     } catch (error) {
         res.send(error.message)
@@ -415,7 +420,6 @@ export async function wishlist(req,res) {
     }
     
 }
-
 
 
 
@@ -451,9 +455,17 @@ export async function addWishlist(req, res) {
                 products: [product],
 
             });
+            message = "product Added succesfully";
         }
 
-        res.json({message:message})
+        const updatedWishlist = await wishlistModel.findOne({ user: userId });
+        const wishlistCount = updatedWishlist.products.length;
+
+        res.json({
+            message:message,
+            wishlistCount:wishlistCount
+
+        })
 
         
     } catch (error) {
