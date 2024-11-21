@@ -297,7 +297,7 @@ export async function checkout(req,res) {
 export async function applyCoupon(req, res) {
     try {
         const userCouponCode = req.body.coupon.trim(); // Trim to remove any extra spaces
-        const userId = req.user; // Ensure userId is retrieved from req.user or JWT
+        const userId = req.user; 
 
         const appliedCoupon = await couponModel.findOne({ code: userCouponCode });
 
@@ -331,17 +331,27 @@ export async function applyCoupon(req, res) {
 
         await cart.save();
 
-
-
         const user={userId:userId,isUsed:true}
 
         appliedCoupon.users.push(user)
 
         await appliedCoupon.save()
 
+        res.clearCookie('couponDetails');
+        res.cookie('couponDetails', JSON.stringify({
+            discountPercentage,
+            discountAmount,
+            newSubTotal,
+            couponCode: userCouponCode
+        }), { httpOnly: true, maxAge: 5 * 60 * 1000 }); // Cookie expires in 30 minutes
+        
 
-
-        res.json({ success: true, message: `Applied ${discountPercentage}% discount`, newSubTotal: newSubTotal ,couponCode:userCouponCode});
+        res.json({ success: true, message: `Applied ${discountPercentage}% discount`, 
+            newSubTotal: newSubTotal ,
+            couponCode:userCouponCode,
+            discountPercentage:discountPercentage,
+            discountAmount:discountAmount
+        });
 
 
 
@@ -508,7 +518,7 @@ export async function addBuyNow(req,res) {
         const coupon=await couponModel.find()
         const address=await addressModel.findOne({user:userId}).select('address') ;
 
-        const subTotal =2000;
+        const couponDetails = JSON.parse(req.cookies.couponDetails || '{}');
  
 
         res.render('user/buyNow',{
@@ -520,9 +530,8 @@ export async function addBuyNow(req,res) {
             product,
             address,
             quantity,
-            subTotal,
-            discount:345,
-            totalDiscount:345})
+            couponDetails
+        })
 
         
     } catch (error) {

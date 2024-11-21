@@ -102,7 +102,8 @@
 
                                                     <tr class="summary-subtotal">
                                                         <td>Subtotal:</td>
-                                                        <td id="subTotal">&#8377;<%= subTotal %></td>
+                                                        <td>&#8377;<span id="subTotal"><%= couponDetails.newSubTotal %></span></td>
+
                                                     </tr>
                                                     <tr>
                                                         <td>Shipping:</td>
@@ -110,17 +111,22 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Coupon:</td>
-                                                        <td class="text-success"> <span id="appliedCoupon"></span></td>
+                                                        <td class="text-success"> <span id="appliedCoupon"></span><%= couponDetails.couponCode %></td>
                                                         
                                                     </tr>
                                                     <tr>
                                                         <td>Discount:</td>
-                                                        <td class="text-danger"> -&#8377;<span id="discountspan"><%= discount %></span></td>
+                                                        <td class="text-danger"> -&#8377;<span id="discountPercentage"><%= couponDetails.discountPercentage %> %</span></td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Discount:</td>
+                                                        <td class="text-danger"> -&#8377;<span id="discountAmount"><%= couponDetails.discountAmount %></span></td>
 
                                                     </tr>
                                                     <tr class="summary-total">
                                                         <td>Total:</td>
-                                                        <td>&#8377;<span id="totalspan"><%= totalDiscount %></span></td>
+                                                        <td>&#8377;<span id="subTotal"><%= couponDetails.newSubTotal %></span></td>
                                                     </tr>
                                                 <% } %>
                                             </tbody>
@@ -202,11 +208,16 @@
                                         const insertCouponElement = document.getElementById('insertcoupon');
                                         const subTotal = document.getElementById('subTotal');
                                         const appliedCoupon=document.getElementById('appliedCoupon');
+                                        const discountAmount=document.getElementById('discountAmount');
+                                        const discountPercentage=document.getElementById('discountPercentage');
+
                                         if (data.success) {
                                             insertCouponElement.textContent = data.message;
                                             subTotal.textContent = ''; 
                                             subTotal.textContent = `&#8377; ${data.newSubTotal}`;
                                             appliedCoupon.textContent=data.couponCode;
+                                            discountAmount.textContent=data.discountAmount;
+                                            discountPercentage.textContent=data.discountPercentage;
 
                                             insertCouponElement.classList.add('text-success')
                                             insertCouponElement.classList.remove('text-danger')
