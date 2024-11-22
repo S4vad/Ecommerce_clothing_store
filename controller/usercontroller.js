@@ -1,4 +1,5 @@
-import { PythonShell } from 'python-shell';
+
+import { spawn } from 'child_process';
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -144,33 +145,49 @@ export async function userSignup(req,res){
     }
 } 
 
+
+
+
 export async function checkPasswordStrength(req, res) {
-    
     const { password } = req.body;
-    console.log('The password is: ' + password);
 
-    const options = {
-        scriptPath: 'C:/Users/savad/Desktop/main_project/python_ml_models/modelLoading',  // Correct path to your Python script
-        args: [password]  
-    };
-    console.log('Python script options:', options);
+    const pythonPath = 'C:/Users/savad/AppData/Local/Programs/Python/Python311/python.exe';
+    const scriptPath = 'python_ml_models/modelLoading/passwordChecker.py';  // Ensure the path is correct
 
+    const pythonProcess = spawn(pythonPath, [scriptPath, password]);
 
-    PythonShell.run('passwordChecker.py', options, (err, results) => {
-        if (err) {
-            console.error("Error:", err);
+    let output = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+        output += data.toString();
+    });
+    
+    pythonProcess.stderr.on('data', (data) => {
+        console.error('Python error:', data.toString());
+    });
+    
+    pythonProcess.on('close', (code) => {
+        if (code !== 0) {
+            console.error(`Python script failed with code ${code}`);
             return res.status(500).json({ strength: 'Error' });
         }
-
+    
+    
+    
         try {
-            const strength = JSON.parse(results[0]).strength;
-            res.json({ strength });
-        } catch (parseError) {
-            console.error("Parsing error:", parseError);
+            // Attempt to parse and return the Python script output
+            const result = JSON.parse(output);
+            res.json({ strength: result.strength });  
+        } catch (err) {
+            console.error('Error parsing Python output:', err);
             res.status(500).json({ strength: 'Error parsing result' });
         }
     });
-};
+    
+}
+
+
+
 
 export async function login(req,res){
     res.render('user/userLogin',{message:""})

@@ -30,10 +30,11 @@
     "validator": "^13.11.0"
   },
   "nodemonConfig": {
-  "watch": ["controllers", "routes", "models"], 
-  "ext": "js,json" 
+    "watch": [
+      "controllers",
+      "routes",
+      "models"
+    ],
+    "ext": "js,json"
+  }
 }
-
-}
-
-
