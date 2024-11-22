@@ -1,5 +1,5 @@
-
 import { spawn } from 'child_process';
+import path from 'path';
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -704,32 +704,53 @@ export async function cartSubTotalUpdate(req,res) {
 }
 
 
-export async function review(req,res) {
 
+
+export async function review(req, res) {
     try {
-        const userId=req.user;
-        const productId=req.query.productId;
+        const userId = req.user;
+        const productId = req.query.productId;
 
-        const {rating,review,name,email}=req.body;
+        const { rating, review, name, email } = req.body;
 
-        await reviewModel.create({
-            user:userId,
-            product:productId,
-            rating:rating,
-            review:review,
-            name:name,
-            email:email
+        // Define the Python executable path and script path
+        const pythonPath = 'C:/Users/savad/AppData/Local/Programs/Python/Python311/python.exe'; 
+        const scriptPath = path.join(process.cwd(), 'python_ml_models', 'modelLoading', 'sentimentAnalysis.py'); 
 
-        })
-        res.redirect(`/productDetails/${productId}`)
 
-        
+        const pythonProcess = spawn(pythonPath, [scriptPath, review]);
+
+        // Capture the output of the Python script
+        pythonProcess.stdout.on('data', (data) => {
+            const reviewStatus = data.toString().trim(); 
+            console.log('Review Status:', reviewStatus); 
+
+
+            reviewModel.create({
+                user: userId,
+                product: productId,
+                rating: rating,
+                review: review,
+                name: name,
+                email: email,
+                reviewStatus: reviewStatus
+            });
+
+            res.redirect(`/productDetails/${productId}`);
+        });
+
+        // Handle errors
+        pythonProcess.stderr.on('data', (error) => {
+            console.error('Error running Python script:', error.toString());
+            res.status(500).send('Error processing review');
+        });
+
     } catch (error) {
-        res.send(error.message)
-        
+        console.error('Error:', error.message);
+        res.status(500).send(error.message);
     }
-    
 }
+
 
 
 
