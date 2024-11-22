@@ -510,29 +510,42 @@ export async function addBuyNow(req,res) {
     try {
         const productId=req.query.productId;
         const quantity = req.body.quantity || 1;
+        const from  = req.query.from;
 
         const userId = req.user; 
-        const { user, cart, cartCount, wishListCount } = await getUserCartWishlistData(userId);
+        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
 
         const product=await productModel.findById(productId)
         const coupon=await couponModel.find()
         const address=await addressModel.findOne({user:userId}).select('address') ;
 
         const couponDetails = JSON.parse(req.cookies.couponDetails || '{}');
- 
 
-        res.render('user/buyNow',{
-            coupons:coupon,
-            user,
-            cartCount,
-            wishListCount,
-            moment,
-            product,
-            address,
-            quantity,
-            couponDetails
-        })
+        const current_product_specific = await productModel.findById(productId); 
+        const stock = current_product_specific.Stock;
+        const updatedStock = stock - quantity;
 
+        if (updatedStock >= 0) {
+            res.render('user/buyNow',{
+                coupons:coupon,
+                user,
+                cart,
+                wallet,
+                cartCount,
+                wishListCount,
+                moment,
+                product,
+                address,
+                quantity,
+                couponDetails
+            })
+    
+        }
+
+        if (updatedStock < 0) {
+            const redirectUrl = from === 'productDetails' ? `/productDetails/${productId}` : `/quickView/${productId}`;
+            return res.redirect(redirectUrl);
+        }
         
     } catch (error) {
         res.send(error.message)

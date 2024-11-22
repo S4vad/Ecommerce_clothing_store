@@ -330,7 +330,6 @@ export async function cartAdd(req, res) {
         const quantity = Number(req.body.quantity) || 1;
         const productId =  req.query.productId || req.body.productID ;
         
-        
         const current_product_specific = await Product.findById(productId); 
         if (!current_product_specific) {
             return res.status(404).json({ message: 'Product not found' });
@@ -378,7 +377,6 @@ export async function cartAdd(req, res) {
                 subtotal: current_Total
             });
         }
-
 
 
         if (req.xhr) {

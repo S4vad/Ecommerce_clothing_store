@@ -257,7 +257,7 @@
 									<button id="addToCart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
 										ADD TO CART
 									</button>
-									<button id="buyNow" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
+									<button id="buyNow" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04   " type="submit">
 										BUY NOW
 									</button>
 								</div>
@@ -323,6 +323,20 @@
 <!--===============================================================================================-->
 	<script src="/user/vendor/select2/select2.min.js"></script>
 	<script>
+			$(document).ready(function () {
+				$("#addToCart").click(function (event) {
+					
+					$("#productForm").attr('action', '/cart?productId=<%= product._id %>');
+				});
+
+				$("#buyNow").click(function (event) {
+					
+					$("#productForm").attr('action', '/buyNow?productId=<%= product._id%>&from=quickView');
+				});
+			});
+	</script>
+	<script>
+		
 		$(".js-select2").each(function(){
 			$(this).select2({
 				minimumResultsForSearch: 20,

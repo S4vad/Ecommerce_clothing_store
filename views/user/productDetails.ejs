@@ -734,7 +734,7 @@
 
 				$("#buyNow").click(function (event) {
 					
-					$("#productForm").attr('action', '/buyNow?productId=<%= product._id %>');
+					$("#productForm").attr('action', '/buyNow?productId=<%= product._id %>&from=productDetails');
 				});
 			});
 
