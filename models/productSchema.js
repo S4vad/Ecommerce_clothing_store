@@ -22,10 +22,7 @@ const addProductSchema = new mongoose.Schema({
     Images: [
         
     ],
-    ImageFeatures: { 
-        type: Array, 
-        default: [] 
-    },
+    ImageFeatures: [[Number]] ,
     Categories:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'Categories',

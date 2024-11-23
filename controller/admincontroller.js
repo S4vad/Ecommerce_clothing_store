@@ -1,3 +1,4 @@
+import axios from "axios";
 import jwt from "jsonwebtoken";
 import { adminAuthentication } from "../middlewares/adminAuthentication.js";
 import adminModel from "../models/adminSchema.js"
@@ -172,46 +173,38 @@ export async function adminSignup(req,res){
 }
 
 
-export async function productAdd(req,res,next){
+export async function productAdd(req, res, next) {
     try {
-        const files = req.body.images
-        const images = req.body.images
-        // const file = req.files
+        const { name, description, price, stock, category, brand, size, images } = req.body;
 
-        const { name, description, price,stock, category, brand ,size} = req.body
-        if (!images) {
-            const error = new Error('Please choose files')
-            error.httpStatusCode = 400;
-            return next(error)
+        if (!images || images.length === 0) {
+            throw new Error("Please upload product images.");
         }
 
-        // Extract features for each image (adjust if calling an external Python script or service)
-        // const imageFeatures = await Promise.all(
-        //     images.map(filename => extractFeatures(`./public/uploads/${filename}`))
-        // );
+        // Extract features for each image
+        const imageFeatures = await Promise.all(
+            images.map(filename => extractFeatures(`./public/uploads/${filename}`))
+        );
 
-        //sharp image
-        await productModel.create({ 
-            Name:name, 
-            Description:description,
-             Brand:brand,
-             Price: price,
-             Categories: category, 
-             Stock:stock,
-             Size:size, 
-             Images: files,
-            //  ImageFeatures: imageFeatures  
-            })
-            // res.send({"success":data})
-            res.redirect('/admin/product_list')
-      
+        await productModel.create({
+            Name: name,
+            Description: description,
+            Brand: brand,
+            Price: price,
+            Categories: category,
+            Stock: stock,
+            Size: size,
+            Images: images,
+            ImageFeatures: imageFeatures
+        });
+
+        res.redirect("/admin/product_list");
     } catch (error) {
-        console.log(error)
-        next(error)
-        
+        console.error(error);
+        next(error);
     }
-   
 }
+
 
 export async function product_list(req,res){
     try {

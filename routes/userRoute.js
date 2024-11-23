@@ -46,6 +46,8 @@ routes.get('/userBanned',userBanned)
 
 
 
+
+
 routes.delete('/cart/remove/:id',userAuthentication, cartDelete); // Temporarily without middleware
 routes.delete('/removeWishList/:id',userAuthentication,wishListDelete)
 

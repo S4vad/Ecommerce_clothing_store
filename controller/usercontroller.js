@@ -1,5 +1,8 @@
 import { spawn } from 'child_process';
 import path from 'path';
+import pkg from 'ml-distance';
+const { cosineSimilarity } = pkg;
+import axios from 'axios';
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -282,40 +285,50 @@ export async function quickView(req, res) {
 }
 
 
-export async function productDetails(req, res) {
+export async function recommendedProducts(productId) {
     try {
-        const userId = req.user; 
-        const { user, cart, cartCount, wishListCount,wallet} = await getUserCartWishlistData(userId);
+        const response = await fetch("http://localhost:8000/recommendations/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ product_id: productId }),
+        });
 
-        const id = req.params.id;
-        const product = await Product.findById(id);
+        if (!response.ok) throw new Error("Failed to fetch recommendations.");
 
-        // const recommendations = recommend_products(product.ImageFeatures, Product);
-
-        const currentStock=product.Stock<=0;
-        let stockStatus;
-        if (currentStock){
-            stockStatus="The product is Unavailable Now !!"
-        }
-    
-        const message= stockStatus || req.query.message;
-
-      
-        res.render('user/productDetails', { 
-            user,
-            product,
-            cart,
-            cartCount, 
-            wishListCount,
-            wallet,
-            quantityAvailableOrNot:message});
-        
+        const data = await response.json();
+        return data.recommendations;
     } catch (error) {
-
-        res.send(error.message);
+        console.error("Recommendation Error:", error);
+        return [];
     }
 }
 
+export async function productDetails(req, res) {
+    try {
+        const { user, cart, cartCount, wishListCount, wallet } = await getUserCartWishlistData(req.user);
+        const productId = req.params.id;
+
+        const product = await Product.findById(productId);
+        if (!product) throw new Error("Product not found.");
+
+        const recommendedProducts = await recommendedProducts(productId);
+
+        const stockMessage = product.Stock > 0 ? null : "The product is currently unavailable.";
+
+        res.render("user/productDetails", {
+            user,
+            product,
+            cart,
+            cartCount,
+            wishListCount,
+            wallet,
+            recommendedProducts,
+            stockMessage
+        });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
 
 
 
@@ -782,17 +795,6 @@ export async function userBanned(req, res) {
         res.send(error.message);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
