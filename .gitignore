@@ -1,10 +1,10 @@
 node_modules
 node_modules/
-.env
+
 requirements.txt
 python_ml_models/datas/pass.csv
 python_ml_models/datas/clothing_review.csv
 myenv
 .venv
 public/uploads
-
+venv
