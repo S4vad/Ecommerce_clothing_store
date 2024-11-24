@@ -185,7 +185,7 @@ export async function productAdd(req, res, next) {
         const FASTAPI_URL = "http://localhost:8000/extract-features/";
 
         // Extract features for each image by calling the FastAPI endpoint
-        const imageFeatures = await Promise.allSettled(
+        const imageFeatures = await Promise.all(
             images.map(async (filename) => {
                 try {
                     const response = await axios.post(FASTAPI_URL, {
@@ -205,6 +205,8 @@ export async function productAdd(req, res, next) {
             })
         );
         console.log('the image feature is ',imageFeatures)
+
+        
         
         await productModel.create({
             Name: name,
