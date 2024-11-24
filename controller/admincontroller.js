@@ -181,11 +181,31 @@ export async function productAdd(req, res, next) {
             throw new Error("Please upload product images.");
         }
 
-        // Extract features for each image
-        const imageFeatures = await Promise.all(
-            images.map(filename => extractFeatures(`./public/uploads/${filename}`))
-        );
+        // URL of the FastAPI server
+        const FASTAPI_URL = "http://localhost:8000/extract-features/";
 
+        // Extract features for each image by calling the FastAPI endpoint
+        const imageFeatures = await Promise.allSettled(
+            images.map(async (filename) => {
+                try {
+                    const response = await axios.post(FASTAPI_URL, {
+                        image_path: filename,//here filename means image name
+                    });
+                    console.log(`Extracted Features for ${filename}:`, response.data.features);  // Add this line
+                    if (response.data.features) {
+                        return response.data.features;  // Extracted features from FastAPI
+                    } else {
+                        console.error(`No features returned for ${filename}`);
+                        return [];  // Return an empty array if features are not found
+                    }
+                } catch (err) {
+                    console.error(`Error extracting features for ${filename}: ${err.message}`);
+                    return [];  // Return an empty array in case of an error
+                }
+            })
+        );
+        console.log('the image feature is ',imageFeatures)
+        
         await productModel.create({
             Name: name,
             Description: description,
@@ -195,7 +215,7 @@ export async function productAdd(req, res, next) {
             Stock: stock,
             Size: size,
             Images: images,
-            ImageFeatures: imageFeatures
+            ImageFeatures:  imageFeatures,  // Filter out empty arrays
         });
 
         res.redirect("/admin/product_list");
