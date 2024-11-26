@@ -4,6 +4,7 @@ from recommendation import get_recommendations
 from fastapi.responses import JSONResponse
 import os
 from extractFeatureHelper import extractFeatures
+from recommendation import get_recommendations
 
 app = FastAPI()
 
@@ -30,7 +31,7 @@ async def extract_features_api(request: FeatureRequest):
     try:
         # Resolve the full image path by joining the base upload directory and the requested image path
         img_path = os.path.normpath(os.path.join(UPLOAD_DIR, request.image_path))  # Normalize the path
-        
+       
         # Print the full image path for debugging
         print(f"Extracting features from: {img_path}")
         
